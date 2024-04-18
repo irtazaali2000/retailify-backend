@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+</head>
+<body>
+<div>
+    {% include "shared/show_msg_alert.html" %}
+</div>
+<h1 class="text-center">Go Bazzar</h1>
+<form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file1"> Upload a file</label>
+    <input type="file" id="file1" name="file">
+    <small>Only accepts CSV files</small>
+
+    <select name="vendor_name" id="vendor_name" required>
+      <option value="">Choose Vendor</option>
+      <option value="noon">noon</option>
+      <option value="virginstore">virginstore</option>
+      <option value="sharafdg">sharafdg</option>
+      <option value="carrefour">carrefour</option>
+      <option value="jumbo">jumbo</option>
+      <option value="amazon">amazon</option>
+      <option value="erosdigitalhome">erosdigitalhome</option>
+      <option value="firstcry">firstcry</option>
+      <option value="mumzworld">mumzworld</option>
+      <option value="sprii">sprii</option>
+    </select>
+
+    <button type="submit">Upload</button>
+</form>
+<table class="table">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Vendor</th>
+        <th scope="col">Catalogue</th>
+        <th scope="col">Category</th>
+        <th scope="col">Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for category in categories %}
+    <tr>
+        <td>{{category.VendorCode.VendorName}}</td>
+        <td>{{category.CategoryCode.CatalogueCode.CatalogueName}}</td>
+        <td>{{category.CategoryCode.CategoryName}}</td>
+        <td>{{category.CategoryLink}}</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+</body>
+</html>
