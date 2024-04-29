@@ -20,7 +20,7 @@ class FirstCrySpider(Spider):
     name = 'firstcry'
     allowed_domains = ['www.firstcry.ae']
     #products_url = 'https://www.firstcry.ae/clothes-and-shoes/6/0/0?gender=boy,unisex&ref2=menu_dd_boy_viewall#sale=6&brandid=0&searchstring=brand@@@@1@0@20@@@@@@@@@@@@@@@@@@@@@&rating=&sort=Popularity&&vi=three&pmonths=&cgen=&skills=&measurement=&material=&Color=&Age=&gender=&ser=&premium=&fulfilment=&personalize=&PageNo=1&scrollPos=155&pview=&tc=13891'
-    products_api = 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid={}&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
+    #products_api = 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid={}&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
     review_api = 'https://www.firstcry.ae/api/rating/getpdsizesquereviewdata'
     
     page = 1
@@ -38,48 +38,41 @@ class FirstCrySpider(Spider):
     # }
 
     categories = {
-        'Boy and Girl Fashion': {
-                                    'Clothes & Shoes': 6,
-                                    'Fashion Accessories': 22
+                    'Fashion':  {
+                                    'Men Clothing': 'https://www.firstcry.ae/api/searchresult.svc/getsearchresultproductsfilters?pageno={}&pagesize=20&sortexpression=Popularity&onsale=6&searchstring=brand&subcatid=168,165,164,269,243,166,220,267,276,295,221,26&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&masterbrand=0&sorting=&rating=&offer=&skills=&material=&measurement=&gender=both,male&exclude=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                    'Women Clothing': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=168,165,164,269,243,166,220,267,276,295,221,26&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=6&skills=&material=&measurement=&gender=both,female&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                    'Men Shoes': 'https://www.firstcry.ae/api/searchresult.svc/getsearchresultproductsfilters?pageno={}&pagesize=20&sortexpression=Popularity&onsale=6&searchstring=brand&subcatid=170&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&masterbrand=0&sorting=&rating=&offer=&skills=&material=&measurement=&gender=both,male&exclude=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                    'Women Shoes': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno=1&pagesize=20&sortexpression=Popularity&subcatid=170&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=6&skills=&material=&measurement=&gender=both,female&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
                                 },
 
-                        'Toys': {
-                                'Toys & Gaming': 5,
-                                'Baby Gear': 7
+                    'Baby & Kids': {
+                                'Toys': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=5&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                'Strollers, Gear & Accessories': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=7&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                'Nursery': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=8&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                'Diapers, Bath & Skincare': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=1&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                'Diapers, Bath & Skincare': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=bestseller&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=3&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                'Feeding & Nursing': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=bestseller&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=2&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
                                 },
 
-                        'School':   {
-                                     'School Supplies': 10,
-                                     'Nursery': 8
-                                    },
-
-                        'Diapering': {
-                                       'Diapering': 1
-                                     },
-
-                        'Feeding':  {
-                                      'Feeding and Nursing': 2,
+                        'Office Supplies':   {
+                                     'Stationary': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=10&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',       
                                     },
                         
-                        'Bath':     {
-                                      'Bath & Skin Care': 3
-                                    },
-
-                        'Home':     {
-                                      'Home': 229
+                        'Home Appliances':     {
+                                      'Home Appliances Accessories': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=229&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
                                     },
 
                         'Beauty':   {
-                                      'Womens Beauty and Personal Care': 78,
-                                      'Makeup': 15
+                                      'Womens Beauty and Personal Care': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=78&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
+                                      'Makeup': 'https://www.firstcry.ae/api/searchresult.svc/getsearchresultproductsfilters?pageno={}&pagesize=20&sortexpression=bestseller&onsale=15&searchstring=brand&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&masterbrand=0&sorting=&rating=&offer=&skills=&material=&measurement=&gender=&exclude=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
                                     },
                         
                         'Safety':   {
-                                      'Health and Safety': 4
+                                      'Health and Safety': 'https://www.firstcry.ae/api/productfilter.svc/getsubcategorywisefilterproducts?pageno={}&pagesize=20&sortexpression=Popularity&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&rating=&offer=&catid=4&skills=&material=&measurement=&gender=&exclude=&p=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize=',
                                     },
 
                         'Moms':     {
-                                      'Moms and Maternity': 21
+                                      'Moms and Maternity': 'https://www.firstcry.ae/api/searchresult.svc/getsearchresultproductspaging?pageno={}&pagesize=20&sortexpression=Popularity&onsale=21&searchstring=brand&subcatid=&brandid=&price=&age=&color=&optionalfilter=&outofstock=1&type1=&type2=&type3=&type4=&type5=&type6=&type7=&type8=&type9=&type10=&type11=&type12=&type13=&type14=&type15=&combo=&discount=&searchwithincat=&productidqstr=&searchrank=&pmonths=&cgen=&priceqstr=&discountqstr=&sorting=&masterbrand=0&rating=&offer=&skills=&material=&measurement=&gender=&exclude=&premium=&ln=en&pcode=U000201&fulfilment=&cnid=uae&personalize='
                                     }
 
     }
@@ -92,20 +85,20 @@ class FirstCrySpider(Spider):
         'DOWNLOAD_DELAY': 0.1,
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
-        #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
     }
 
     conn = mysql.connector.connect(
-            host='localhost',
-            user='root',
-            password='admin',
-            database='gb'
-            # host="mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com",
-            # user="datapillar",
-            # password="4wIwdBmMSJ3BLBVCesJT",
-            # database="scrappers_db",
-            # port="3306"
+            # host='localhost',
+            # user='root',
+            # password='admin',
+            # database='gb'
+            host="mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com",
+            user="datapillar",
+            password="4wIwdBmMSJ3BLBVCesJT",
+            database="scrappers_db",
+            port="3306"
         )
     cursor = conn.cursor()
 
@@ -167,9 +160,9 @@ class FirstCrySpider(Spider):
         for main_cat, sub_cats in self.categories.items():
             catalogue_code = self.get_catalogue_code(main_cat)
             if catalogue_code:
-                for sub_cat_name, sub_cat_id in sub_cats.items():
+                for sub_cat_name, sub_cat_url in sub_cats.items():
                     page = self.page
-                    yield scrapy.Request(url=self.products_api.format(page, sub_cat_id), callback=self.parse, meta={"main_category": main_cat, "sub_category": sub_cat_name, "cat_id": sub_cat_id, "page": page, 'catalogue_code': catalogue_code})
+                    yield scrapy.Request(url=sub_cat_url.format(page), callback=self.parse, meta={"main_category": main_cat, "sub_category": sub_cat_name, "cat_url": sub_cat_url, "page": page, 'catalogue_code': catalogue_code})
 
 
     
@@ -179,7 +172,7 @@ class FirstCrySpider(Spider):
         catalogue_code = response.meta['catalogue_code']
         print("Category: ", sub_category)
         page = response.meta['page']
-        cat_id = response.meta['cat_id']
+        cat_url = response.meta['cat_url']
         vendor_code = self.vendor_code
         data = json.loads(response.text)
         product_response_str = data.get('ProductResponse', {})
@@ -213,7 +206,7 @@ class FirstCrySpider(Spider):
                                            'catalogue_code': catalogue_code,
                                            'page': page})
             page = page + 1
-            yield scrapy.Request(url=self.products_api.format(page, cat_id), meta={"main_category": main_category, "sub_category": sub_category, "cat_id": cat_id, "page": page, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=cat_url.format(page), meta={"main_category": main_category, "sub_category": sub_category, "cat_url": cat_url, "page": page, 'catalogue_code': catalogue_code})
 
 
     def parse_review(self, response):

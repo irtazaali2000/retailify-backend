@@ -62,19 +62,23 @@ class AdidasSpider(Spider):
     
 
     
-    categories = {'Men': {'Men Shoes': 'https://www.adidas.ae/en/men-shoes',
+    categories = {'Fashion': {'Men Shoes': 'https://www.adidas.ae/en/men-shoes',
                           'Men Clothing': 'https://www.adidas.ae/en/men-clothing',
-                          'Men Accessories': 'https://www.adidas.ae/en/men-accessories'
+                          'Men Accessories': 'https://www.adidas.ae/en/men-accessories',
+                          'Women Shoes': 'https://www.adidas.ae/en/women-shoes',
+                          'Women Clothing': 'https://www.adidas.ae/en/women-clothing',
+                          'Women Accessories': 'https://www.adidas.ae/en/women-accessories'
                           },
                    
-                  'Women': {'Women Shoes': 'https://www.adidas.ae/en/women-shoes',
-                            'Women Clothing': 'https://www.adidas.ae/en/women-clothing',
-                            'Women Accessories': 'https://www.adidas.ae/en/women-accessories'},
 
-                  'Kids': {'Infants and Toddlers Sportswear': 'https://www.adidas.ae/en/infant_todder',
-                           'Kids 4 to 8 Years Sportswear': 'https://www.adidas.ae/en/kids_4_8_years',
-                           'Kids 8 to 16 Years Sportswear': 'https://www.adidas.ae/en/kids_8_16_years',
-                           'Kids Accessories': 'https://www.adidas.ae/en/kids-accessories'}
+                  'Baby & Kids': {'Baby Shoes': 'https://www.adidas.ae/en/infant_todder',
+                           'Boys Shoes': 'https://www.adidas.ae/en/boys-kids_4_8_years',
+                           'Boys Shoes': 'https://www.adidas.ae/en/boys-kids_8_16_years',
+                           'Boys Shoes': 'https://www.adidas.ae/en/boys-kids-accessories',
+
+                           'Girls Shoes': 'https://www.adidas.ae/en/girls-kids_4_8_years',
+                           'Girls Shoes': 'https://www.adidas.ae/en/girls-kids_8_16_years',
+                           'Girls Shoes': 'https://www.adidas.ae/en/girls-kids-accessories',}
 
                          }
     

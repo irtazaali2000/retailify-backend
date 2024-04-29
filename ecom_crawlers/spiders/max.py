@@ -37,15 +37,70 @@ class MaxSpider(Spider):
     page = 0
     count = 0
     
-    categories = {'Beauty': 'Alsbeauty', 'Kids': 'Amxkids', 'Bedroom': 'Ahbxbedroom', 'Women': 'Amxwomen',
-                  'Men': 'Amxmen', 'Decor and Furnishings': 'Ahbxdecorandfurnishings', 
-                  'Dining Room': 'Ahbxdiningroom', 'Living Room': 'Ahbxlivingroom',
-                  'Kitchen': 'Ahbxkitchen', #'Kids': 'Ahbxkidsandyouth',
-                  'Bathroom': 'Ahbxbathroom', 'Home': 'Amxhome', 'Urban Women': 'Amxurbnwomen',
-                  'Outdoor': 'Ahbxoutdoor', 'Urban Men': 'Amxurbnmen', 'Furniture': 'Ahbxfurniture'}
-                  #'Home': 'Ahbxhomeimprovement', 
-                  #'Gift Card': 'Agiftcard'}
+            
+
+    categories = {
+                  'Personal Care & Beauty': {
+                      'Makeup & Accessories': 'Alsbeauty',
+                  },
+
+                  'Baby & Kids': {
+                      'Girls Clothing': 'Amxkids-babygirlzerototwoyrs-clothing',
+                      'Girls Clothing': 'Amxkids-girlstwotoeightyrs-clothing',
+                      'Girls Clothing': 'Amxkids-girlseighttosixteenyrs-clothing',
+                      'Girls Shoes': 'Amxkids-babygirlzerototwoyrs-shoes',
+                      'Girls Shoes': 'Amxkids-girlstwotoeightyrs-shoes',
+                      'Girls Shoes': 'Amxkids-girlseighttosixteenyrs-shoes',
+                      
+                      'Boys Clothing': 'Amxkids-babyboyzerototwoyrs-clothing',
+                      'Boys Clothing': 'Amxkids-boystwotoeightyrs-clothing',
+                      'Boys Clothing': 'Amxkids-boyseighttosixteenyrs-clothing',
+                      'Boys Shoes': 'Amxkids-babyboyzerototwoyrs-shoes',
+                      'Boys Shoes': 'Amxkids-boystwotoeightyrs-shoes',
+                      'Boys Shoes': 'Amxkids-boyseighttosixteenyrs-shoes',
+
+                      'Boys Accessories': 'Amxkids-accessories-boys',
+                      'Girls Accessories': 'Amxkids-accessories-girls',
+                      'Toys': 'Amxkids-toys'
+                  },
+
+                  'Furniture, Home And Garden': {
+                      'Home Decor And Accessories': 'Ahbxbedroom',
+                      'Home Decor And Accessories': 'Ahbxdecorandfurnishings',
+                      'Home Decor And Accessories': 'Ahbxdiningroom',
+                      'Home Decor And Accessories': 'Ahbxlivingroom',
+                      'Home Decor And Accessories': 'Ahbxkitchen',
+                      'Home Decor And Accessories': 'Ahbxbathroom',
+                      'Home Decor And Accessories': 'Amxhome',
+                      'Outdoor': 'Ahbxoutdoor',
+                      'Furniture': 'Ahbxfurniture'
+                  },
+                  
+                  'Fashion': {
+                      'Women Clothing': 'Amxwomen-clothing',
+                      'Women Clothing': 'Amxurbnwomen-clothing',
+                      'Women Shoes': 'Amxwomen-shoes',
+                      'Women Shoes': 'Amxurbnwomen-shoes',
+                      'Women Bags': 'Amxwomen-bagsandwallets',
+                      
+                      'Women Accessories': 'Amxwomen-accessories',
+                      'Women Accessories': 'Amxwomen-beauty',
+                      'Women Accessories': 'Amxurbnwomen-accessories',
+                      'Women Accessories': 'Amxurbnwomen-beauty',
+
+                      'Men Clothing': 'Amxmen-clothing',
+                      'Men Clothing': 'Amxurbnmen-clothing',
+                      'Men Shoes': 'Amxmen-shoes',
+                      'Men Shoes': 'Amxurbnmen-clothing',
+                      'Men Bags': 'Amxmen-bagsandwallets',
+                      'Men Bags': 'Amxurbnmen-bagsandwallets',
+                      'Men Accessories': 'Amxmen-accessories',
+                      'Men Accessories': 'Amxurbnmen-accessories'
+                  },
+
+                  }
     
+
     conn = mysql.connector.connect(
             # host='localhost',
             # user='root',
@@ -113,23 +168,26 @@ class MaxSpider(Spider):
             return result[0] if result else None
 
     def start_requests(self):
-        for category, category_code in self.categories.items():
-            catalogue_code = self.get_catalogue_code(category)
-            if catalogue_code:
-                print("########################################", category)
-                # Create a deep copy of the original body
-                modified_body = copy.deepcopy(self.body)      
-                # Modify the copy with the current category
-                format_body = modified_body["requests"][0]["params"].format(self.page, category_code)
-                modified_body["requests"][0]["params"] = format_body
-                body = json.dumps(modified_body)
-                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, callback=self.parse, meta={'category':category, 'category_code': category_code, 'page':self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
+        for main_category, sub_categories in self.categories.items():
+            for sub_category, category_code in sub_categories.items():
+                catalogue_code = self.get_catalogue_code(main_category)
+                if catalogue_code:
+                    print("########################################", sub_category)
+                    # Create a deep copy of the original body
+                    modified_body = copy.deepcopy(self.body)      
+                    # Modify the copy with the current category
+                    format_body = modified_body["requests"][0]["params"].format(self.page, category_code)
+                    modified_body["requests"][0]["params"] = format_body
+                    body = json.dumps(modified_body)
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, callback=self.parse, meta={'category': main_category, 'sub_category': sub_category, 'category_code': category_code, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
+
 
     
     def parse(self, response):
         item = ProductItemMax()
         vendor_code = response.meta['vendor_code']
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         category_code = response.meta['category_code']
         print("Category: ", category)
         page = response.meta['page']
@@ -143,8 +201,8 @@ class MaxSpider(Spider):
                     item['ProductName'] = hit.get('name', {}).get('en')
                     item['BrandName'] = hit.get('manufacturerName', {}).get('en')
                     item['CatalogueName'] = category
-                    category_key = next(iter(hit.get('url', {}).keys()))
-                    item['CategoryName'] = category_key
+                    #category_key = next(iter(hit.get('url', {}).keys()))
+                    item['CategoryName'] = sub_category
                     item['StockAvailability'] = hit.get('inStock')
                     item['RatingValue'] = hit.get('reviewAvgRating', {}).get('avgProductRating', 0)
                     item['RatingValue'] = round(float(item['RatingValue']), 2)
@@ -185,4 +243,4 @@ class MaxSpider(Spider):
                 format_body = modified_body["requests"][0]["params"].format(page, category_code)
                 modified_body["requests"][0]["params"] = format_body
                 body = json.dumps(modified_body)
-                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category':category, 'category_code': category_code, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
+                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category':category, 'sub_category': sub_category, 'category_code': category_code, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})

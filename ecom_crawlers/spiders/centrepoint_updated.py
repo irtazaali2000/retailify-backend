@@ -88,6 +88,93 @@ class CentrePointSpider(Spider):
                                'Sports Nutrition': 'cpsports-nutrition'}
 
                     }
+    
+    categories = {
+                "Fashion": {
+                        'Men Clothing': 'cpmen-clothing',
+                        'Men Shoes': 'cpmen-footwear',
+                        'Men Bags': 'cpmen-fashionaccessories-bagsandwallets',
+                        'Men Accessories': 'cpmen-fashionaccessories',
+                        'Men Shoes': 'cpmen-footwear-sportsshoes',
+                        'Men Sportswear': 'cpmen-clothing-sportswearandactivewear',
+                        'Men Clothing': 'cpmen-clothing-plussizeclothing',
+                        'Men Perfumes': 'cpmen-perfumes',
+                        'Women Clothing': 'cpwomen-clothing',
+                        "Women Shoes": 'cpwomen-footwear',
+                        "Women Accessories": 'cpwomen-fashionaccessories',
+                        'Women Shoes': 'cpwomen-footwear-sportsshoes',
+                        'Women Sportswear': 'cpwomen-clothing-sportswearandactivewear',
+                        'Women Clothing': 'cpwomen-arabicclothing',
+                        'Women Clothing': 'cpwomen-clothing-lingerie',
+                        'Women Clothing': 'cpwomen-clothing-plussizeclothing'
+                        },
+
+                "Personal Care & Beauty": {
+                    "Personal Care For Women": 'cpbeauty',
+                },
+                            
+                "Baby & Kids": {
+                                "Boys Clothing": 'cpbaby-clothing-boys',
+                                "Girls Clothing": 'cpbaby-clothing-girls',
+                                'Toys': 'cpbaby-toys',
+                                "Girls Clothing": 'cpkids-clothing-girls',
+                                'Girls Shoes': 'cpkids-footwear-girls',
+                                'Girls Shoes': 'cpkids-footwear-girls-sportsshoes',
+                                'Girls Sportswear': 'cpkids-clothing-girls-sportswear',
+                                'Girls Accessories': 'cpkids-accessories-girls',    
+                                "Boys Clothing": "cpkids-clothing-boys",
+                                "Boys Shoes": "cpkids-footwear-boys",
+                                'Boys Shoes': 'cpkids-footwear-boys-sportsshoes',
+                                'Boys Sportswear': 'cpkids-clothing-boys-sportswear',
+                                'Boys Accessories': 'cpkids-accessories-boys',
+                                "Nursery": "cpkids-backtoschool",
+                                'Feeding & Nursing': 'cpbaby-nursery',
+                                'Strollers, Gear & Accessories': 'cpbaby-travelgear',
+                                'Feeding & Nursing': 'cpbaby-feeding',
+                                'Diapers, Bath & Skincare': 'cpbaby-diapersandwipes',
+                                'Diapers, Bath & Skincare': 'cpbaby-bathandpottytraining',
+                                'Safety Accessories': 'cpbaby-healthandsafety-safetyessentialsandhygiene',
+                            },
+
+                "Home": {
+                            "Home Fragrance": 'cphomeandliving-homefragrance',
+                            "Home Furniture": 'cphomeandliving-homefurniture',
+                            "Home Dining": 'cphomeandliving-diningandserving',
+                            "Home Furnishings": 'cphomeandliving-homefurnishings',
+                            "Home Kitchen": 'cphomeandliving-kitchen',
+                            "Home Decor and Lighting": 'cphomeandliving-homedecor',
+                            "Home Bath": 'cphomeandliving-bathdecor'
+                        },
+
+                "Personal Care & Beauty": {
+                            'Makeup & Accessories': 'cpbeauty-makeup',
+                            'Fragrances & Perfumes': 'cpbeauty-fragrance',
+                            'Personal Care For Women': 'cpbeauty-skincare',
+                            'Personal Care For Women': 'cpbeauty-bathandbody',
+                            'Personal Care For Women': 'cpbeauty-haircare',
+                            'Personal Care For Women': 'cpbeauty-makeup-nails'
+                            },
+
+                "Sports Equipment": {
+                            'Hiking & Outdoor': 'cpsports-allsports-campingandhiking',
+                            'Tennis': 'cpsports-allsports-racketsports-tennis',
+                            'Table Tennis': 'cpsports-allsports-racketsports-tabletennis',
+                            'Badminton': 'cpsports-allsports-racketsports-badminton',
+                            'Squash': 'cpsports-allsports-racketsports-squash',
+                            'Swimming': 'cpsports-allsports-watersports-swimming',
+                            'Fitness': 'cpsports-allsports-gym',
+                            'Fitness': 'cpsports-allsports-homegym',
+                            'Rugby & Football': 'cpsports-allsports-football',
+                            'Volleyball': 'cpsports-allsports-volleyball',
+                            "Basketball": 'cpsports-allsports-basketball',
+                            'Fitness': 'cpsports-allsports-supports' 
+                          },
+
+                'Health & Medical': {
+                            'Nutrition': 'cpsports-nutrition'
+                        }
+            
+            }
 
                             
 

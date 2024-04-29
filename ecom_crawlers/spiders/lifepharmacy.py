@@ -36,15 +36,36 @@ class LifePharmacySpider(Spider):
     page = 0
     skip = 0
     count = 0
-    
+
     categories = {
-        'Beauty Care': 'beauty-care',
-        'Sports Nutrition': 'sports-nutrition',
-        'Nutrition and Supplements': 'nutrition-supplements',
-        'Home Healthcare': 'home-healthcare',
-        'Mother and Baby Care': 'mother-baby-care',
-        'Personal Care': 'personal-care',
-        'Medicines': 'medicines'
+        'Personal Care & Beauty': {
+            'Makeup & Accessories': 'beauty-care'
+        },
+
+        'Sports Equipment': {
+            'Sports Supplements': 'sports-nutrition',
+        },
+
+        
+        'Health & Medical': {
+            'Nutrition': 'nutrition-supplements',
+        },
+        
+        'Home Appliances': {
+            'Home Appliances Accessories': 'home-healthcare',
+        },
+        
+        'Baby & Kids': {
+            'Feeding & Nursing': 'mother-baby-care',
+        },
+        
+        'Personal Care & Beauty': {
+            'Makeup & Accessories': 'personal-care',
+        },
+
+        'Health & Medical': {
+            'Medicine': 'medicines'
+        }
             }
     
     conn = mysql.connector.connect(
@@ -115,15 +136,18 @@ class LifePharmacySpider(Spider):
 
     
     def start_requests(self):
-        for main_category, category_f in self.categories.items():
-            catalogue_code = self.get_catalogue_code(main_category)
-            if catalogue_code:
-                formatted_products_api = self.products_api.format(category_f, self.skip)
-                yield scrapy.Request(url=formatted_products_api, headers=self.headers, callback=self.parse, meta={'category': main_category, 'category_f': category_f, 'skip': self.skip, 'page': self.page, 'catalogue_code': catalogue_code})
+        for main_category, sub_categories in self.categories.items():
+            for sub_category, category_f in sub_categories.items():
+                catalogue_code = self.get_catalogue_code(main_category)
+                if catalogue_code:
+                    formatted_products_api = self.products_api.format(category_f, self.skip)
+                    yield scrapy.Request(url=formatted_products_api, headers=self.headers, callback=self.parse, meta={'category': main_category, 'sub_category': sub_category, 'category_f': category_f, 'skip': self.skip, 'page': self.page, 'catalogue_code': catalogue_code})
+
     
     def parse(self, response):
         item = ProductItemLifePharmacy()
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         category_f = response.meta['category_f']
         skip = response.meta['skip']
         page = response.meta['page']
@@ -176,8 +200,9 @@ class LifePharmacySpider(Spider):
                 item['RatingValue'] = round(float(item['RatingValue']), 2)
                 url = product.get('product_url')
                 item['URL'] = self.main_url + url
-                item['CategoryName'] = product.get('categories', [])[0].get('name', '')
+                #item['CategoryName'] = product.get('categories', [])[0].get('name', '')
                 item['CatalogueName'] = category
+                item['CategoryName'] = sub_category
                 #item['page'] = page
                 item['ModelNumber'] = ''
                 item['VendorCode'] = self.vendor_code
@@ -195,5 +220,5 @@ class LifePharmacySpider(Spider):
             skip = skip + 40
             page = page + 1
             formatted_products_api = self.products_api.format(category_f, skip)
-            yield scrapy.Request(url=formatted_products_api, headers=self.headers, meta={'category': category, 'category_f': category_f, 'skip': skip, 'page': page, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=formatted_products_api, headers=self.headers, meta={'category': category, 'sub_category': sub_category, 'category_f': category_f, 'skip': skip, 'page': page, 'catalogue_code': catalogue_code})
 

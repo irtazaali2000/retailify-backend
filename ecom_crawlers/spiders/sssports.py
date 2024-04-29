@@ -22,13 +22,41 @@ class SunAndSandSportsSpider(Spider):
     main_url = 'https://en-ae.sssports.com'
     #product_url_men = 'https://en-ae.sssports.com/mens'
     #product_url_women = 'https://en-ae.sssports.com/womens'
+    
     cat_products_urls = {
-                'Men': 'https://en-ae.sssports.com/mens',
-                'Women': 'https://en-ae.sssports.com/womens',
-                'Kids': 'https://en-ae.sssports.com/kids',
-                'Equipment': 'https://en-ae.sssports.com/equipment',
-                'Accessories': 'https://en-ae.sssports.com/accessories',
+            'Fashion': {
+                'Men Clothing': 'https://en-ae.sssports.com/mens/clothing?pmin=0,01&prefn1=gender&prefv1=Mens|Unisex&gs=3&srule=featured',
+                'Men Shoes': 'https://en-ae.sssports.com/mens/shoes?pmin=0,01&prefn1=gender&prefv1=Mens|Unisex&gs=3&srule=featured',
+                'Men Accessories': 'https://en-ae.sssports.com/mens/accessories?pmin=0,01&prefn1=gender&prefv1=Mens|Unisex&gs=3&srule=featured',
+                
+                'Women Clothing': 'https://en-ae.sssports.com/womens/clothing?pmin=0,01&prefn1=gender&prefv1=Womens|Unisex&gs=3&srule=featured',
+                'Women Shoes': 'https://en-ae.sssports.com/womens/shoes?pmin=0,01&prefn1=gender&prefv1=Womens|Unisex&gs=3&srule=featured',
+                'Women Accessories': 'https://en-ae.sssports.com/womens/accessories?pmin=0,01&prefn1=gender&prefv1=Womens|Unisex&gs=3&srule=featured'
+            
+            },
+
+            'Baby & Kids': {
+                'Boys Clothing': 'https://en-ae.sssports.com/kids/clothing?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Boys&gs=3&srule=featured',
+                'Boys Shoes': 'https://en-ae.sssports.com/kids/shoes?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Boys&gs=3&srule=featured',
+                'Boys Accessories': 'https://en-ae.sssports.com/kids/accessories?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Boys&gs=3&srule=featured',
+
+                'Girls Clothing': 'https://en-ae.sssports.com/kids/shoes?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Girls&gs=3&srule=featured',
+                'Girls Shoes': 'https://en-ae.sssports.com/kids/clothing?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Girls&gs=3&srule=featured',
+                'Girls Accessories': 'https://en-ae.sssports.com/kids/accessories?pmin=0,01&prefn1=gender&prefv1=Kids&prefn2=kidsGender&prefv2=Unisex|Girls&gs=3&srule=featured',
+            },
+
+            'Sports Equipment': {
+                    'Cycling & Skating': 'https://en-ae.sssports.com/equipment/cycling?pmin=0,01&gs=3&srule=featured',
+                    'Fitness': 'https://en-ae.sssports.com/equipment/fitness?pmin=0,01&gs=3&srule=featured',
+                    'Rugby & Football': 'https://en-ae.sssports.com/equipment/football?pmin=0,01&gs=3&srule=featured',
+                    'Basketball': 'https://en-ae.sssports.com/equipment/basketball?pmin=0,01&gs=3&srule=featured',
+                    'Swimming': 'https://en-ae.sssports.com/equipment/swimming?pmin=0,01&gs=3&srule=featured',
+                    'Volleyball': 'https://en-ae.sssports.com/equipment/volleyball?pmin=0,01&gs=3&srule=featured'
+            },
+
+            'Health & Medical': {
                 'Nutrition': 'https://en-ae.sssports.com/health-and-nutrition'
+            }
         }
 
     custom_settings = {
@@ -98,16 +126,16 @@ class SunAndSandSportsSpider(Spider):
 
 
     def start_requests(self):
-        for category, product_url in self.cat_products_urls.items():
-            catalogue_code = self.get_catalogue_code(category)
-            if catalogue_code:
-                yield scrapy.Request(url=product_url, dont_filter=True, meta={'category': category, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
-
-
+        for main_category, sub_categories in self.cat_products_urls.items():
+            for sub_category, product_url in sub_categories.items():
+                catalogue_code = self.get_catalogue_code(main_category)  # Assuming you have this method implemented
+                if catalogue_code:
+                    yield scrapy.Request(url=product_url, dont_filter=True, meta={'category': main_category, 'sub_category': sub_category, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
 
     def parse(self, response):
         #print("INSIDE PARSE")
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         page = response.meta['page']
         catalogue_code = response.meta['catalogue_code']
         vendor_code = response.meta['vendor_code']
@@ -116,17 +144,18 @@ class SunAndSandSportsSpider(Spider):
             url = product.css('a::attr(href)').get()
             url = self.main_url + url
             
-            yield scrapy.Request(url=url, callback=self.parse_product, meta={'category': category, 'url': url, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=url, callback=self.parse_product, meta={'category': category, 'sub_category': sub_category, 'url': url, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
 
         #NEXT PAGE
         load_more_url = response.css('.js-show-more-btn::attr(data-url)').get()
         if load_more_url:
             page = page + 1
-            yield scrapy.Request(url=load_more_url, callback=self.parse, meta={'category': category, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=load_more_url, callback=self.parse, meta={'category': category, 'sub_category': sub_category, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
 
 
     def parse_product(self, response):
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         page = response.meta['page']
         url = response.meta['url']
         vendor_code = response.meta['vendor_code']
@@ -135,9 +164,9 @@ class SunAndSandSportsSpider(Spider):
         title = title.strip()
         img = response.xpath('//img[@class="d-block img-fluid lazyload"][1]/@data-high-res-src').get()
         brand = response.xpath('//h1[@class="product-detail__product-brand-product-name"]/span[@class="product-detail__product-brand"]/text()').get()
-        sub_category = response.xpath('(//li[@class="breadcrumb__item"])[last()-1]/a/text()').get()
-        if sub_category:
-            sub_category = sub_category.strip()
+        # sub_category = response.xpath('(//li[@class="breadcrumb__item"])[last()-1]/a/text()').get()
+        # if sub_category:
+        #     sub_category = sub_category.strip()
         price_in_aed = response.xpath('//span[@class="sales"]/span[@class="value"]/@content').get()
         price_in_aed = round(float(price_in_aed), 2)
         old_price_in_aed = response.xpath('//div[@class="prices js-gtm-price"]/div[@class="price"]/span/del/span[@class="strike-through list pl-1"]/span[@class="value"]/@content').get()

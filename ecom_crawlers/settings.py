@@ -103,61 +103,61 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    #'ecom_crawlers.pipelines.FilterItemPipelineCarrefour': 300,
-    'ecom_crawlers.pipelines.UploadPipelineCarrefour': 306,
+    #'ecom_crawlers.pipelines.UploadPipelineCarrefour': 306,
 
    #'ecom_crawlers.pipelines.FilterItemPipeline': 300,
    #'ecom_crawlers.pipelines.UploadPipeline': 301,
 
     # 'ecom_crawlers.pipelines.FilterItemPipelineAmazon': 300,
-    'ecom_crawlers.pipelines.UploadPipelineAmazon': 303,
+    #'ecom_crawlers.pipelines.UploadPipelineAmazon': 303,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineNoon': 300,
-    'ecom_crawlers.pipelines.UploadPipelineNoon': 313,
+    #'ecom_crawlers.pipelines.UploadPipelineNoon': 313,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineJumbo': 300,
-    'ecom_crawlers.pipelines.UploadPipelineJumbo': 310,
+    #'ecom_crawlers.pipelines.UploadPipelineJumbo': 310,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineFirstCry': 300,
-    'ecom_crawlers.pipelines.UploadPipelineFirstCry': 309,
+    #'ecom_crawlers.pipelines.UploadPipelineFirstCry': 309,
 
    #'ecom_crawlers.pipelines.FilterItemPipelineHandM': 300,
-    'ecom_crawlers.pipelines.UploadPipelineHandM': 317,
+    #'ecom_crawlers.pipelines.UploadPipelineHandM': 317,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineBoots': 300,
-    'ecom_crawlers.pipelines.UploadPipelineBoots': 305,
+    #'ecom_crawlers.pipelines.UploadPipelineBoots': 305,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineCentrePoint': 300,
-    'ecom_crawlers.pipelines.UploadPipelineCentrePoint': 307,
+    #'ecom_crawlers.pipelines.UploadPipelineCentrePoint': 307,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineMax': 302,
-    'ecom_crawlers.pipelines.UploadPipelineMax': 312,
+    #'ecom_crawlers.pipelines.UploadPipelineMax': 312,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineEmax': 304,
-    'ecom_crawlers.pipelines.UploadPipelineEmax': 308,
+    #'ecom_crawlers.pipelines.UploadPipelineEmax': 308,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineNamshi': 301,
-    'ecom_crawlers.pipelines.UploadPipelineNamshi': 301,
+    #'ecom_crawlers.pipelines.UploadPipelineNamshi': 301,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineLifePharmacy': 300,
-    'ecom_crawlers.pipelines.UploadPipelineLifePharmacy': 311,
+    #'ecom_crawlers.pipelines.UploadPipelineLifePharmacy': 311,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineAsterPharmacy': 300,
-    'ecom_crawlers.pipelines.UploadPipelineAsterPharmacy': 304,
+    #'ecom_crawlers.pipelines.UploadPipelineAsterPharmacy': 304,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineSharafDG': 308,
-    'ecom_crawlers.pipelines.UploadPipelineSharafDG': 315,
+    #'ecom_crawlers.pipelines.UploadPipelineSharafDG': 315,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineSkechers': 300,
-    'ecom_crawlers.pipelines.UploadPipelineSkechers': 301,
+    #'ecom_crawlers.pipelines.UploadPipelineSkechers': 301,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineAdidas': 300,
-    'ecom_crawlers.pipelines.UploadPipelineAdidas': 302,
+    #'ecom_crawlers.pipelines.UploadPipelineAdidas': 302,
 
     #'ecom_crawlers.pipelines.FilterItemPipelinePullBear': 300,
-    'ecom_crawlers.pipelines.UploadPipelinePullBear': 314,
+    #'ecom_crawlers.pipelines.UploadPipelinePullBear': 314,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineSunAndSandSports': 300,
-    'ecom_crawlers.pipelines.UploadPipelineSunAndSandSports': 316,
+    #'ecom_crawlers.pipelines.UploadPipelineSunAndSandSports': 316,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

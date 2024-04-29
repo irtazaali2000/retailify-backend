@@ -24,21 +24,51 @@ class JumboSpider(Spider):
     #review_api = 'https://js.testfreaks.com/badge/jumbo.ae-staging/reviews.json?offset=1&pid={}&type=user&limit=1'
     #body = {"query":"","ruleContexts":["magento-category-{}"],"page":1,"facets":["*"],"hitsPerPage":24,"filters":"","facetFilters":["visibility_search:1","in_stock:1","categoryIds:{}"]}
     
+
     categories = {
-    "Mobiles": 401,
-    "Computers and Tablets / personal-computers": 395,
-    "Televisions and Home Theaters": 404,
-    "Cameras": 359,
-    "Home Appliances": 371,
-    "Headphones and speakers": 374,
-    "Networking and Smart Devices": 389,
-    "Accessories": 353,
-    "Gaming": 365,
-    "Office Automation": 392,
-    "Wearables": 416,
-    "Health and Personal Care": 377,
-    #"Gift Card": 368,
-    }
+        "Mobiles Tables & Wearables": {
+            'Mobile Phones': 401,
+            "Mobile Accessories": 353,
+            "Wearables": 416,
+        },
+
+        'Computers': {
+            "Desktop": 395
+        },
+        
+        'Video, Lcd & Oled': {
+            'Tv': 404
+        },
+
+        'Camcorders & Cameras': {
+            'Camera Accessories': 359
+        },
+
+        'Home Appliances': {
+            "Home Appliances Accessories": 371
+        },
+
+        'Audio, Headphones & Music Players': {
+            "Headphones & Speakers": 374
+        },
+
+        'Computers': {
+            "Networking & Wireless": 389,
+        },
+        
+        'Video Games & Consoles': {
+            "Games Accessories": 365
+        },
+        
+        'Office Supplies': {
+            "Warehouse Equipment": 392,
+        },
+
+        'Personal Care & Beauty': {
+            "Makeup & Accessories": 377,
+        }
+        
+        }
 
     
     custom_settings = {
@@ -120,25 +150,27 @@ class JumboSpider(Spider):
 
 
     def start_requests(self):
-        for category_name, category_id in self.categories.items():
-            catalogue_code = self.get_catalogue_code(category_name)
-            if catalogue_code:
-                page = 1
-                body = {
-                    "query": "",
-                    "ruleContexts": ["magento-category-{}".format(category_id)],
-                    "page": page,
-                    "facets": ["*"],
-                    "hitsPerPage": 24,
-                    "filters": "",
-                    "facetFilters": ["visibility_search:1", "in_stock:1", "categoryIds:{}".format(category_id)],
-                }
-                yield scrapy.Request(url=self.products_api, body=json.dumps(body), method='POST', meta={'category_name': category_name, 'page': page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
+        for main_category, sub_categories in self.categories.items():
+            for sub_category, category_id in sub_categories.items():
+                catalogue_code = self.get_catalogue_code(main_category)
+                if catalogue_code:
+                    page = 1
+                    body = {
+                        "query": "",
+                        "ruleContexts": ["magento-category-{}".format(category_id)],
+                        "page": page,
+                        "facets": ["*"],
+                        "hitsPerPage": 24,
+                        "filters": "",
+                        "facetFilters": ["visibility_search:1", "in_stock:1", "categoryIds:{}".format(category_id)],
+                    }
+                    yield scrapy.Request(url=self.products_api, body=json.dumps(body), method='POST', meta={'category_name': main_category, 'sub_category': sub_category, 'page': page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
 
     
     def parse(self, response):
         item = ProductItemJumbo()
         category_name = response.meta['category_name']
+        sub_category = response.meta['sub_category']
         vendor_code = response.meta['vendor_code']
         page = response.meta['page']
 
@@ -150,7 +182,8 @@ class JumboSpider(Spider):
                 item['ProductName'] = hit.get('name')
                 item['URL'] = hit.get('url').replace('mcprod.', '')
                 item['CatalogueName'] = category_name
-                item['CategoryName'] = hit.get('categories_without_path', [])[0]
+                #item['CategoryName'] = hit.get('categories_without_path', [])[0]
+                item['CategoryName'] = sub_category
                 item['MainImage'] = hit.get('image_url')
                 item['StockAvailability'] = hit.get('in_stock')
                 item['SKU'] = hit.get('sku')
@@ -184,7 +217,7 @@ class JumboSpider(Spider):
             print("Total Items on Page {}: {}".format(page, self.count))
             page = page + 1
             next_body = response.request.body.replace(f'"page": {page-1}'.encode('utf-8'), f'"page": {page}'.encode('utf-8'))
-            yield scrapy.Request(url=self.products_api, method='POST', body=next_body, meta={'category_name': category_name, 'page': page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=self.products_api, method='POST', body=next_body, meta={'category_name': category_name, 'sub_category': sub_category, 'page': page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
 
     def parse_pid(self, response):
         data = json.loads(response.text)

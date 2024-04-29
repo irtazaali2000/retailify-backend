@@ -103,25 +103,41 @@ class PullBearSpider(Spider):
             # print(result[0])
             return result[0] if result else None
 
+    
     categories = {
-                 'Man': ['clothing', 'shoes', 'accessories', 'bags'],
-                 'Woman': ['clothing', 'shoes', 'accessories', 'bags']
+                 'Fashion': {
+                        "Men Clothing": 'clothing', 
+                        "Men Shoes": 'shoes', 
+                        "Men Accessories": 'accessories', 
+                        "Men Bags": 'bags',
+
+                        "Women Clothing": 'clothing', 
+                        "Women Shoes": 'shoes', 
+                        "Women Accessories": 'accessories', 
+                        "Women Bags": 'bags',
+                        },
                  }
     
-    
-    
+
     def start_requests(self):
-        for category, sub_category_list in self.categories.items():
-            catalogue_code = self.get_catalogue_code(category)
+        for main_category, sub_categories in self.categories.items():
+            catalogue_code = self.get_catalogue_code(main_category)
             if catalogue_code:
-                for sub_category in sub_category_list:
-                    yield scrapy.Request(url=self.get_id_api.format(category.lower(), category, sub_category, self.offset), 
-                                            meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'offset': self.offset})
+                for sub_category, sub_category_code in sub_categories.items():
+                    param = sub_category.split(' ')[0]
+                    if param == "Men":
+                        yield scrapy.Request(url=self.get_id_api.format("man", "Man", sub_category_code, self.offset), 
+                                                meta={'category': main_category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'catalogue_code': catalogue_code, 'offset': self.offset})
+
+                    elif param == "Women":
+                        yield scrapy.Request(url=self.get_id_api.format("woman", "Woman", sub_category_code, self.offset), 
+                                                meta={'category': main_category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'catalogue_code': catalogue_code, 'offset': self.offset})
 
 
     def parse(self, response):
         category = response.meta['category']
         sub_category = response.meta['sub_category']
+        sub_category_code = response.meta['sub_category_code']
         catalogue_code = response.meta['catalogue_code']
         offset = response.meta['offset']
         vendor_code = self.vendor_code
@@ -134,11 +150,18 @@ class PullBearSpider(Spider):
 
             offset = offset + 25
             #if offset <= 25:
-            yield scrapy.Request(url=self.get_id_api.format(category.lower(), category, sub_category, offset), 
-                                     meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'offset': offset})
-            
+            param = sub_category.split(' ')[0]
+            if param == "Men":
+                yield scrapy.Request(url=self.get_id_api.format("man", "Man", sub_category_code, offset), 
+                                        meta={'category': category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'catalogue_code': catalogue_code, 'offset': offset})
+            elif param == "Women":
+                yield scrapy.Request(url=self.get_id_api.format("woman", "Woman", sub_category_code, offset), 
+                                        meta={'category': category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'catalogue_code': catalogue_code, 'offset': offset})
+                
     def parse_product(self, response):
         item = ProductItemPullBear()
+        category = response.meta['category']
+        sub_category = response.meta['sub_category']
         offset = response.meta['offset']
         vendor_code = response.meta['VendorCode']
         data = json.loads(response.text)
@@ -147,16 +170,18 @@ class PullBearSpider(Spider):
             for product in products:
                 item['SKU'] = product.get('id')
                 item['ProductName'] = product.get('name', '')
-                item['CatalogueName'] = product.get('sectionNameEN', '')
-                sub_category = product.get('relatedCategories', [])
-                if sub_category:
-                    sub_category = sub_category[0].get('name', '')
-                    sub_category = sub_category + '>' + product.get('familyName', '')
-                    new_sub_category = product.get('subFamilyName', '')
-                    if new_sub_category:
-                        item['CategoryName'] = sub_category + '>' + new_sub_category
-                    else:
-                        item['CategoryName'] = sub_category
+                #item['CatalogueName'] = product.get('sectionNameEN', '')
+                item['CatalogueName'] = category
+                item['CategoryName'] = sub_category
+                # sub_category = product.get('relatedCategories', [])
+                # if sub_category:
+                #     sub_category = sub_category[0].get('name', '')
+                #     sub_category = sub_category + '>' + product.get('familyName', '')
+                #     new_sub_category = product.get('subFamilyName', '')
+                #     if new_sub_category:
+                #         item['CategoryName'] = sub_category + '>' + new_sub_category
+                #     else:
+                #         item['CategoryName'] = sub_category
                 #item['description'] = product.get('detail', {}).get('longDescription', '')
                 item['Offer'] = product.get('detail', {}).get('colors', [])[0].get('sizes', [])[0].get('price', 0)
                 item['Offer'] = float(item['Offer']) / 100
@@ -179,8 +204,7 @@ class PullBearSpider(Spider):
                 item['CatalogueCode'] = catalogue_code
                 item['CategoryCode'] = category_code
                 item['MainImage'] = ''
-                item['CategoryName'] = response.meta['sub_category']
-                item['CatalogueName'] = response.meta['category']
+
 
                 yield item
                 

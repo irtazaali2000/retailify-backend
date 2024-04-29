@@ -37,31 +37,50 @@ class EmaxSpider(Spider):
     page = 0
     count = 0
     
+
     categories = {
-                  'Mobiles': 'mobile', 
-                  'Laptop, Tablet & Computer Accessories': 'laptoptabletandcomputeraccessories',
-                  'Television and Audio': 'televisionandaudio',
-                  'Home Appliances': 'homeappliances', 'Kitchen Appliances': 'kitchenappliances', 
-                  'Personal Care': 'personalcare', 'Gaming & Gaming Accessories': 'gamingandgamingaccessories',
-                  'Photography, Lenses & Drones': 'photographylensesanddrones', 
-                  'Musical Instruments': 'musicalinstruments',
+                'Mobiles Tablets & Wearables': {
+                                            'Mobile Phones': 'mobile',
+                                            'Mobile Accessories': 'mobileaccessories',
+                                            'Tablets & Ereaders': 'laptoptabletandcomputeraccessories-tablets'
+                                            },
                 
-                  'Mobile Accessories': 
-                    {"Mobile Covers": 'mobileaccessories-mobilecovers',
-                    "Charger": "mobileaccessories-charger",
-                    "Headsets": "mobileaccessories-headsets",
-                    "SmartWatches": 'mobileaccessories-smartwatches',
-                    "Screen Protectors": 'mobileaccessories-screenprotectors',
-                    "Cable": 'mobileaccessories-cable',
-                    "Wearable Accessories": 'mobileaccessories-wearableaccessories',
-                    "Power Banks": 'mobileaccessories-powerbanks',
-                    "Car Holders": 'mobileaccessories-carholders',
-                    "Memory Cards": 'mobileaccessories-memorycards',
-                    "Mobile Photography": 'mobileaccessories-mobilephotography'          
-                    
-                    }
- 
+                'Computers': {
+                                'Laptops': 'laptoptabletandcomputeraccessories-laptops',
+                                'Computers Accessories': 'laptoptabletandcomputeraccessories-computeraccessories'
+                                
+                            },
+
+                'Video, Lcd & Oled': {
+                            'Tv': 'televisionandaudio-television',
+                },
+
+                'Audio, Headphones & Music Players': {
+                    'Audio Accessories': 'televisionandaudio-audio'
+                },
+
+                'Home Appliances': {
+                    'Home Appliances Accessories': 'homeappliances',
+                    'Kitchen Appliances': 'kitchenappliances'
+                },
+
+                'Personal Care & Beauty': {
+                    'Makeup & Accessories': 'personalcare'
+                },
+
+                'Video Games & Consoles': {
+                    'Games Accessories': 'gamingandgamingaccessories'
+                },
+
+                'Camcorders & Cameras': {
+                    'Camera Accessories': 'photographylensesanddrones'
+                    },
+
+                'Musical Instruments': {
+                    'Keyboards & Midi Instruments': 'musicalinstruments'
                 }
+                    
+        }
     
     conn = mysql.connector.connect(
             # host='localhost',
@@ -132,38 +151,25 @@ class EmaxSpider(Spider):
 
     
     def start_requests(self):
-        for main_category, sub_categories in self.categories.items():
+        for main_category, subcategories in self.categories.items():
             catalogue_code = self.get_catalogue_code(main_category)
             if catalogue_code:
-                if isinstance(sub_categories, str):  # For main categories
-                    category_code_f = sub_categories
-                else:  # For sub-categories
-                    for sub_category, sub_category_code in sub_categories.items():
-                        category_code_f = sub_category_code
+                for sub_category, sub_category_code in subcategories.items():
+                    modified_body = copy.deepcopy(self.body)
+                    format_body = modified_body["requests"][0]["params"].format(self.page, sub_category_code)
+                    modified_body["requests"][0]["params"] = format_body
+                    body = json.dumps(modified_body)
+                    
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers,
+                                        body=body, callback=self.parse,
+                                        meta={'category': main_category, 'sub_category': sub_category, 'category_code_f': sub_category_code, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
 
-                        modified_body = copy.deepcopy(self.body)
-                        format_body = modified_body["requests"][0]["params"].format(self.page, category_code_f)
-                        modified_body["requests"][0]["params"] = format_body
-                        body = json.dumps(modified_body)
-
-                        yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers,
-                                            body=body, callback=self.parse,
-                                            meta={'category': sub_category, 'category_code_f': category_code_f, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
-                        # You may want to adjust the meta data accordingly, e.g., {'category': main_category, 'subcategory': sub_category, ...}
-
-                modified_body = copy.deepcopy(self.body)
-                format_body = modified_body["requests"][0]["params"].format(self.page, category_code_f)
-                modified_body["requests"][0]["params"] = format_body
-                body = json.dumps(modified_body)
-
-                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers,
-                                    body=body, callback=self.parse,
-                                    meta={'category': main_category, 'category_code_f': category_code_f, 'page': self.page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
         
     
     def parse(self, response):
         item = ProductItemEmax()
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         category_code_f = response.meta['category_code_f']
         vendor_code = response.meta['vendor_code']
         print("Category: ", category)
@@ -208,7 +214,8 @@ class EmaxSpider(Spider):
                     item['URL'] = self.main_url + url
                     #item['percentage_discount'] = hit.get('percentageDiscount', 0)
                     item['CatalogueName'] = category
-                    item['CategoryName'] = hit.get('allCategories', [])[-1]
+                    #item['CategoryName'] = hit.get('allCategories', [])[-1]
+                    item['CategoryName'] = sub_category
                     #item['page'] = page
                     item['RatingValue'] = 0
                     item['ModelNumber'] = ''
@@ -230,5 +237,5 @@ class EmaxSpider(Spider):
                 modified_body["requests"][0]["params"] = format_body
                 body = json.dumps(modified_body)
                 #print(body)
-                yield scrapy.Request(url=self.products_api, method='POST', callback=self.parse, headers=self.headers, body=body, meta={'category':category, 'category_code_f': category_code_f, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
+                yield scrapy.Request(url=self.products_api, method='POST', callback=self.parse, headers=self.headers, body=body, meta={'category':category, 'sub_category': sub_category, 'category_code_f': category_code_f, 'page': page, 'vendor_code': vendor_code, 'catalogue_code': catalogue_code})
 

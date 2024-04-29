@@ -28,7 +28,8 @@ class BootsSpider(Spider):
     headers = {'Content-Type': 'application/json'}
     body_skincare = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Skincare%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page={}&ruleContexts=%5B%22shop_by_department__skincare%22%2C%22shop_by_department%22%2C%22web__shop_by_department__skincare%22%2C%22web__shop_by_department%22%5D"}]}
     body_hairs = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Hair%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__hair%22%2C%22shop_by_department%22%2C%22web__shop_by_department__hair%22%2C%22web__shop_by_department%22%5D"}]}
-    body_personalcare = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Personal%20Care%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__personal_care%22%2C%22shop_by_department%22%2C%22web__shop_by_department__personal_care%22%2C%22web__shop_by_department%22%5D"}]}
+    body_personalcare_men = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facetFilters=%5B%5B%22attr_gender.en%3ABoys%22%2C%22attr_gender.en%3AMen%22%2C%22attr_gender.en%3AUnisex%22%5D%5D&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Personal%20Care%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__personal_care%22%2C%22shop_by_department%22%2C%22web__shop_by_department__personal_care%22%2C%22web__shop_by_department%22%5D&userToken=anonymous-0e53accc-fb96-44e3-879a-da2462115d6a&analytics=true"},{"indexName":"01live_bpae_product_list","params":"analytics=true&clickAnalytics=false&facets=attr_gender.en&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Personal%20Care%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=0&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__personal_care%22%2C%22shop_by_department%22%2C%22web__shop_by_department__personal_care%22%2C%22web__shop_by_department%22%5D&userToken=anonymous-0e53accc-fb96-44e3-879a-da2462115d6a"}]}
+    body_personalcare_women = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facetFilters=%5B%5B%22attr_gender.en%3AGirls%22%2C%22attr_gender.en%3AUnisex%22%2C%22attr_gender.en%3AWomen%22%5D%5D&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Personal%20Care%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__personal_care%22%2C%22shop_by_department%22%2C%22web__shop_by_department__personal_care%22%2C%22web__shop_by_department%22%5D&userToken=anonymous-0e53accc-fb96-44e3-879a-da2462115d6a&analytics=true"},{"indexName":"01live_bpae_product_list","params":"analytics=true&clickAnalytics=false&facets=attr_gender.en&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Personal%20Care%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=0&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__personal_care%22%2C%22shop_by_department%22%2C%22web__shop_by_department__personal_care%22%2C%22web__shop_by_department%22%5D&userToken=anonymous-0e53accc-fb96-44e3-879a-da2462115d6a"}]}
     body_makeup = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Makeup%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__makeup%22%2C%22shop_by_department%22%2C%22web__shop_by_department__makeup%22%2C%22web__shop_by_department%22%5D"}]}
     body_fragrance = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Fragrance%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__fragrance%22%2C%22shop_by_department%22%2C%22web__shop_by_department__fragrance%22%2C%22web__shop_by_department%22%5D"}]}
     body_suncare_tanning = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Suncare%20%26%20Tanning%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__suncare_tanning%22%2C%22shop_by_department%22%2C%22web__shop_by_department__suncare_tanning%22%2C%22web__shop_by_department%22%5D"}]}
@@ -37,7 +38,7 @@ class BootsSpider(Spider):
     body_wellness = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Wellness%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__wellness%22%2C%22shop_by_department%22%2C%22web__shop_by_department__wellness%22%2C%22web__shop_by_department%22%5D"}]}
     body_pharmacy = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Pharmacy%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__pharmacy%22%2C%22shop_by_department%22%2C%22web__shop_by_department__pharmacy%22%2C%22web__shop_by_department%22%5D"}]}
     body_opticians = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Opticians%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__opticians%22%2C%22shop_by_department%22%2C%22web__shop_by_department__opticians%22%2C%22web__shop_by_department%22%5D"}]}
-    body_gifting = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Gifting%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__gifting%22%2C%22shop_by_department%22%2C%22web__shop_by_department__gifting%22%2C%22web__shop_by_department%22%5D"}]}
+    #body_gifting = {"requests":[{"indexName":"01live_bpae_product_list","params":"clickAnalytics=true&facets=%5B%22*%22%5D&filters=(stock%20%3E%200)%20AND%20(field_category_name.en.lvl1%3A%20%22Shop%20by%20Department%20%3E%20Gifting%22)&highlightPostTag=%3C%2Fais-highlight-0000000000%3E&highlightPreTag=%3Cais-highlight-0000000000%3E&hitsPerPage=36&optionalFilters=null&page=0&ruleContexts=%5B%22shop_by_department__gifting%22%2C%22shop_by_department%22%2C%22web__shop_by_department__gifting%22%2C%22web__shop_by_department%22%5D"}]}
 
     page = 0
     offset = 0
@@ -58,8 +59,11 @@ class BootsSpider(Spider):
     next_page_body_hairs = body_hairs["requests"][0]["params"].format(page)
     body_hairs["requests"][0]["params"] = next_page_body_hairs
 
-    next_page_body_personalcare = body_personalcare["requests"][0]["params"].format(page)
-    body_personalcare["requests"][0]["params"] = next_page_body_personalcare
+    next_page_body_personalcare_men = body_personalcare_men["requests"][0]["params"].format(page)
+    body_personalcare_men["requests"][0]["params"] = next_page_body_personalcare_men
+
+    next_page_body_personalcare_women = body_personalcare_women["requests"][0]["params"].format(page)
+    body_personalcare_women["requests"][0]["params"] = next_page_body_personalcare_women
 
     next_page_body_makeup = body_makeup["requests"][0]["params"].format(page)
     body_makeup["requests"][0]["params"] = next_page_body_makeup
@@ -85,8 +89,8 @@ class BootsSpider(Spider):
     next_page_body_opticians = body_opticians["requests"][0]["params"].format(page)
     body_opticians["requests"][0]["params"] = next_page_body_opticians
 
-    next_page_body_gifting = body_gifting["requests"][0]["params"].format(page)
-    body_gifting["requests"][0]["params"] = next_page_body_gifting
+    # next_page_body_gifting = body_gifting["requests"][0]["params"].format(page)
+    # body_gifting["requests"][0]["params"] = next_page_body_gifting
 
     
     item_reviews = []
@@ -160,32 +164,56 @@ class BootsSpider(Spider):
     
     
     def start_requests(self):
-        categories = {
-            'body_skincare': 'skin_care',
-            'body_hairs': 'hairs',
-            'body_personalcare': 'personal_care',
-            'body_makeup': 'makeup',
-            'body_fragrance': 'fragrance',
-            'body_suncare_tanning': 'suncare_tanning',
-            'body_baby': 'baby',
-            'body_electrical': 'electrical',
-            'body_wellness': 'wellness',
-            'body_pharmacy': 'pharmacy',
-            'body_opticians': 'opticians',
-            'body_gifting': 'gifting'
-        }
+        # categories = {
+        #     'body_skincare': 'skin_care',
+        #     'body_hairs': 'hairs',
+        #     'body_personalcare': 'personal_care',
+        #     'body_makeup': 'makeup',
+        #     'body_fragrance': 'fragrance',
+        #     'body_suncare_tanning': 'suncare_tanning',
+        #     'body_baby': 'baby',
+        #     'body_electrical': 'electrical',
+        #     'body_wellness': 'wellness',
+        #     'body_pharmacy': 'pharmacy',
+        #     'body_opticians': 'opticians',
+        #     # 'body_gifting': 'gifting'
+        # }
 
-        for body, category in categories.items():
+        categories = {
+                        'body_skincare': {'Personal Care & Beauty': 'Makeup & Accessories'},
+                        'body_hairs': {'Personal Care & Beauty': 'Makeup & Accessories'},
+                        'body_personalcare_men': {'Personal Care & Beauty': 'Personal Care For Men'},
+                        'body_personalcare_women': {'Personal Care & Beauty': 'Personal Care For Women'},
+                        'body_makeup': {'Personal Care & Beauty': 'Makeup & Accessories'},
+                        'body_fragrance': {'Personal Care & Beauty': 'Fragrances & Perfumes'},
+                        'body_suncare_tanning': {'Personal Care & Beauty': 'Makeup & Accessories'},
+                        'body_baby': {'Baby & Kids': 'Diapers, Bath & Skincare'},
+                        'body_electrical': {'Health & Medical': 'Mouth Care'},
+                        'body_wellness': {'Health & Medical': 'Medicine'},
+                        'body_pharmacy': {'Health & Medical': 'Medicine'},
+                        'body_opticians': {'Health & Medical': 'Medicine'}
+                     }
+
+        for body, category_data in categories.items():
+            category, subcategory = list(category_data.keys())[0], list(category_data.values())[0]
             catalogue_code = self.get_catalogue_code(category)
             if catalogue_code:
                 request_body = getattr(self, body)
-                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=json.dumps(request_body), callback=self.parse, meta={'category': category, 'catalogue_code': catalogue_code, 'page': self.page})
+                yield scrapy.Request(
+                    url=self.products_api,
+                    method='POST',
+                    headers=self.headers,
+                    body=json.dumps(request_body),
+                    callback=self.parse,
+                    meta={'category': category, 'sub_category': subcategory, 'catalogue_code': catalogue_code, 'page': self.page}
+                )
 
         
 
     def parse(self, response):
         print("###################################Inside PARSE###################################")
         category = response.meta['category']
+        sub_category = response.meta['sub_category']
         catalogue_code = response.meta['catalogue_code']
         page = response.meta['page']
         print("Category = {}, Page = {}".format(category, page))
@@ -198,7 +226,7 @@ class BootsSpider(Spider):
                 for hit in hits:
                     title = hit.get('title', {}).get('en')
                     sku = hit.get('sku')
-                    sub_category = hit.get('gtm', {}).get('gtm-category')
+                    # sub_category = hit.get('gtm', {}).get('gtm-category')
                     price = hit.get('gtm', {}).get('gtm-price')
                     old_price = hit.get('gtm', {}).get('gtm-old-price', 0)
                     description = hit.get('body', {}).get('en')
@@ -239,90 +267,97 @@ class BootsSpider(Spider):
                 #Next Page
                 page = page + 1
 
-                if category == 'skin_care':
+                if category == 'Personal Care & Beauty':
                     next_page_body = self.body_skincare["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_skincare["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_skincare)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'skin_care', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'hairs':
+                # elif category == 'hairs':
                     next_page_body = self.body_hairs["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_hairs["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_hairs)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'hairs', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'personal_care':
-                    next_page_body = self.body_personalcare["requests"][0]["params"]
+                #elif category == 'personal_care':
+                    next_page_body = self.body_personalcare_men["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
-                    self.body_personalcare["requests"][0]["params"] = next_page_body
-                    body = json.dumps(self.body_personalcare)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'personal_care', 'catalogue_code': catalogue_code, 'page': page})
+                    self.body_personalcare_men["requests"][0]["params"] = next_page_body
+                    body = json.dumps(self.body_personalcare_men)
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
+                #elif category == 'personal_care':
+                    next_page_body = self.body_personalcare_women["requests"][0]["params"]
+                    next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
+                    self.body_personalcare_women["requests"][0]["params"] = next_page_body
+                    body = json.dumps(self.body_personalcare_women)
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
                 
-                elif category == 'makeup':
+                
+                #elif category == 'makeup':
                     next_page_body = self.body_makeup["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_makeup["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_makeup)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'makeup', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'fragrance':
+                #elif category == 'fragrance':
                     next_page_body = self.body_fragrance["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_fragrance["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_fragrance)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'fragrance', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'suncare_tanning':
+                #elif category == 'suncare_tanning':
                     next_page_body = self.body_suncare_tanning["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_suncare_tanning["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_suncare_tanning)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'suncare_tanning', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'baby':
+                elif category == 'Baby & Kids':
                     next_page_body = self.body_baby["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_baby["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_baby)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'baby', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'electrical':
+                elif category == 'Health & Medical':
                     next_page_body = self.body_electrical["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_electrical["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_electrical)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'electrical', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'wellness':
+                #elif category == 'Health & Medical':
                     next_page_body = self.body_wellness["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_wellness["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_wellness)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'wellness', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'pharmacy':
+                #elif category == 'pharmacy':
                     next_page_body = self.body_pharmacy["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_pharmacy["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_pharmacy)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'pharmacy', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category':category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'opticians':
+                #elif category == 'opticians':
                     next_page_body = self.body_opticians["requests"][0]["params"]
                     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
                     self.body_opticians["requests"][0]["params"] = next_page_body
                     body = json.dumps(self.body_opticians)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'opticians', 'catalogue_code': catalogue_code, 'page': page})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'page': page})
 
-                elif category == 'gifting':
-                    next_page_body = self.body_gifting["requests"][0]["params"]
-                    next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
-                    self.body_gifting["requests"][0]["params"] = next_page_body
-                    body = json.dumps(self.body_gifting)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'gifting', 'catalogue_code': catalogue_code, 'page': page})
+                # elif category == 'gifting':
+                #     next_page_body = self.body_gifting["requests"][0]["params"]
+                #     next_page_body = next_page_body.replace(f'page={page-1}', f'page={page}')
+                #     self.body_gifting["requests"][0]["params"] = next_page_body
+                #     body = json.dumps(self.body_gifting)
+                #     yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category': 'gifting', 'catalogue_code': catalogue_code, 'page': page})
 
 
     def parse_review(self, response):

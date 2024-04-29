@@ -1,5 +1,5 @@
 from scrapy.utils.log import configure_logging
-from twisted.internet import reactor
+from twisted.internet import reactor, defer
 
 from scrapy.utils.project import get_project_settings
 from ecom_crawlers.spiders.adidas_uae import AdidasSpider
@@ -46,25 +46,29 @@ def main():
 
     settings = get_project_settings()
     runner = CrawlerRunner(settings)
-    runner.crawl(NamshiSpider)
-    runner.crawl(AdidasSpider)
-    runner.crawl(AmazonSpider)
-    runner.crawl(AsterPharmacySpider)
-    runner.crawl(BootsSpider)
-    runner.crawl(CarreFourSpider)
-    runner.crawl(CentrePointSpider)
-    runner.crawl(EmaxSpider)
-    runner.crawl(FirstCrySpider)
-    runner.crawl(JumboSpider)
-    runner.crawl(LifePharmacySpider)
-    runner.crawl(MaxSpider)
-    runner.crawl(NoonSpider)
-    runner.crawl(PullBearSpider)
-    runner.crawl(SharafDGSpider)
-    runner.crawl(SunAndSandSportsSpider)
-    runner.crawl(HandMSpider)
-    d = runner.join()
-    d.addBoth(lambda _: reactor.stop())
+    
+    @defer.inlineCallbacks
+    def crawl():
+        yield runner.crawl(NamshiSpider)
+        yield runner.crawl(AdidasSpider)
+        yield runner.crawl(AsterPharmacySpider)
+        yield runner.crawl(BootsSpider)
+        yield runner.crawl(CarreFourSpider)
+        yield runner.crawl(CentrePointSpider)
+        yield runner.crawl(EmaxSpider)
+        yield runner.crawl(FirstCrySpider)
+        yield runner.crawl(JumboSpider)
+        yield runner.crawl(LifePharmacySpider)
+        yield runner.crawl(MaxSpider)
+        yield runner.crawl(NoonSpider)
+        yield runner.crawl(PullBearSpider)
+        yield runner.crawl(SharafDGSpider)
+        yield runner.crawl(SunAndSandSportsSpider)
+        yield runner.crawl(HandMSpider)
+        yield runner.crawl(AmazonSpider)
+        reactor.stop()
+
+    crawl()
 
     logger.info("Starting the reactor")
     reactor.run()  # the script will block here until all crawling jobs are finished

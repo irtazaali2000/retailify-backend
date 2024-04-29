@@ -53,13 +53,44 @@ class NamshiSpider(Spider):
         )
     cursor = conn.cursor()
     
+    
     categories_l = {
-                "Women": ['women-clothing', 'women-shoes', 'women-accessories', 'women-bags', 'women-beauty-products', 'women-lifestyle'],
-                "Men": ['men-shoes', 'men-clothing', 'men-accessories', 'men-bags', 'men-beauty-products', 'men-lifestyle'],
-                "Kids": ['kids-shoes', 'kids-clothing', 'kids-accessories', 'kids-bags', 'kids-beauty-products', 'kids-lifestyle', 'kids-toys']
+                "Fashion": {
+                    'Women Clothing': 'women-clothing', 
+                    'Women Shoes': 'women-shoes', 
+                    'Women Accessories': 'women-accessories', 
+                    'Women Bags': 'women-bags',  
+                    'Women Accessories': 'women-lifestyle',
+                    "Men Shoes": 'men-shoes',
+                    "Men Clothing": 'men-clothing',
+                    "Men Accessories": 'men-accessories',
+                    "Men Bags": 'men-bags',
+                    "Men Accessories": 'men-lifestyle'
+
+                },
+
+                "Baby & Kids": {
+                    "Boys Shoes": 'kids-shoes-boys', 
+                    "Boys Clothing": 'kids-clothing-boys', 
+                    "Boys Accessories": 'kids-accessories-boys', 
+                    "Boys Accessories": 'kids-bags-boys', 
+                    "Girls Accessories": 'kids-beauty-products', 
+                    "Boys Accessories": 'kids-lifestyle-boys', 
+                    "Toys": 'kids-toys-boys',
+                    "Girls Shoes": 'kids-shoes-girls', 
+                    "Girls Clothing": 'kids-clothing-girls', 
+                    "Girls Accessories": 'kids-accessories-girls', 
+                    "Girls Accessories": 'kids-bags-girls', 
+                    "Girls Accessories": 'kids-lifestyle-girls', 
+                    "Toys": 'kids-toys-girls'
+                    },
+
+                "Personal Care & Beauty": {
+                    'Personal Care For Women': 'women-beauty-products',
+                    'Personal Care For Men': 'men-beauty-products',
                 }
-    
-    
+
+                }
 
 
 
@@ -118,23 +149,23 @@ class NamshiSpider(Spider):
             return result[0] if result else None
     
     def start_requests(self):
-        for main_category, sub_category_list in self.categories_l.items():
+        for main_category, sub_categories in self.categories_l.items():
             catalogue_code = self.get_catalogue_code(main_category)
             if catalogue_code:
-                for sub_category in sub_category_list:
+                for sub_category, sub_category_code in sub_categories.items():
                     modified_body = copy.deepcopy(self.body)
-                    format_body = modified_body["uri"].format(sub_category, self.page)
+                    format_body = modified_body["uri"].format(sub_category_code, self.page)
                     modified_body["uri"] = format_body
                     formatted_body = json.dumps(modified_body)
-                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=formatted_body, callback=self.parse, meta={'category': main_category, 'sub_category': sub_category, 'page': self.page, 'catalogue_code': catalogue_code})
+                    yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=formatted_body, callback=self.parse, meta={'category': main_category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'page': self.page, 'catalogue_code': catalogue_code})
+
         
-
-
 
     def parse(self, response):
         item = ProductItemNamshi()
         category = response.meta['category']
         sub_category = response.meta['sub_category']
+        sub_category_code = response.meta['sub_category_code']
         page = response.meta['page']
         data = json.loads(response.text)
         products = data.get('products', [])
@@ -179,9 +210,9 @@ class NamshiSpider(Spider):
             #Next Page
             page = page + 1
             modified_body = copy.deepcopy(self.body)
-            format_body = modified_body["uri"].format(sub_category, page)
+            format_body = modified_body["uri"].format(sub_category_code, page)
             modified_body["uri"] = format_body
             formatted_body = json.dumps(modified_body)
-            yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=formatted_body, meta={'category': category, 'sub_category': sub_category, 'page': page, 'catalogue_code': catalogue_code})
+            yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=formatted_body, meta={'category': category, 'sub_category': sub_category, 'sub_category_code': sub_category_code, 'page': page, 'catalogue_code': catalogue_code})
 
 
