@@ -106,7 +106,7 @@ class BootsSpider(Spider):
             database="scrappers_db",
             port="3306"
         )
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
@@ -120,33 +120,45 @@ class BootsSpider(Spider):
         self.vendor_code = raw_res.get('VendorCode')
 
     def get_catalogue_code(self, catalogue_name):
-        # Attempt to retrieve the catalogue code from the database
-        query = "SELECT CatalogueCode FROM product_catalogue WHERE CatalogueName = %s"
-        self.cursor.execute(query, (catalogue_name,))
+        # Attempt to retrieve the catalog code and name from the database
+        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the catalogue code exists, return it
+            # If the catalog code exists, check if the name needs to be updated
+            if result[1] != catalogue_name:
+                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                self.cursor.execute(update_query, (catalogue_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+                
             return result[0]
         else:
-            # If the catalogue code doesn't exist, insert it into the database
+            # If the catalog code doesn't exist, insert it into the database
             insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted catalogue code
-            self.cursor.execute(query, (catalogue_name,))
+            # Retrieve the newly inserted catalog code and name
+            self.cursor.execute(query_select, (catalogue_name,))
             result = self.cursor.fetchone()
             return result[0] if result else None
+
+
     
     def get_category_code(self, category_name, catalogue_code):
-        # Attempt to retrieve the category code from the database
-        query = "SELECT CategoryCode FROM product_category WHERE CategoryName = %s"
-        self.cursor.execute(query, (category_name,))
+        # Attempt to retrieve the category code and name from the database
+        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the category code exists, return it
+            # If the category code exists, check if the name needs to be updated
+            if result[1] != category_name:
+                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                self.cursor.execute(update_query, (category_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+            
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
@@ -154,11 +166,9 @@ class BootsSpider(Spider):
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code
-            self.cursor.execute(query, (category_name,))
+            # Retrieve the newly inserted category code and name
+            self.cursor.execute(query_select, (category_name,))
             result = self.cursor.fetchone()
-            # print("*******************")
-            # print(result[0])
             return result[0] if result else None
     
     
@@ -364,6 +374,8 @@ class BootsSpider(Spider):
         item = ProductItemBoots()
         item['ProductName'] = response.meta['title']
         item['CategoryName'] = response.meta['sub_category']
+        vendor_code = response.meta['vendor_code']
+        avg_rating = response.meta['rating']
         item['Offer'] = response.meta['price']
         item['Offer'] = round(float(item['Offer']), 2)
         item['RegularPrice'] = response.meta['old_price']
@@ -385,10 +397,10 @@ class BootsSpider(Spider):
         item['RatingValue'] = round(float(item['RatingValue']), 2)
         item['CatalogueCode']= response.meta['CatalogueCode']
         item['CategoryCode']= response.meta['CategoryCode']
-        item['reviews'] = item_reviews
+        # item['reviews'] = item_reviews
         item['SKU'] = response.meta['sku']
-        avg_rating = response.meta['rating']
-        vendor_code = response.meta['vendor_code']
+        
+        
         data = json.loads(response.text)
         results = data.get('Results', [])
         item_reviews = []

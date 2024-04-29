@@ -23,71 +23,7 @@ class CentrePointSpider(Spider):
     allowed_domains = ['www.centrepointstores.com', '3hwowx4270-dsn.algolia.net']
     main_url = 'https://www.centrepointstores.com/ae/en'
     products_api = 'https://3hwowx4270-dsn.algolia.net/1/indexes/*/queries?X-Algolia-API-Key=4c4f62629d66d4e9463ddb94b9217afb&X-Algolia-Application-Id=3HWOWX4270&X-Algolia-Agent=Algolia%20for%20vanilla%20JavaScript%202.9.7'
-    categories = {
-                    "Men": {'Men Clothing': 'cpmen-clothing',
-                           'Men Shoes': 'cpmen-footwear',
-                           'Men Bags': 'cpmen-fashionaccessories-bagsandwallets',
-                           'Men Accessories': 'cpmen-fashionaccessories',
-                           'Men Sports Shoes': 'cpmen-footwear-sportsshoes',
-                           'Men Clothing Sportswear': 'cpmen-clothing-sportswearandactivewear',
-                           'Men Plus Size': 'cpmen-clothing-plussizeclothing',
-                           'Men Perfumes': 'cpmen-perfumes'},
-
-                    "Women": {'Women Clothing': 'cpwomen-clothing',
-                              "Women Shoes": 'cpwomen-footwear',
-                              "Women Accessories": 'cpwomen-fashionaccessories',
-                              "Women Beauty": 'cpbeauty',
-                              'Women Sports Shoes': 'cpwomen-footwear-sportsshoes',
-                              'Women Clothing Sportswear': 'cpwomen-clothing-sportswearandactivewear',
-                              'Women Abayas': 'cpwomen-arabicclothing',
-                              'Women Nightwear': 'cpwomen-clothing-lingerie',
-                              'Women Plus Size': 'cpwomen-clothing-plussizeclothing'},
-                              
-                    "Baby": {"Baby Boy Clothes": 'cpbaby-clothing-boys',
-                             "Baby Girl Clothes": 'cpbaby-clothing-girls',
-                             'Baby Nursery': 'cpbaby-nursery',
-                             'Baby Travel Gear': 'cpbaby-travelgear',
-                             'Baby Feeding': 'cpbaby-feeding',
-                             'Baby Diapers': 'cpbaby-diapersandwipes',
-                             'Baby Bath': 'cpbaby-bathandpottytraining',
-                             'Baby Proofing': 'cpbaby-healthandsafety-safetyessentialsandhygiene',
-                             'Baby Toys': 'cpbaby-toys'},
-
-                    "Girls": {"Girls Clothing": 'cpkids-clothing-girls',
-                              'Girls Shoes': 'cpkids-footwear-girls',
-                              'Girls Sports Shoes': 'cpkids-footwear-girls-sportsshoes',
-                              'Girls Clothing Sportswear': 'cpkids-clothing-girls-sportswear',
-                              'Girls Accessories': 'cpkids-accessories-girls',
-                              
-                        },
-
-                    "Boys": {"Boys Clothing": "cpkids-clothing-boys",
-                             "Boys Shoes": "cpkids-footwear-boys",
-                             'Boys Sports Shoes': 'cpkids-footwear-boys-sportsshoes',
-                             'Boys Clothing Sportswear': 'cpkids-clothing-boys-sportswear',
-                             'Boys Accessories': 'cpkids-accessories-boys'},
-
-                    "Kids": {"Kids School": "cpkids-backtoschool"},
-
-                    "Home": {"Home Fragrance": 'cphomeandliving-homefragrance',
-                             "Home Furniture": 'cphomeandliving-homefurniture',
-                             "Home Dining": 'cphomeandliving-diningandserving',
-                             "Home Furnishings": 'cphomeandliving-homefurnishings',
-                             "Home Kitchen": 'cphomeandliving-kitchen',
-                             "Home Decor and Lighting": 'cphomeandliving-homedecor',
-                             "Home Bath": 'cphomeandliving-bathdecor'},
-
-                    "Beauty": {'Beauty Makeup': 'cpbeauty-makeup',
-                               'Beauty Perfumes': 'cpbeauty-fragrance',
-                               'Beauty Skin Care': 'cpbeauty-skincare',
-                               'Beauty Bath and Body': 'cpbeauty-bathandbody',
-                               'Beauty Haircare': 'cpbeauty-haircare',
-                               'Beauty Nails': 'cpbeauty-makeup-nails'},
-
-                    "Sports": {'Sports Gear': 'cpsports-allsports',
-                               'Sports Nutrition': 'cpsports-nutrition'}
-
-                    }
+   
     
     categories = {
                 "Fashion": {
@@ -206,7 +142,7 @@ class CentrePointSpider(Spider):
             database="scrappers_db",
             port="3306"
         )
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
@@ -220,33 +156,45 @@ class CentrePointSpider(Spider):
         self.vendor_code = raw_res.get('VendorCode')
 
     def get_catalogue_code(self, catalogue_name):
-        # Attempt to retrieve the catalogue code from the database
-        query = "SELECT CatalogueCode FROM product_catalogue WHERE CatalogueName = %s"
-        self.cursor.execute(query, (catalogue_name,))
+        # Attempt to retrieve the catalog code and name from the database
+        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the catalogue code exists, return it
+            # If the catalog code exists, check if the name needs to be updated
+            if result[1] != catalogue_name:
+                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                self.cursor.execute(update_query, (catalogue_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+                
             return result[0]
         else:
-            # If the catalogue code doesn't exist, insert it into the database
+            # If the catalog code doesn't exist, insert it into the database
             insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted catalogue code
-            self.cursor.execute(query, (catalogue_name,))
+            # Retrieve the newly inserted catalog code and name
+            self.cursor.execute(query_select, (catalogue_name,))
             result = self.cursor.fetchone()
             return result[0] if result else None
+
+
     
     def get_category_code(self, category_name, catalogue_code):
-        # Attempt to retrieve the category code from the database
-        query = "SELECT CategoryCode FROM product_category WHERE CategoryName = %s"
-        self.cursor.execute(query, (category_name,))
+        # Attempt to retrieve the category code and name from the database
+        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the category code exists, return it
+            # If the category code exists, check if the name needs to be updated
+            if result[1] != category_name:
+                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                self.cursor.execute(update_query, (category_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+            
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
@@ -254,11 +202,9 @@ class CentrePointSpider(Spider):
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code
-            self.cursor.execute(query, (category_name,))
+            # Retrieve the newly inserted category code and name
+            self.cursor.execute(query_select, (category_name,))
             result = self.cursor.fetchone()
-            # print("*******************")
-            # print(result[0])
             return result[0] if result else None
     
     

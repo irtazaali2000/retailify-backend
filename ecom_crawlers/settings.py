@@ -106,7 +106,7 @@ ITEM_PIPELINES = {
     #'ecom_crawlers.pipelines.UploadPipelineCarrefour': 306,
 
    #'ecom_crawlers.pipelines.FilterItemPipeline': 300,
-   #'ecom_crawlers.pipelines.UploadPipeline': 301,
+    #'ecom_crawlers.pipelines.UploadPipeline': 301,
 
     # 'ecom_crawlers.pipelines.FilterItemPipelineAmazon': 300,
     #'ecom_crawlers.pipelines.UploadPipelineAmazon': 303,
@@ -121,7 +121,7 @@ ITEM_PIPELINES = {
     #'ecom_crawlers.pipelines.UploadPipelineFirstCry': 309,
 
    #'ecom_crawlers.pipelines.FilterItemPipelineHandM': 300,
-    #'ecom_crawlers.pipelines.UploadPipelineHandM': 317,
+    'ecom_crawlers.pipelines.UploadPipelineHandM': 317,
 
     #'ecom_crawlers.pipelines.FilterItemPipelineBoots': 300,
     #'ecom_crawlers.pipelines.UploadPipelineBoots': 305,

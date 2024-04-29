@@ -109,7 +109,7 @@ class HandMSpider(Spider):
             database="scrappers_db",
             port="3306"
         )
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
     #visited_urls = set()
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
@@ -124,33 +124,45 @@ class HandMSpider(Spider):
         self.vendor_code = raw_res.get('VendorCode')
 
     def get_catalogue_code(self, catalogue_name):
-        # Attempt to retrieve the catalogue code from the database
-        query = "SELECT CatalogueCode FROM product_catalogue WHERE CatalogueName = %s"
-        self.cursor.execute(query, (catalogue_name,))
+        # Attempt to retrieve the catalog code and name from the database
+        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the catalogue code exists, return it
+            # If the catalog code exists, check if the name needs to be updated
+            if result[1] != catalogue_name:
+                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                self.cursor.execute(update_query, (catalogue_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+                
             return result[0]
         else:
-            # If the catalogue code doesn't exist, insert it into the database
+            # If the catalog code doesn't exist, insert it into the database
             insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted catalogue code
-            self.cursor.execute(query, (catalogue_name,))
+            # Retrieve the newly inserted catalog code and name
+            self.cursor.execute(query_select, (catalogue_name,))
             result = self.cursor.fetchone()
             return result[0] if result else None
+
+
     
     def get_category_code(self, category_name, catalogue_code):
-        # Attempt to retrieve the category code from the database
-        query = "SELECT CategoryCode FROM product_category WHERE CategoryName = %s"
-        self.cursor.execute(query, (category_name,))
+        # Attempt to retrieve the category code and name from the database
+        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
-            # If the category code exists, return it
+            # If the category code exists, check if the name needs to be updated
+            if result[1] != category_name:
+                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                self.cursor.execute(update_query, (category_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+            
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
@@ -158,11 +170,9 @@ class HandMSpider(Spider):
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code
-            self.cursor.execute(query, (category_name,))
+            # Retrieve the newly inserted category code and name
+            self.cursor.execute(query_select, (category_name,))
             result = self.cursor.fetchone()
-            # print("*******************")
-            # print(result[0])
             return result[0] if result else None
 
     def start_requests(self):
@@ -172,8 +182,22 @@ class HandMSpider(Spider):
                 if catalogue_code:
                     print("########################################", sub_category)
                     modified_body = copy.deepcopy(body)
+                    # Loop through each request and update the params with the new page number
                     for request in modified_body['requests']:
-                        request['params'] = request['params'].format(self.page)
+                        # Extract existing page number
+                        params = request['params']
+                        page_placeholder_index = params.find("&page=")
+                        if page_placeholder_index != -1:
+                            next_amp_index = params.find("&", page_placeholder_index + 1)
+                            if next_amp_index != -1:
+                                params = params[:page_placeholder_index] + "&page={}" + params[next_amp_index:]
+                            else:
+                                params = params[:page_placeholder_index] + "&page={}"
+
+                        # Format the params with the new page number
+                        request['params'] = params.format(self.page)
+
+                    # Convert the modified body back to JSON
                     body = json.dumps(modified_body)
                     yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, callback=self.parse, meta={'category': main_category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'body': body, 'page': self.page})
 
@@ -183,6 +207,7 @@ class HandMSpider(Spider):
         vendor_code = self.vendor_code
         category = response.meta['category']
         sub_category = response.meta['sub_category']
+        catalogue_code = response.meta['catalogue_code']
         body = response.meta['body']
         print("Category: ", category)
         page = response.meta['page']
@@ -243,7 +268,7 @@ class HandMSpider(Spider):
                     item['BrandCode']= ''
                     item['ModelNumber']= ''
                     item['VendorCode']= vendor_code
-                    catalogue_code = response.meta['catalogue_code']
+                    #catalogue_code = response.meta['catalogue_code']
                     # item['CategoryName'] = item['CategoryName'].strip()
                     category_code = self.get_category_code(item['CategoryName'], catalogue_code)
                     item['CatalogueCode']= catalogue_code
@@ -254,13 +279,28 @@ class HandMSpider(Spider):
                         'item': item,
                 })
                 
-                print("Category = {}, Total Products = {} on Page = {}".format(category, self.count, page))
-                page = page + 1      
-                modified_body = copy.deepcopy(body)
-                for request in modified_body['requests']:
-                    request['params'] = request['params'].format(page)
-                body = json.dumps(modified_body)
-                yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category':category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'body': body, 'page':page})
+        print("Category = {}, Total Products = {} on Page = {}".format(category, self.count, page))
+        page = page + 1      
+        modified_body = json.loads(body)
+
+        # Loop through each request and update the params with the new page number
+        for request in modified_body['requests']:
+            # Extract existing page number
+            params = request['params']
+            page_placeholder_index = params.find("&page=")
+            if page_placeholder_index != -1:
+                next_amp_index = params.find("&", page_placeholder_index + 1)
+                if next_amp_index != -1:
+                    params = params[:page_placeholder_index] + "&page={}" + params[next_amp_index:]
+                else:
+                    params = params[:page_placeholder_index] + "&page={}"
+
+            # Format the params with the new page number
+            request['params'] = params.format(page)
+
+        # Convert the modified body back to JSON
+        body = json.dumps(modified_body)
+        yield scrapy.Request(url=self.products_api, method='POST', headers=self.headers, body=body, meta={'category':category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'body': body, 'page':page})
 
 
     def parse_review(self, response):

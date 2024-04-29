@@ -20,7 +20,7 @@ class ProductUpload(CreateAPIView):
             LOGGER.info(f"Product availabilty Updated {instance.StockAvailability} to {data['StockAvailability']}!")
             return True
 
-        elif 'Offer' in data and float(data['Offer'])!= float(instance.Offer):
+        elif 'Offer' in data and data['Offer'] is not None and instance.Offer is not None and float(data['Offer']) != float(instance.Offer):
             LOGGER.info(f"Product Offer Updated from {instance.Offer} to {data['Offer']}!")
             return True
         elif 'RegularPrice' in data and float(data['RegularPrice']) != float(instance.RegularPrice):
@@ -46,6 +46,15 @@ class ProductUpload(CreateAPIView):
                 else:
                     pass
                     #LOGGER.info(f"Category: No change in category name. Name: '{category.CategoryName}'")
+
+            # # Check if the category doesn't exist and add it
+            # if not categories.exists():
+            #     new_category = Category.objects.create(
+            #         CategoryCode=instance.CategoryCode_id,
+            #         CategoryName=instance.CategoryName
+            #     )
+            #     LOGGER.info(f"New Category Added: {new_category.CategoryCode}. Name: '{new_category.CategoryName}'")
+
 
 
 

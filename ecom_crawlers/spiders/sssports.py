@@ -80,7 +80,7 @@ class SunAndSandSportsSpider(Spider):
             password='4wIwdBmMSJ3BLBVCesJT',
             database='scrappers_db'
         )
-    cursor = conn.cursor()
+    cursor = conn.cursor(buffered=True)
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
@@ -93,34 +93,54 @@ class SunAndSandSportsSpider(Spider):
         self.vendor_code = raw_res.get('VendorCode')
 
     def get_catalogue_code(self, catalogue_name):
-        query = "SELECT CatalogueCode FROM product_catalogue WHERE CatalogueName = %s"
-        self.cursor.execute(query, (catalogue_name,))
+        # Attempt to retrieve the catalog code and name from the database
+        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
+            # If the catalog code exists, check if the name needs to be updated
+            if result[1] != catalogue_name:
+                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                self.cursor.execute(update_query, (catalogue_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+                
             return result[0]
         else:
+            # If the catalog code doesn't exist, insert it into the database
             insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
             self.cursor.execute(insert_query, (catalogue_name,))
-            self.conn.commit()
+            self.conn.commit()  # Commit the transaction
             
-            self.cursor.execute(query, (catalogue_name,))
+            # Retrieve the newly inserted catalog code and name
+            self.cursor.execute(query_select, (catalogue_name,))
             result = self.cursor.fetchone()
             return result[0] if result else None
+
+
     
     def get_category_code(self, category_name, catalogue_code):
-        query = "SELECT CategoryCode FROM product_category WHERE CategoryName = %s"
-        self.cursor.execute(query, (category_name,))
+        # Attempt to retrieve the category code and name from the database
+        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
+            # If the category code exists, check if the name needs to be updated
+            if result[1] != category_name:
+                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                self.cursor.execute(update_query, (category_name, result[0]))
+                self.conn.commit()  # Commit the transaction
+            
             return result[0]
         else:
+            # If the category code doesn't exist, insert it into the database
             insert_query = "INSERT INTO product_category (CategoryName, CatalogueCode_id) VALUES (%s, %s)"
             self.cursor.execute(insert_query, (category_name, catalogue_code))
-            self.conn.commit()
-
-            self.cursor.execute(query, (category_name,))
+            self.conn.commit()  # Commit the transaction
+            
+            # Retrieve the newly inserted category code and name
+            self.cursor.execute(query_select, (category_name,))
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -170,9 +190,10 @@ class SunAndSandSportsSpider(Spider):
         price_in_aed = response.xpath('//span[@class="sales"]/span[@class="value"]/@content').get()
         price_in_aed = round(float(price_in_aed), 2)
         old_price_in_aed = response.xpath('//div[@class="prices js-gtm-price"]/div[@class="price"]/span/del/span[@class="strike-through list pl-1"]/span[@class="value"]/@content').get()
-        old_price_in_aed = round(float(old_price_in_aed), 2)
         if not old_price_in_aed:
             old_price_in_aed = 0
+        old_price_in_aed = round(float(old_price_in_aed), 2)
+
 
         discount = response.xpath('//div[@class="prices js-gtm-price"]/div[@class="price"]/span/div[@class="discount-top-pdp"]/span[@class="discount-text d-block discount-pdp-text"]/text()').get()
         if not discount:
