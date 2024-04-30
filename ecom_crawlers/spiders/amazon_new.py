@@ -226,7 +226,7 @@ class AmazonSpider(Spider):
     custom_settings = {
         'DOWNLOAD_DELAY': 2.0,  # Adjusted download delay to 2 seconds
         'RETRY_TIMES': 10,      # Increased retry times to 10
-        'DOWNLOAD_TIMEOUT': 600,  # Increased download timeout to 600 seconds (10 minutes)
+        'DOWNLOAD_TIMEOUT': 100,  # Increased download timeout to 600 seconds (10 minutes)
         'CONCURRENT_REQUESTS': 8,  # Adjusted concurrent requests if necessary
         'CONCURRENT_REQUESTS_PER_DOMAIN': 4,  # Adjusted concurrent requests per domain if necessary
         'AUTOTHROTTLE_ENABLED': True,  # Enables automatic throttling
@@ -234,8 +234,8 @@ class AmazonSpider(Spider):
         'AUTOTHROTTLE_START_DELAY': 5,  # Initial delay for automatic throttling
         'AUTOTHROTTLE_MAX_DELAY': 60,  # Maximum delay for automatic throttling
         'AUTOTHROTTLE_DEBUG': True,  # Enables autothrottle debug mode
-        'LOG_LEVEL': 'INFO',  # Adjusted log level for more detailed logging
-        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',  # Updated log file name
+        #'LOG_LEVEL': 'INFO',  # Adjusted log level for more detailed logging
+        #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',  # Updated log file name
         }
 
     page = 0
@@ -323,7 +323,7 @@ class AmazonSpider(Spider):
             for sub_category, product_url in sub_categories.items():
                 catalogue_code = self.get_catalogue_code(main_category)
                 if catalogue_code:
-                    yield scrapy.Request(url=product_url, headers=self.headers, meta={'category': main_category, 'sub_category': sub_category, 'cat_url': product_url, 'page': self.page})
+                    yield scrapy.Request(url=product_url, headers=self.headers, meta={'category': main_category, 'sub_category': sub_category, 'cat_url': product_url, 'page': self.page, 'catalogue_code': catalogue_code})
 
     def parse(self, response):
         #print("INSIDE PARSE")
@@ -357,11 +357,12 @@ class AmazonSpider(Spider):
         item['URL'] = response.meta['url']
         item['SKU'] = re.search(r'/dp/([^/]+)', response.url).group(1) if re.search(r'/dp/([^/]+)', response.url) else ''
         item['ProductName'] = response.xpath('//span[@id="productTitle"]/text()').get()
-        if not item['ProductName']:
-            item['ProductName'] = ''
 
         if item['ProductName']:
             item['ProductName'] = item['ProductName'].strip()
+
+        if not item['ProductName']:
+            item['ProductName'] = ''
 
         item['RatingValue'] = response.xpath('//a[@class="a-popover-trigger a-declarative"]/span[@class="a-size-base a-color-base"]/text()').get()
         if not item['RatingValue']:

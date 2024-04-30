@@ -57,7 +57,7 @@ class Product(BaseModel):
     CategoryCode = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
     VendorCode = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     SKU = models.CharField(max_length=250, unique=True)
-    ProductName = models.TextField()
+    ProductName = models.TextField(blank=True)
     URL = models.TextField(blank=True)
     MainImage = models.TextField(blank=True)
     CatalogueName = models.CharField(max_length=250)

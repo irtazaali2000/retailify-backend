@@ -19,7 +19,6 @@ class ProductUpload(CreateAPIView):
         if 'StockAvailability' in data and data['StockAvailability'] != instance.StockAvailability:
             LOGGER.info(f"Product availabilty Updated {instance.StockAvailability} to {data['StockAvailability']}!")
             return True
-
         elif 'Offer' in data and data['Offer'] is not None and instance.Offer is not None and float(data['Offer']) != float(instance.Offer):
             LOGGER.info(f"Product Offer Updated from {instance.Offer} to {data['Offer']}!")
             return True
