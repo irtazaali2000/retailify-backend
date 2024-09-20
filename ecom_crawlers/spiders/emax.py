@@ -13,8 +13,8 @@ from ecom_crawlers.utils import *
 from fake_useragent import UserAgent
 import scrapy
 import copy
-import mysql.connector
-
+import os
+import psycopg2
 
 
 
@@ -31,7 +31,7 @@ class EmaxSpider(Spider):
         'DOWNLOAD_DELAY': 0.1,
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
-        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
     }
     page = 0
@@ -41,13 +41,13 @@ class EmaxSpider(Spider):
     categories = {
                 'Mobiles Tablets & Wearables': {
                                             'Mobile Phones': 'mobile',
-                                            'Mobile Accessories': 'mobileaccessories',
-                                            'Tablets & Ereaders': 'laptoptabletandcomputeraccessories-tablets'
+                                            #'Mobile Accessories': 'mobileaccessories',
+                                            #'Tablets & Ereaders': 'laptoptabletandcomputeraccessories-tablets'
                                             },
                 
                 'Computers': {
                                 'Laptops': 'laptoptabletandcomputeraccessories-laptops',
-                                'Computers Accessories': 'laptoptabletandcomputeraccessories-computeraccessories'
+                                #'Computers Accessories': 'laptoptabletandcomputeraccessories-computeraccessories'
                                 
                             },
 
@@ -56,47 +56,51 @@ class EmaxSpider(Spider):
                 },
 
                 'Audio, Headphones & Music Players': {
-                    'Audio Accessories': 'televisionandaudio-audio'
+                    #'Audio Accessories': 'televisionandaudio-audio'
                 },
 
-                'Home Appliances': {
-                    'Home Appliances Accessories': 'homeappliances',
-                    'Kitchen Appliances': 'kitchenappliances'
-                },
+                # 'Home Appliances': {
+                #     'Home Appliances Accessories': 'homeappliances',
+                #     'Kitchen Appliances': 'kitchenappliances'
+                # },
 
-                'Personal Care & Beauty': {
-                    'Makeup & Accessories': 'personalcare'
-                },
+                # 'Personal Care & Beauty': {
+                #     'Makeup & Accessories': 'personalcare'
+                # },
 
-                'Video Games & Consoles': {
-                    'Games Accessories': 'gamingandgamingaccessories'
-                },
+                # 'Video Games & Consoles': {
+                #     'Games Accessories': 'gamingandgamingaccessories'
+                # },
 
                 'Camcorders & Cameras': {
                     'Camera Accessories': 'photographylensesanddrones'
                     },
 
-                'Musical Instruments': {
-                    'Keyboards & Midi Instruments': 'musicalinstruments'
-                }
+                # 'Musical Instruments': {
+                #     'Keyboards & Midi Instruments': 'musicalinstruments'
+                # }
                     
         }
     
-    conn = mysql.connector.connect(
-            # host='localhost',
-            # user='root',
-            # password='admin',
-            # database='gb'
-            host="mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com",
-            user="datapillar",
-            password="4wIwdBmMSJ3BLBVCesJT",
-            database="scrappers_db",
-            port="3306"
-        )
-    cursor = conn.cursor(buffered=True)
+    conn = psycopg2.connect(
+        dbname="retailifydb",
+        user="postgres",
+        password="admin",
+        host="localhost",
+        port="5432"
+    )
+    cursor = conn.cursor()
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
+
+        # Set up the log directory and file path
+        log_dir = 'scrapy-logs'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)  # Create the directory if it doesn't exist
+
+        log_file = f'{log_dir}/{self.name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log'
+        self.custom_settings['LOG_FILE'] = log_file
 
         self.reviews = reviews.lower() == 'true'
         self.short_scraper = short_scraper.lower() == 'true'
@@ -109,26 +113,29 @@ class EmaxSpider(Spider):
 
     def get_catalogue_code(self, catalogue_name):
         # Attempt to retrieve the catalog code and name from the database
-        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        query_select = 'SELECT "CatalogueCode", "CatalogueName" FROM product_catalogue WHERE "CatalogueName" = %s'
         self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the catalog code exists, check if the name needs to be updated
             if result[1] != catalogue_name:
-                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                update_query = 'UPDATE product_catalogue SET "CatalogueName" = %s WHERE "CatalogueCode" = %s'
                 self.cursor.execute(update_query, (catalogue_name, result[0]))
                 self.conn.commit()  # Commit the transaction
                 
             return result[0]
         else:
             # If the catalog code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
+            insert_query = 'INSERT INTO product_catalogue ("CatalogueName") VALUES (%s) RETURNING "CatalogueCode"'
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
-            
-            # Retrieve the newly inserted catalog code and name
-            self.cursor.execute(query_select, (catalogue_name,))
+
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (catalogue_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
+        
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -136,26 +143,28 @@ class EmaxSpider(Spider):
     
     def get_category_code(self, category_name, catalogue_code):
         # Attempt to retrieve the category code and name from the database
-        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        query_select = 'SELECT "CategoryCode", "CategoryName" FROM product_category WHERE "CategoryName" = %s'
         self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the category code exists, check if the name needs to be updated
             if result[1] != category_name:
-                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                update_query = 'UPDATE product_category SET "CategoryName" = %s WHERE "CategoryCode" = %s'
                 self.cursor.execute(update_query, (category_name, result[0]))
                 self.conn.commit()  # Commit the transaction
             
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_category (CategoryName, CatalogueCode_id) VALUES (%s, %s)"
+            insert_query = 'INSERT INTO product_category ("CategoryName", "CatalogueCode_id") VALUES (%s, %s) RETURNING "CategoryCode"'
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code and name
-            self.cursor.execute(query_select, (category_name,))
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (category_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -211,6 +220,14 @@ class EmaxSpider(Spider):
                     if item['RegularPrice'] == item['Offer']:
                         item['Offer'] = 0
 
+                    # item['MyPrice'] = hit.get('price')
+                    # item['MyPrice'] = round(float(item['MyPrice']), 2)
+                    # item['Cost'] = hit.get('wasPrice', 0)
+                    # item['Cost'] = round(float(item['Cost']), 2)
+
+                    # if item['Cost'] == item['MyPrice']:
+                    #     item['MyPrice'] = 0
+
                     img = hit.get('galleryImages', [])
                     if img:
                         item['MainImage'] = img[0].get('url', '')
@@ -229,6 +246,8 @@ class EmaxSpider(Spider):
                     #item['page'] = page
                     item['RatingValue'] = 0
                     item['ModelNumber'] = ''
+                    item['Currency'] = 'AED'
+                    item['About'] = hit.get('description', {}).get('en')
                     item['VendorCode'] = vendor_code
                     catalogue_code = response.meta['catalogue_code']
                     category_code = self.get_category_code(item['CategoryName'], catalogue_code)

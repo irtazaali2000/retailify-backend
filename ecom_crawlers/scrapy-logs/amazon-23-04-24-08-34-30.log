@@ -1,0 +1,2291 @@
+2024-04-23 08:34:50 [urllib3.connectionpool] DEBUG: Starting new HTTP connection (1): 127.0.0.1:8000
+2024-04-23 08:34:52 [urllib3.connectionpool] DEBUG: http://127.0.0.1:8000 "GET /api/v1/private/product/get_catalogues/?vendor_name=amazon&short_scraper=False HTTP/1.1" 200 49
+2024-04-23 08:34:52 [scrapy.addons] INFO: Enabled addons:
+[]
+2024-04-23 08:34:52 [py.warnings] WARNING: F:\shehneel\gobazzar_crawlers-master\gobazzar_crawlers-master\gobazzar-venv\lib\site-packages\scrapy\utils\request.py:254: ScrapyDeprecationWarning: '2.6' is a deprecated value for the 'REQUEST_FINGERPRINTER_IMPLEMENTATION' setting.
+
+It is also the default value. In other words, it is normal to get this warning if you have not defined a value for the 'REQUEST_FINGERPRINTER_IMPLEMENTATION' setting. This is so for backward compatibility reasons, but it will change in a future version of Scrapy.
+
+See the documentation of the 'REQUEST_FINGERPRINTER_IMPLEMENTATION' setting for information on how to handle this deprecation.
+  return cls(crawler)
+
+2024-04-23 08:34:52 [scrapy.utils.log] DEBUG: Using reactor: twisted.internet.selectreactor.SelectReactor
+2024-04-23 08:34:52 [scrapy.extensions.telnet] INFO: Telnet Password: cfe2cdc3f7987a99
+2024-04-23 08:34:53 [scrapy.middleware] INFO: Enabled extensions:
+['scrapy.extensions.corestats.CoreStats',
+ 'scrapy.extensions.telnet.TelnetConsole',
+ 'scrapy.extensions.feedexport.FeedExporter',
+ 'scrapy.extensions.logstats.LogStats',
+ 'scrapy.extensions.throttle.AutoThrottle']
+2024-04-23 08:34:53 [scrapy.crawler] INFO: Overridden settings:
+{'AUTOTHROTTLE_ENABLED': True,
+ 'BOT_NAME': 'ecom_crawlers',
+ 'DOWNLOAD_DELAY': 0.5,
+ 'DOWNLOAD_TIMEOUT': 200,
+ 'FEED_EXPORT_ENCODING': 'utf-8',
+ 'LOG_FILE': 'scrapy-logs/amazon-23-04-24-08-34-30.log',
+ 'NEWSPIDER_MODULE': 'ecom_crawlers.spiders',
+ 'RETRY_TIMES': 3,
+ 'SPIDER_MODULES': ['ecom_crawlers.spiders']}
+2024-04-23 08:34:54 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Android
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Sony BDV13, Brand: Sony, Model: BDV13
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Nintendo DSi, Brand: Nintendo, Model: DSi
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Other
+2024-04-23 08:34:55 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: LYF F90M, Brand: LYF, Model: F90M
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Sony BDV14, Brand: Sony, Model: BDV14
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: LG Web0S SmartTV, Brand: LG, Model: Web0S SmartTV
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Sony BDV11, Brand: Sony, Model: BDV11
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:56 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Nintendo DSi, Brand: Nintendo, Model: DSi
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: LYF LF-2403N, Brand: LYF, Model: LF-2403N
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: LYF F90M, Brand: LYF, Model: F90M
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Applebot
+2024-04-23 08:34:57 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:58 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Applebot
+2024-04-23 08:34:58 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Other
+2024-04-23 08:34:58 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Other
+2024-04-23 08:34:58 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:58 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: SMTBot
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: WebKit Nightly
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: PhantomJS
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Robot
+2024-04-23 08:34:59 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedDeviceType] Family: Other, Brand: None, Model: None
+2024-04-23 08:35:00 [scrapy_user_agents.user_agent_picker] WARNING: [UnsupportedBrowserType] Family: Zune
+2024-04-23 08:35:00 [scrapy.middleware] INFO: Enabled downloader middlewares:
+['scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware',
+ 'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware',
+ 'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware',
+ 'scrapy_user_agents.middlewares.RandomUserAgentMiddleware',
+ 'scrapy.downloadermiddlewares.retry.RetryMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware',
+ 'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware',
+ 'scrapy.downloadermiddlewares.redirect.RedirectMiddleware',
+ 'scrapy.downloadermiddlewares.cookies.CookiesMiddleware',
+ 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware',
+ 'scrapy.downloadermiddlewares.stats.DownloaderStats']
+2024-04-23 08:35:00 [scrapy.middleware] INFO: Enabled spider middlewares:
+['scrapy.spidermiddlewares.httperror.HttpErrorMiddleware',
+ 'scrapy.spidermiddlewares.offsite.OffsiteMiddleware',
+ 'scrapy.spidermiddlewares.referer.RefererMiddleware',
+ 'scrapy.spidermiddlewares.urllength.UrlLengthMiddleware',
+ 'scrapy.spidermiddlewares.depth.DepthMiddleware']
+2024-04-23 08:35:00 [scrapy.middleware] INFO: Enabled item pipelines:
+[]
+2024-04-23 08:35:00 [scrapy.core.engine] INFO: Spider opened
+2024-04-23 08:35:00 [scrapy.extensions.logstats] INFO: Crawled 0 pages (at 0 pages/min), scraped 0 items (at 0 items/min)
+2024-04-23 08:35:00 [scrapy.extensions.telnet] INFO: Telnet console listening on 127.0.0.1:6024
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.62 Safari/537.36
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.0.12195 Safari/537.36
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.0.12195 Safari/537.36
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.93 Safari/537.36
+2024-04-23 08:35:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36
+2024-04-23 08:35:01 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar> (referer: None)
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36
+2024-04-23 08:35:01 [scrapy.dupefilters] DEBUG: Filtered duplicate request: <GET https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/dp/B0CQYY4QXF/ref=sr_1_2?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-2> - no more duplicates will be shown (see DUPEFILTER_DEBUG to show all duplicates)
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.167 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.85 Safari/537.36
+2024-04-23 08:35:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36
+2024-04-23 08:35:04 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?rh=n%3A12303803031&fs=true&ref=lp_12303803031_sar> (referer: None)
+2024-04-23 08:35:04 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36
+2024-04-23 08:35:06 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?rh=n%3A11497745031&fs=true&ref=lp_11497745031_sar> (referer: None)
+2024-04-23 08:35:06 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36
+2024-04-23 08:35:07 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://www.amazon.ae/s?rh=n%3A12050239031&fs=true&ref=lp_12050239031_sar> (failed 1 times): 503 Service Unavailable
+2024-04-23 08:35:07 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36
+2024-04-23 08:35:08 [scrapy.downloadermiddlewares.retry] DEBUG: Retrying <GET https://www.amazon.ae/s?rh=n%3A11601326031&fs=true&ref=lp_11601326031_sar> (failed 1 times): 503 Service Unavailable
+2024-04-23 08:35:08 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36
+2024-04-23 08:35:10 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?rh=n%3A11497688031&fs=true&ref=lp_11497688031_sar> (referer: None)
+2024-04-23 08:35:10 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
+2024-04-23 08:35:11 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/HONOR-Smartphone-Display-Battery-Warranty/dp/B0CB4F258K/ref=sr_1_9?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-9> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:11 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36
+2024-04-23 08:35:11 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/HONOR-Smartphone-Display-Battery-Warranty/dp/B0CB4F258K/ref=sr_1_9?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-9>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': '',
+ 'Offer': 0,
+ 'ProductName': '',
+ 'RatingValue': 0,
+ 'RegularPrice': 0,
+ 'SKU': 'B0CB4F258K',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/HONOR-Smartphone-Display-Battery-Warranty/dp/B0CB4F258K/ref=sr_1_9?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-9',
+ 'VendorCode': 11}
+2024-04-23 08:35:12 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-iPhone-Pro-Max-256/dp/B0CHXLGXHQ/ref=sr_1_1?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-1> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:12 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+2024-04-23 08:35:13 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Samsung-Android%D8%8C-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9%D8%8C-%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D9%91%D8%AD%D8%AF%D8%A9/dp/B0CX95ZJMZ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-8> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:13 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36
+2024-04-23 08:35:14 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-New-AirTag-pack/dp/B093Z293ZN/ref=sr_1_6?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-6> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:14 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36
+2024-04-23 08:35:14 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Samsung-Galaxy-Android-Smartphone-Version/dp/B0BSLF1ZN4/ref=sr_1_7?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-7> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:14 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
+2024-04-23 08:35:14 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-20W-USB-C-Power-Adapter/dp/B08L85KDV5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-5> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:14 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36
+2024-04-23 08:35:15 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-generation-Lightning-Charging-Wireless/dp/B0BDKB96DD/ref=sr_1_4?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-4> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:15 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36
+2024-04-23 08:35:16 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-iPhone-15-Pro-256/dp/B0CHX78QDZ/ref=sr_1_3?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-3> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:16 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36
+2024-04-23 08:35:17 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/dp/B0CQYY4QXF/ref=sr_1_2?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-2> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:17 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36
+2024-04-23 08:35:17 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Nothing-Phone-128-smartphone-Dimensity/dp/B0CWQWJYSJ/ref=sr_1_11?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-11> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:17 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36
+2024-04-23 08:35:18 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=2&qid=1713857699&ref=sr_pg_1> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:18 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36
+2024-04-23 08:35:18 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Xiaomi-Redmi-Note-ONYX-256GB/dp/B0BZYNB4F5/ref=sr_1_10?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-10> (referer: https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar)
+2024-04-23 08:35:18 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43 Safari/537.31
+2024-04-23 08:35:18 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=2&qid=1713857703&ref=sr_pg_1> (referer: https://www.amazon.ae/s?rh=n%3A12303803031&fs=true&ref=lp_12303803031_sar)
+2024-04-23 08:35:18 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36
+2024-04-23 08:35:19 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=2&qid=1713857705&ref=sr_pg_1> (referer: https://www.amazon.ae/s?rh=n%3A11497745031&fs=true&ref=lp_11497745031_sar)
+2024-04-23 08:35:19 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36
+2024-04-23 08:35:21 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1> (referer: https://www.amazon.ae/s?rh=n%3A11497688031&fs=true&ref=lp_11497688031_sar)
+2024-04-23 08:35:21 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36
+2024-04-23 08:35:21 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Crucial-CT1000P3SSD8-PCIe-3500MB-Black/dp/B0B25LZGGW/ref=sr_1_24?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-24> (referer: https://www.amazon.ae/s?rh=n%3A11497745031&fs=true&ref=lp_11497745031_sar)
+2024-04-23 08:35:21 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.65 Safari/537.36
+2024-04-23 08:35:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/305-Black-Original-Cartridge-Tri-Color/dp/B09BM6XRSN/ref=sr_1_23?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-23> (referer: https://www.amazon.ae/s?rh=n%3A11497745031&fs=true&ref=lp_11497745031_sar)
+2024-04-23 08:35:22 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36
+2024-04-23 08:35:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-iPhone-Pro-Max-256/product-reviews/B0CHXLGXHQ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Apple-iPhone-Pro-Max-256/dp/B0CHXLGXHQ/ref=sr_1_1?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-1)
+2024-04-23 08:35:22 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36
+2024-04-23 08:35:22 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Apple-iPhone-Pro-Max-256/product-reviews/B0CHXLGXHQ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/81YSmKnlijL.__AC_SY445_SX342_QL70_ML2_.jpg',
+ 'Offer': 4449.0,
+ 'ProductName': 'Apple iPhone 15 Pro Max (256 GB) - Natural Titanium',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 5099.0,
+ 'SKU': 'B0CHXLGXHQ',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Apple-iPhone-Pro-Max-256/dp/B0CHXLGXHQ/ref=sr_1_1?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-1',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Working perfectly fine and loved the natural '
+                         'titanium color so much😍',
+              'CommentDate': '2024-04-08',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Fast delivery. Fresh product.',
+              'CommentDate': '2024-04-02',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'All good!',
+              'CommentDate': '2024-04-14',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Best phone ever',
+              'CommentDate': '2024-04-12',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The iPhone 15 Pro Max stunning design, exceptional '
+                         'camera system, and lightning-fast performance make '
+                         'it a standout choice.',
+              'CommentDate': '2024-03-03',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Product is good but Amazon delivery very bad I have '
+                         'it on camera he is playing with the box throw up and '
+                         'catch the the phone box fall down to the floor….',
+              'CommentDate': '2024-04-06',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Quality Product',
+              'CommentDate': '2024-04-14',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'It was amazing performance',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'It’s good but sometimes it will hang..',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'المنتج اصلي وحقيقي من ابل.',
+              'CommentDate': '2024-04-16',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0}]}
+2024-04-23 08:35:22 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Samsung-Android%D8%8C-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9%D8%8C-%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D9%91%D8%AD%D8%AF%D8%A9/product-reviews/B0CX95ZJMZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Samsung-Android%D8%8C-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9%D8%8C-%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D9%91%D8%AD%D8%AF%D8%A9/dp/B0CX95ZJMZ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-8)
+2024-04-23 08:35:22 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36
+2024-04-23 08:35:23 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Samsung-Android%D8%8C-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9%D8%8C-%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D9%91%D8%AD%D8%AF%D8%A9/product-reviews/B0CX95ZJMZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/61ERH+yIyiL._AC_SX300_SY300_.jpg',
+ 'Offer': 1339.0,
+ 'ProductName': 'Samsung Galaxy A55 5G, Android Smartphone, Dual SIM Mobile '
+                'Phone, 8GB RAM, 256GB Storage, Awesome Navy (UAE Version)',
+ 'RatingValue': 4.2,
+ 'RegularPrice': 1549.0,
+ 'SKU': 'B0CX95ZJMZ',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Samsung-Android%D8%8C-%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D8%AD%D8%A9%D8%8C-%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%AA%D9%91%D8%AD%D8%AF%D8%A9/dp/B0CX95ZJMZ/ref=sr_1_8?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-8',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Device is fast looks premium feels good in hand',
+              'CommentDate': '2024-04-06',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Great Device,',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Super',
+              'CommentDate': '2024-04-16',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Samsung pay is not supported',
+              'CommentDate': '2024-04-06',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'Nice product',
+              'CommentDate': '2024-04-11',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Looking cool, fast deleverd, excelenet service',
+              'CommentDate': '2024-04-08',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Only one day use good looking',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good',
+              'CommentDate': '2024-03-27',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Very good',
+              'CommentDate': '2024-04-14',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'م انصح فيه ابدا ندمت اني اخذته',
+              'CommentDate': '2024-04-04',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:23 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Good-GirlS-Guide-Murder/dp/1405293187/ref=sr_1_16?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-16> (referer: https://www.amazon.ae/s?rh=n%3A11497688031&fs=true&ref=lp_11497688031_sar)
+2024-04-23 08:35:23 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36
+2024-04-23 08:35:24 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Samsung-Galaxy-Android-Smartphone-Version/product-reviews/B0BSLF1ZN4/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Samsung-Galaxy-Android-Smartphone-Version/dp/B0BSLF1ZN4/ref=sr_1_7?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-7)
+2024-04-23 08:35:24 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+2024-04-23 08:35:24 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Samsung-Galaxy-Android-Smartphone-Version/product-reviews/B0BSLF1ZN4/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71EYdOx09+L._AC_SY300_SX300_.jpg',
+ 'Offer': 3077.0,
+ 'ProductName': 'Samsung Galaxy S23 Ultra, AI Phone, Dual SIM, 5G, Android '
+                'Smartphone, 256GB, Green (UAE Version)',
+ 'RatingValue': 4.5,
+ 'RegularPrice': 4949.0,
+ 'SKU': 'B0BSLF1ZN4',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Samsung-Galaxy-Android-Smartphone-Version/dp/B0BSLF1ZN4/ref=sr_1_7?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-7',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Sealed, well packed, perfect condition and delivered '
+                         'within two days to my doorstep. The phone is amazing '
+                         'and the battery can last for more than one day, dual '
+                         'actual sim cards and an outstanding camera. Nothing '
+                         'to complain about.',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': "I'm glad I found a smartphone phone with the newest "
+                         'features and a decent camera.',
+              'CommentDate': '2024-04-08',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Battery, performance,  cameras and operating '
+                         'system.. its a great package',
+              'CommentDate': '2024-03-06',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Being an iPhone user, I tried this phone out of '
+                         'curiosity and it amazed me with its display and '
+                         'speed. Its a great phone to begin with.',
+              'CommentDate': '2024-03-28',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Amazing Experience',
+              'CommentDate': '2024-04-09',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Bought this for my friend.. its fast runs smoothly '
+                         'premium looking... For android user this one i can '
+                         'recommend...',
+              'CommentDate': '2024-03-14',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'great screen, long battery, good options, sound is '
+                         'good as well. i must recommend this product. '
+                         'delivery was  good also and box was in good '
+                         'condition. only issue is amazon should delivery '
+                         'these products fast because it taking one and half '
+                         'day to receive delivery.',
+              'CommentDate': '2024-03-13',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good Phone',
+              'CommentDate': '2024-04-18',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Good',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'It was same product and original',
+              'CommentDate': '2024-04-12',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0}]}
+2024-04-23 08:35:24 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-20W-USB-C-Power-Adapter/product-reviews/B08L85KDV5/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Apple-20W-USB-C-Power-Adapter/dp/B08L85KDV5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-5)
+2024-04-23 08:35:24 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36
+2024-04-23 08:35:25 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Apple-20W-USB-C-Power-Adapter/product-reviews/B08L85KDV5/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/61TbaDn9AgS.__AC_SY445_SX342_QL70_ML2_.jpg',
+ 'Offer': 64.0,
+ 'ProductName': 'Apple 20W USB-C Power Adapter',
+ 'RatingValue': 4.7,
+ 'RegularPrice': 79.0,
+ 'SKU': 'B08L85KDV5',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Apple-20W-USB-C-Power-Adapter/dp/B08L85KDV5/ref=sr_1_5?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-5',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Having purchased the Apple 20W USB-C Power Adapter '
+                         'from Amazon for the fourth time, I can confidently '
+                         'say that this product continues to impress with its '
+                         'quality and performance.',
+              'CommentDate': '2024-03-16',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The Apple 20W USB-C Power Adapter has seamlessly '
+                         'integrated itself into my daily tech routine over '
+                         "the past eight months, and I'm compelled to share my "
+                         'positive experience. In a market flooded with '
+                         'charging options, this adapter stands out for its '
+                         'reliability and performance.',
+              'CommentDate': '2024-03-02',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I recently purchased the Apple 20W USB-C Power '
+                         'Adapter, and it has exceeded my expectations in '
+                         'every way. The sleek, compact design makes it '
+                         'perfect for travel, easily fitting into any bag or '
+                         'even a pocket. Its build quality is exceptional, a '
+                         'hallmark of Apple products, ensuring durability and '
+                         'longevity.',
+              'CommentDate': '2023-11-20',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I works well',
+              'CommentDate': '2024-02-26',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Because this adapter for my phone too much '
+                         'helpfully, speed charging, all is goo😊',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The power adapter is great for charging my iPhone; '
+                         'it support fast charging.',
+              'CommentDate': '2024-03-16',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Great',
+              'CommentDate': '2024-04-07',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Worth the price!',
+              'CommentDate': '2024-03-30',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'It’s original in my opinion… feels like it.',
+              'CommentDate': '2024-04-09',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0}]}
+2024-04-23 08:35:25 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Power-Positive-Attitude-Your-Success/dp/9389432642/ref=sr_1_15?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-15> (referer: https://www.amazon.ae/s?rh=n%3A11497688031&fs=true&ref=lp_11497688031_sar)
+2024-04-23 08:35:25 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36
+2024-04-23 08:35:25 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-generation-Lightning-Charging-Wireless/product-reviews/B0BDKB96DD/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Apple-generation-Lightning-Charging-Wireless/dp/B0BDKB96DD/ref=sr_1_4?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-4)
+2024-04-23 08:35:25 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/525.19 (KHTML, like Gecko) Chrome/1.0.154.36 Safari/525.19
+2024-04-23 08:35:25 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Apple-generation-Lightning-Charging-Wireless/product-reviews/B0BDKB96DD/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51wJyyfrVXL.__AC_SY445_SX342_QL70_ML2_.jpg',
+ 'Offer': 609.0,
+ 'ProductName': 'Apple AirPods (3rd generation) with Lightning Charging Case, '
+                'Wireless',
+ 'RatingValue': 4.5,
+ 'RegularPrice': 719.0,
+ 'SKU': 'B0BDKB96DD',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Apple-generation-Lightning-Charging-Wireless/dp/B0BDKB96DD/ref=sr_1_4?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-4',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': '\uf8ff quality is always awesome',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I will never settle for less when it comes to music! '
+                         'Amazing buy',
+              'CommentDate': '2024-04-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Nice product',
+              'CommentDate': '2024-04-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I can’t even say budget cause they are still pretty '
+                         'overpriced compared to its competitors but it’s '
+                         'great overall and it’s Apple.',
+              'CommentDate': '2024-02-20',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Wow, it’s looks like the original',
+              'CommentDate': '2024-04-04',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'It’s very convenient to use and value for money when '
+                         'I bought it on a discounted price.',
+              'CommentDate': '2024-03-13',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'المفروض ان تكون السماعة جديدة ، ولكن الظاهر ان صندوق '
+                         'قد تم فتحه من قبل شخص يدعى asif , وعند ربط السماعه '
+                         'بالهاتف يظهر اسم الشخص المستخدم حتى ان اللاصق الذي '
+                         'يأتي خلف العلبة تم اعادة وضعه مره ثانية وليش هو '
+                         'الملصق الاصلي الذي يكون من من المصنع وهو من المفروض '
+                         'ان تكون السماعة جديد ولم يتم استخدامها',
+              'CommentDate': '2024-04-08',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'Good gift for everyone',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Nice',
+              'CommentDate': '2024-04-12',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'All good',
+              'CommentDate': '2024-03-13',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 4.0}]}
+2024-04-23 08:35:26 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-iPhone-15-Pro-256/product-reviews/B0CHX78QDZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Apple-iPhone-15-Pro-256/dp/B0CHX78QDZ/ref=sr_1_3?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-3)
+2024-04-23 08:35:26 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36
+2024-04-23 08:35:26 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Apple-iPhone-15-Pro-256/product-reviews/B0CHX78QDZ/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/81gTH9iEn+L._AC_SX342_SY445_.jpg',
+ 'Offer': 4099.0,
+ 'ProductName': 'Apple iPhone 15 Pro (256 GB) - Natural Titanium',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 4699.0,
+ 'SKU': 'B0CHX78QDZ',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Apple-iPhone-15-Pro-256/dp/B0CHX78QDZ/ref=sr_1_3?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-3',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': "It's is more cheaper than in the mall and store and "
+                         "all are original I don't regret buying iPhone from "
+                         'Amazon.. always best and trusted...... people say '
+                         "rumours that they don't trust online but Amazon is "
+                         'always trusted....',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The from Amazon was fast and good. The phone arrived '
+                         'in good condition, brand new and unsealed.',
+              'CommentDate': '2024-02-07',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Bought this with an exchange offer. Before-time '
+                         'delivery. Product in top shape.',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'As a first-time iPhone user, buying online was a '
+                         'breeze. The process was smooth, and the delivery was '
+                         'prompt. The iPhone itself exceeded my expectations '
+                         'with its sleek design, intuitive interface, and '
+                         'impressive performance. Transitioning from another '
+                         'platform was seamless, thanks to the user-friendly '
+                         'setup process. Overall, a fantastic experience that '
+                         'has converted me into a loyal iPhone user.',
+              'CommentDate': '2024-04-07',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Original product perfect color I m in love with this '
+                         'phone 🥰',
+              'CommentDate': '2024-03-31',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good performance so far , fantastic gaming '
+                         'experience. Camera and videography, one of the best '
+                         'your device will provide.',
+              'CommentDate': '2024-01-25',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': "It's a good phone if your upgrading from a older "
+                         'version, not a lot of difference compared to 14 pro.',
+              'CommentDate': '2024-04-13',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Excellent',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Excellent',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0}]}
+2024-04-23 08:35:26 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/product-reviews/B0CQYY4QXF/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/dp/B0CQYY4QXF/ref=sr_1_2?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-2)
+2024-04-23 08:35:26 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+2024-04-23 08:35:27 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/product-reviews/B0CQYY4QXF/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71WkqFssobL.__AC_SX300_SY300_QL70_ML2_.jpg',
+ 'Offer': 3725.0,
+ 'ProductName': 'SAMSUNG Galaxy S24 Ultra, AI Phone, 256GB Storage, Titanium '
+                'Gray, 12GB RAM, Android Smartphone, 200MP Camera, S Pen, Long '
+                'Battery Life (UAE Version)',
+ 'RatingValue': 4.1,
+ 'RegularPrice': 5099.0,
+ 'SKU': 'B0CQYY4QXF',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/SAMSUNG-Storage-Titanium-Android-Smartphone/dp/B0CQYY4QXF/ref=sr_1_2?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-2',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Bought this 20 days back and loved this phone, the '
+                         'features to the core. Camera zoom quality and every '
+                         'bit of experience be it the audio, the video, the '
+                         'call experience till date has been great. Screen '
+                         'size, the stylus pen and the AI based tech too '
+                         'superb! Go for it.',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Everything has passed smoothly. Phone was delivered '
+                         'on time. S24 plus works without any issue as '
+                         'expected.',
+              'CommentDate': '2024-04-17',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'This device was delivered safely, very amazing '
+                         'device !, great in every aspect i love the '
+                         'applications on samsung they are very well '
+                         'optimized, the device was sealed by samsung as it '
+                         'got here everything is as accurate i love it !',
+              'CommentDate': '2024-03-31',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Great product but i dont get the 500aed vouches as '
+                         'said in the adds',
+              'CommentDate': '2024-03-30',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'It has been two weeks since I purchased the phone. '
+                         'Overall, the device performs exceptionally well, and '
+                         'the battery life is particularly impressive. The '
+                         'issue with the display, which was a concern for many '
+                         'people, still exists (the gray color on the screen '
+                         'looks grainy compared to older devices). It is not a '
+                         'significant issue for me (since I came from Note9), '
+                         'but it depends on whether you can live with it or '
+                         'not. So far, the colors are not as vibrant as '
+                         'previous devices even after the latest update, so if '
+                         'anyone decides to get this phone, compare it with '
+                         'the S23U and then decide if you can accept this or '
+                         'not. The AI features work similarly to how current '
+                         'AI works. It is not perfect, but it does work to '
+                         "some extent. Other than that it's a great phone that "
+                         'promises 7 years of updates with the latest '
+                         'processor. Given that it is still relatively new, we '
+                         'may anticipate the possibility that the screen issue '
+                         'is software-related and can be rectified through a '
+                         "software update. (The review's writing style was "
+                         'edited with AI🤷\u200d♂️)',
+              'CommentDate': '2024-04-20',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': "It's with latest technology, AI is the future, if "
+                         "you ate a android user it's a must have phone. "
+                         'Amazon delivery was quick ordered at 9pm and next '
+                         'day 8 am I had the phone. The phone was well packed '
+                         'and no damage. In all aspects the phone looks and '
+                         'feel awesome 👌,  the features of AI are tremendous '
+                         'and helpful. The battery life,camera and screen '
+                         "clarity is also amazing. Totally satisfied, can't "
+                         'ask anything else from Samsung.',
+              'CommentDate': '2024-03-05',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The item was received in good condition, its exactly '
+                         'as shown in the picture and it functions well.',
+              'CommentDate': '2024-04-10',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Mobile displays not that much of good, heating '
+                         "issues are there when I'm going to boot up or file "
+                         "transferring mobile getting heat, in samsung's app "
+                         'also not available in samsung store app.',
+              'CommentDate': '2024-04-03',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': "My most concern is the battery, I don't think that "
+                         "it is normal to charge it 2x a day. And I'm still "
+                         "waiting for the 500 aed voucher it's been more than "
+                         "two weeks now and I still haven't receive it yet.",
+              'CommentDate': '2024-04-12',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'The phone was fine until it started overheating it '
+                         'pretty much frequently. I am not sure what is the '
+                         'issue but samsung customer service put apps to sleep '
+                         'to solve it but nothing happened. Going back to them '
+                         'again this week',
+              'CommentDate': '2024-04-05',
+              'Source': '',
+              'average_rating': 4.1,
+              'max_rating': 5,
+              'rating': 3.0}]}
+2024-04-23 08:35:27 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Apple-New-AirTag-pack/product-reviews/B093Z293ZN/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Apple-New-AirTag-pack/dp/B093Z293ZN/ref=sr_1_6?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-6)
+2024-04-23 08:35:27 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36
+2024-04-23 08:35:27 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Apple-New-AirTag-pack/product-reviews/B093Z293ZN/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Phones',
+ 'CategoryName': 'Mobile Phones',
+ 'MainImage': 'https://m.media-amazon.com/images/I/617XOyDdTTL.__AC_SY445_SX342_QL70_ML2_.jpg',
+ 'Offer': 363.0,
+ 'ProductName': 'Apple New Apple AirTag 4 pack',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 439.0,
+ 'SKU': 'B093Z293ZN',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Apple-New-AirTag-pack/dp/B093Z293ZN/ref=sr_1_6?dib=eyJ2IjoiMSJ9.vqfw8ItWtWVh3Q3eoeFE4u0lHTj2P24Pk6mNqGMyhzLKimglQA9DB_UrdTpdZGTtORMTbg58-1MrSP8IEFtYmHRMnvTaMp7WnSlVXYuoWcO3aVhZT7ub4xalmyjihKcZe28-N9Lz8DIZ4rwY4ZdIzAdz2TezL-nAQdZG3fhbaMRetIadamHY63T6TwO2ykjoRwcZOGfJpXp9yhsmhwaUu5HRW7bYx8E8IPVneXPqChYX-u2kFpE22EqJSscnfKPDAxGuS6csEhNzHRcWuXKnP-5wNhn8-FbHCUmGL0-i4QE.7uuzC4FY8hsTm4_clZnCRYViPL7bAycQl7KC5alxCGA&dib_tag=se&qid=1713857699&s=electronics&sr=1-6',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Its good if you are travelling you just put it in '
+                         'your luggage... and just use your i phone thats '
+                         'it....quality is what you expect from apple.... '
+                         'although my smart tag from samsung has more '
+                         'functionality, just note that airtag works only on '
+                         'iphone, smart tag only works with samsung. i have '
+                         'both.',
+              'CommentDate': '2024-01-22',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Original product and good.',
+              'CommentDate': '2024-03-14',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I travel alot and i cant travel without this '
+                         'product, keep my checked bagged tracked and keep me '
+                         'safe minded, it help me to insure my bags travailing '
+                         'with me or finding them in big airports',
+              'CommentDate': '2024-04-10',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Very very useful  especially when you add to your '
+                         'luggage',
+              'CommentDate': '2024-01-24',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': "Works as you'd expect, a great product but there's "
+                         'no need for it to be twice the price of competitors '
+                         'product. I have both apple and Samsung, and there is '
+                         'no noticable difference in their performance. In '
+                         'fact the new Samsung one has longer battery life',
+              'CommentDate': '2023-12-22',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Perfect',
+              'CommentDate': '2024-04-10',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Super quick delivery of a well documented successful '
+                         'product.',
+              'CommentDate': '2024-04-04',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Original',
+              'CommentDate': '2024-03-20',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'ابل صناعتها جيدة ولكن هذا المنتج لا يعطيك التتبع '
+                         'المباشر اذا كان قصدك ان تتبع شي خارج المنزل.',
+              'CommentDate': '2024-03-29',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Packaging good. Excited to use. Thanks',
+              'CommentDate': '2024-03-16',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0}]}
+2024-04-23 08:35:28 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=3&qid=1713857716&ref=sr_pg_2> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=2&qid=1713857699&ref=sr_pg_1)
+2024-04-23 08:35:28 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36
+2024-04-23 08:35:29 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=3&qid=1713857717&ref=sr_pg_2> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=2&qid=1713857703&ref=sr_pg_1)
+2024-04-23 08:35:29 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36
+2024-04-23 08:35:30 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/dp/B0BWTXHTPW/ref=sr_1_57_sspa?dib=eyJ2IjoiMSJ9.bazJlQ1fmdwIJzMthc76sHoXP16kyuzQM-4dCp6TlSaJtPL1XI3sFSUlQM6KGdXTMYLrPs4FbCqQiObwW1ZMGxoTk-qTqRjCo-3-Y25VXJ2TGqkTbcDX70_mXXKBC1e_7y3KPapUfp3fBdqrN_RzSXiy--kAn0A5Vw3KL_JlbHOMJzsIrkn3fpKdACW8uYoRqNPd5yhvWoRJlGftWntnXNPQkhWMNKRZ3qG8frGDrCkWaNmNP7UhTbdbyj834kmEw-dHqZH3JN97eefLo9z2b7kdN_kO-g_bjwZga63HVss.LNwPV9yYQeRAKLwZfbk82fPyMRvQDY5X0gJHPLtC8NI&dib_tag=se&qid=1713857718&s=computers&sr=1-57-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo4MzgzMDY3NTM5NDU4MTEzOjE3MTM4NTc3MTg6c3BfYnRmX2Jyb3dzZTozMDAxNjUyMDQxMTQzMzI6OjA6Og&url=%2FHUATOL-Overbed-Adjustable-Swivel-Rolling%2Fdp%2FB0BWTXHTPW%2Fref%3Dsr_1_57_sspa%3Fdib%3DeyJ2IjoiMSJ9.bazJlQ1fmdwIJzMthc76sHoXP16kyuzQM-4dCp6TlSaJtPL1XI3sFSUlQM6KGdXTMYLrPs4FbCqQiObwW1ZMGxoTk-qTqRjCo-3-Y25VXJ2TGqkTbcDX70_mXXKBC1e_7y3KPapUfp3fBdqrN_RzSXiy--kAn0A5Vw3KL_JlbHOMJzsIrkn3fpKdACW8uYoRqNPd5yhvWoRJlGftWntnXNPQkhWMNKRZ3qG8frGDrCkWaNmNP7UhTbdbyj834kmEw-dHqZH3JN97eefLo9z2b7kdN_kO-g_bjwZga63HVss.LNwPV9yYQeRAKLwZfbk82fPyMRvQDY5X0gJHPLtC8NI%26dib_tag%3Dse%26qid%3D1713857718%26s%3Dcomputers%26sr%3D1-57-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:30 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36
+2024-04-23 08:35:30 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Anker-Magnetic-Wireless-Portable-Compatible/dp/B0C58MS6HF/ref=sr_1_48?dib=eyJ2IjoiMSJ9.h4EDoR8GK316ZAYYyn5v7NzoPUKW74o9oqfuYpc67AFWzHFdNtGT5kBBMhlyUkhmeFJuMQKwvz0jiyQIkNHHf9KitoKUK8rHKgJW9zzPiSbnrvHjv726CIsooWKbhRCVHQtk-OlazknaBwtrQLq1dt-IiUONrFNpi4XefAzzC4uARNJwHF1V0ob3kJ_sOPtvwxEaXy6S-EE_VIXWP_IqWLBOreN-PhwI4VDeaeyt7AiYevYdapPwCEFEcdzQgt2jR3MJ4NuWF-pmhjtRL4HbXyCsH4VMPqsszXuPfUpqcy4.0VmX-5O7JYcmCYjsrVw4uG_idMx8NUXucAWlPOwIbEY&dib_tag=se&qid=1713857716&s=electronics&sr=1-48> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=2&qid=1713857699&ref=sr_pg_1)
+2024-04-23 08:35:30 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.82 Safari/537.36
+2024-04-23 08:35:30 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=3&qid=1713857718&ref=sr_pg_2> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=2&qid=1713857705&ref=sr_pg_1)
+2024-04-23 08:35:30 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36
+2024-04-23 08:35:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Crucial-CT1000P3SSD8-PCIe-3500MB-Black/product-reviews/B0B25LZGGW/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Crucial-CT1000P3SSD8-PCIe-3500MB-Black/dp/B0B25LZGGW/ref=sr_1_24?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-24)
+2024-04-23 08:35:31 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36
+2024-04-23 08:35:31 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Crucial-CT1000P3SSD8-PCIe-3500MB-Black/product-reviews/B0B25LZGGW/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Computers',
+ 'CategoryName': 'Computers',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51XuNS7R-lL.__AC_SY300_SX300_QL70_ML2_.jpg',
+ 'Offer': 224.99,
+ 'ProductName': 'Crucial P3 1TB CT1000P3SSD8 PCIe 3.0, 3D NAND, NVMe, M.2 SSD, '
+                'up to 3500MB/s, Black',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 0,
+ 'SKU': 'B0B25LZGGW',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Crucial-CT1000P3SSD8-PCIe-3500MB-Black/dp/B0B25LZGGW/ref=sr_1_24?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-24',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': '2 weeks running windows from this now with a smooth '
+                         'and much needed fast performance.',
+              'CommentDate': '2024-04-15',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Fast delivery and good pric. Value for money',
+              'CommentDate': '2024-03-13',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Of course, this SSD comes with all the caveats of '
+                         'any DRAM-less SSD. However, if you are aware of that '
+                         'then this is a very speedy and cheap device. If you '
+                         'plan to read/write for a long time, definitely get a '
+                         'heatsink too. It will throttle after a couple '
+                         'minutes. Crystal diskmark says approx 3300mb/s read '
+                         'and 3000mb/s write over 4x PCIe gen 3',
+              'CommentDate': '2023-09-10',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Really good NVME SSD for the price. Works fantastic '
+                         'out of the box and outputs amazing read and write '
+                         'speeds for a GEN 3 SSD.',
+              'CommentDate': '2023-11-24',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Installed this on my Dell G15 5515 Laptop (2022 '
+                         "Ryzen Edition), and I'm proud to say that this was "
+                         'my first time adding an upgrade to my PC :D On '
+                         'CrystalDiskMark 8 I got speeds of 3500-3600MB/s, '
+                         'which means that the SSD performs up to the speed as '
+                         'advertised. I use this SSD purely for the storage of '
+                         'games and there have been zero issues with this '
+                         'drive ever since I installed it. Highly recommend '
+                         'this model if your PC is on PCIe 3.0.',
+              'CommentDate': '2023-12-15',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': '👍',
+              'CommentDate': '2024-03-29',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good',
+              'CommentDate': '2024-02-29',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': "i love it and i'm getting a 2tb one soon when i get "
+                         'my allowance :)',
+              'CommentDate': '2024-02-04',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'منتج جيد انصح به',
+              'CommentDate': '2024-01-03',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'upgraded my laptop storage with this and happy with '
+                         'it',
+              'CommentDate': '2023-12-14',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0}]}
+2024-04-23 08:35:31 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/305-Black-Original-Cartridge-Tri-Color/product-reviews/B09BM6XRSN/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/305-Black-Original-Cartridge-Tri-Color/dp/B09BM6XRSN/ref=sr_1_23?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-23)
+2024-04-23 08:35:31 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:35:32 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/305-Black-Original-Cartridge-Tri-Color/product-reviews/B09BM6XRSN/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Computers',
+ 'CategoryName': 'Computers',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71IT+pQ8zjL._AC_SY300_SX300_.jpg',
+ 'Offer': 85.0,
+ 'ProductName': 'Hp 305 Black Original Ink Cartridge (1) + Hp 305 Tri-Color '
+                'Original Ink Cartridge(1)',
+ 'RatingValue': 4.3,
+ 'RegularPrice': 90.0,
+ 'SKU': 'B09BM6XRSN',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/305-Black-Original-Cartridge-Tri-Color/dp/B09BM6XRSN/ref=sr_1_23?dib=eyJ2IjoiMSJ9.KmyNfDF5RhSkMmYaqKOoTOZtA0yGaLhrK8kWe_TeMrj3hIWsfqAph8hc4mYivWrZo-LOJz-Qi_uu2F4EXhD0G-ch1hnyokYfKwRHi6XO_323IlQ4eMWMR5HU0tEHm0plixhRTRqIxEquhwg1FGGHDRPUYuMgWH-QO25EyqWsLv7fwDeQDZpExAzAYNWiyjYwcH7tVs7JApjH78Bwla0RtX1GAcReY20F4NikjKMJG1jBoBN6HwJuRU3LEASzSfsX6DFAST5tu6thbGZINpvqKMj1TNebLgGrPqMQJz4YBHc.7NtQQNUhQ9-KOocZ7VDn4Zao58yLoyWIOYanDwR8sWs&dib_tag=se&qid=1713857705&s=computers&sr=1-23',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Suitable for my printer',
+              'CommentDate': '2024-03-24',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I want to say that the supplied cartridge is '
+                         'original and compatible to my printer.',
+              'CommentDate': '2024-03-18',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Small values and huge prices',
+              'CommentDate': '2024-03-21',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Good and genuine, great price compared to the shops',
+              'CommentDate': '2022-12-01',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Perfect',
+              'CommentDate': '2023-12-30',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The color cartridge is OK but the black one is not '
+                         'working as the printer keeps showing error (E0) and '
+                         'empty tank. While inserting back the old one  the '
+                         'error stops and the status is just showing low ink.',
+              'CommentDate': '2023-01-29',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'Good value deal',
+              'CommentDate': '2023-11-04',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': '👍🏻',
+              'CommentDate': '2024-03-20',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': 'Nice',
+              'CommentDate': '2023-07-13',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Working well',
+              'CommentDate': '2023-03-25',
+              'Source': '',
+              'average_rating': 4.3,
+              'max_rating': 5,
+              'rating': 4.0}]}
+2024-04-23 08:35:32 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/Panchtantra-Ki-Prasiddh-Kahaniyan-Timeless/dp/9389178134/ref=sr_1_38_sspa?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-38-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo0NzU5MDkyMjM1NzUzMTEzOjE3MTM4NTc3MjA6c3BfYnRmX2Jyb3dzZToyMDA2NTk4MjQ5ODE5ODo6MDo6&url=%2FPanchtantra-Ki-Prasiddh-Kahaniyan-Timeless%2Fdp%2F9389178134%2Fref%3Dsr_1_38_sspa%3Fdib%3DeyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg%26dib_tag%3Dse%26qid%3D1713857720%26s%3Dbooks%26sr%3D1-38-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:32 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36
+2024-04-23 08:35:32 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=3&qid=1713857720&ref=sr_pg_2> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:32 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36
+2024-04-23 08:35:33 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Good-GirlS-Guide-Murder/product-reviews/1405293187/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Good-GirlS-Guide-Murder/dp/1405293187/ref=sr_1_16?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-16)
+2024-04-23 08:35:33 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36
+2024-04-23 08:35:33 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Good-GirlS-Guide-Murder/product-reviews/1405293187/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51afd7Iy8sL._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': "A Good Girl'S Guide To Murder",
+ 'RatingValue': 4.7,
+ 'RegularPrice': 0,
+ 'SKU': '1405293187',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Good-GirlS-Guide-Murder/dp/1405293187/ref=sr_1_16?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-16',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Good quality pages',
+              'CommentDate': '2024-03-17',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'the book was such an amazing book and made me get '
+                         'really excited to read the next part !! 10/10 would '
+                         'recommend !!!!',
+              'CommentDate': '2023-08-25',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'the price is the best',
+              'CommentDate': '2023-08-23',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good',
+              'CommentDate': '2023-09-18',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'This is my first mystery book, and let me tell you, '
+                         "I didn't think I'd like it this much, but omg it's "
+                         'amazing!! When I finished the first book, I '
+                         'immediately went on Amazon and bought parts two and '
+                         'three, and the entire trilogy was interesting and '
+                         "had so many plot twists. Id say it's beginner "
+                         'friendly!',
+              'CommentDate': '2022-08-09',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Enjoyed the book and will continue with other books '
+                         'series ..',
+              'CommentDate': '2023-02-20',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I received the book in an excellent condition no '
+                         'scratches, nothing. The story itself is excellent my '
+                         'only comment is I don’t like how pip started with '
+                         'the case directly since the first page.',
+              'CommentDate': '2022-07-22',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'This book is like one of my favorites. I really went '
+                         'into it without reading reviews about but at the end '
+                         'I loved the story and the characters. The plot twist '
+                         'was not expectedat all.',
+              'CommentDate': '2022-04-08',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Not exactly the kind of mystery thriller I',
+              'CommentDate': '2023-11-10',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': 'I have read only a few chapters love the book so far '
+                         'but sadly i lost it so Mabey they should put a built '
+                         'in book tracker in the book so people like me wont '
+                         'lose it',
+              'CommentDate': '2023-04-14',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 4.0}]}
+2024-04-23 08:35:33 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/Grade-9-1-GCSE-Physics-Revision/dp/1782945733/ref=sr_1_37_sspa?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-37-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo0NzU5MDkyMjM1NzUzMTEzOjE3MTM4NTc3MjA6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIyMzI6OjA6Og&url=%2FGrade-9-1-GCSE-Physics-Revision%2Fdp%2F1782945733%2Fref%3Dsr_1_37_sspa%3Fdib%3DeyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg%26dib_tag%3Dse%26qid%3D1713857720%26s%3Dbooks%26sr%3D1-37-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:33 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36
+2024-04-23 08:35:35 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Power-Positive-Attitude-Your-Success/product-reviews/9389432642/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Power-Positive-Attitude-Your-Success/dp/9389432642/ref=sr_1_15?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-15)
+2024-04-23 08:35:35 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36
+2024-04-23 08:35:35 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Power-Positive-Attitude-Your-Success/product-reviews/9389432642/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41RhCDH1U7L._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'The Power of A Positive Attitude: Your Road To Success',
+ 'RatingValue': 4.4,
+ 'RegularPrice': 0,
+ 'SKU': '9389432642',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Power-Positive-Attitude-Your-Success/dp/9389432642/ref=sr_1_15?dib=eyJ2IjoiMSJ9.AUqUVO3vjMk4vM0JVhwGC8QALrJtwWNHtw3NqX9v4bWUqAHInOmGRV7M0WfgxP5lTEHXb7uTTtCWH9hX1WkFX9DWmwZOwlnD4eDGg6Nd2_3w39e1wW_Cv9G07A4BquMsOR76kg3xL67_7o2VVrdJvnaQscS_QxMXw4iwXsyHRyTPSS1qJhgowaMZrkBHuUl4jg0KZlZ3ys-XCirc8LdETA-N41DGsrdWpYXas-DOTBY.z5T5QDvhzdlM0BpznWFeUpYGDsNtNaBq5ZNfzvzfakU&dib_tag=se&qid=1713857709&s=books&sr=1-15',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Amazing quality paper. Thank you',
+              'CommentDate': '2024-04-15',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I t is really good book for self improvement.',
+              'CommentDate': '2024-01-29',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'I loved it!',
+              'CommentDate': '2024-01-04',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Really finished more than half of the book in just a '
+                         'week ... learnt many good things ...  bools like '
+                         'these are worth reading.',
+              'CommentDate': '2023-08-15',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'In an effort to improve a seemingly negative '
+                         'attitude in the workplace, I was tasked to read some '
+                         'books on having a positive attitude.  Naturally I '
+                         'did not do so with a good attitude . . . but this '
+                         'book was actually very well written and relatively '
+                         'motivational.  The author has some great concepts '
+                         'and techniques for improving your attitude that are '
+                         'not quite as absurd as you might think.  Was it '
+                         'worth the money?  Yeah . . . and I got to check off '
+                         'an item on my development plan for the year.  Double '
+                         'bonus for me!',
+              'CommentDate': '2008-08-14',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': "Quality of book is good. It's reading experience is "
+                         "amazing. It's a relatable book and will surely help "
+                         'in personality improvement.',
+              'CommentDate': '2023-12-28',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This book is really very helpful to discover '
+                         'yourself what is really you are made of and what '
+                         'else you can do in n your life. This is really '
+                         'amazing experience.',
+              'CommentDate': '2023-12-07',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'All in one in book',
+              'CommentDate': '2024-03-17',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'The quality of book is amazing nd literally worth it',
+              'CommentDate': '2024-03-05',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'LOVED IT',
+              'CommentDate': '2024-04-19',
+              'Source': '',
+              'average_rating': 4.4,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:36 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Think-Grow-Rich-21st-CENTURY/dp/9389931525/ref=sr_1_36?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-36> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:36 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+2024-04-23 08:35:37 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Intelligent-Investor-Definitive-Investing-Practical/dp/0060555661/ref=sr_1_35?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-35> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:37 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+2024-04-23 08:35:38 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Diary-Wimpy-Kid-Book-17/dp/024158308X/ref=sr_1_34?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-34> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:38 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36
+2024-04-23 08:35:38 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Kensukes-Kingdom-Egmont-Modern-Classics/dp/1405281790/ref=sr_1_33?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-33> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:38 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+2024-04-23 08:35:38 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=4&qid=1713857727&ref=sr_pg_3> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=3&qid=1713857716&ref=sr_pg_2)
+2024-04-23 08:35:38 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36
+2024-04-23 08:35:39 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/5-Am-Club-Robin-Sharma/dp/0008312834/ref=sr_1_32?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-32> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:39 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36
+2024-04-23 08:35:39 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/JDDWIN-Designed-Playstation-Accessories-Compatible/dp/B0CN6K9T6S/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9.9IZqKMRUFqUyCFgyFILxy60GkI3GjGnZ_W5WMt_mNN_5mgtXYmjZM9qyGQQGIUBvswW_nw7RpCDNn00C4MA6CWRKB6_PrzmUqYpOgZj5WTa7eTF-FTUR1Fn-NonW9eiVacBxIgO1cx-P677GGY0zPQNl23B1HVa5_-6iUwIwFGJFrbEEgdxLAvWGcwsHClrRLhIdappyyistEQFi9qm6c6rCBxGm5B--fbWTEMrri0lPjJgjkhFwkbvLvf9yPUNvSyq0tZxZQd0PQ82YAiBAbWFc0yHTiiXDRUL3fHXFO50.ljDhpGBmj0yImDb6ipKqeiBkDnu7bkCrBkYKtY-ZkJw&dib_tag=se&qid=1713857728&s=electronics&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1&smid=ARGWQTP6MMV7W> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo0NDQ2MzIyOTE2ODk3MTEzOjE3MTM4NTc3Mjg6c3BfYnRmX2Jyb3dzZTozMDAxMTEzOTMyODI3MzI6OjA6Og&url=%2FJDDWIN-Designed-Playstation-Accessories-Compatible%2Fdp%2FB0CN6K9T6S%2Fref%3Dsr_1_81_sspa%3Fdib%3DeyJ2IjoiMSJ9.9IZqKMRUFqUyCFgyFILxy60GkI3GjGnZ_W5WMt_mNN_5mgtXYmjZM9qyGQQGIUBvswW_nw7RpCDNn00C4MA6CWRKB6_PrzmUqYpOgZj5WTa7eTF-FTUR1Fn-NonW9eiVacBxIgO1cx-P677GGY0zPQNl23B1HVa5_-6iUwIwFGJFrbEEgdxLAvWGcwsHClrRLhIdappyyistEQFi9qm6c6rCBxGm5B--fbWTEMrri0lPjJgjkhFwkbvLvf9yPUNvSyq0tZxZQd0PQ82YAiBAbWFc0yHTiiXDRUL3fHXFO50.ljDhpGBmj0yImDb6ipKqeiBkDnu7bkCrBkYKtY-ZkJw%26dib_tag%3Dse%26qid%3D1713857728%26s%3Delectronics%26sr%3D1-81-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1%26smid%3DARGWQTP6MMV7W>
+2024-04-23 08:35:39 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36
+2024-04-23 08:35:40 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=4&qid=1713857728&ref=sr_pg_3> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=3&qid=1713857717&ref=sr_pg_2)
+2024-04-23 08:35:40 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+2024-04-23 08:35:40 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/dp/B0BWTXHTPW/ref=sr_1_57_sspa?dib=eyJ2IjoiMSJ9.bazJlQ1fmdwIJzMthc76sHoXP16kyuzQM-4dCp6TlSaJtPL1XI3sFSUlQM6KGdXTMYLrPs4FbCqQiObwW1ZMGxoTk-qTqRjCo-3-Y25VXJ2TGqkTbcDX70_mXXKBC1e_7y3KPapUfp3fBdqrN_RzSXiy--kAn0A5Vw3KL_JlbHOMJzsIrkn3fpKdACW8uYoRqNPd5yhvWoRJlGftWntnXNPQkhWMNKRZ3qG8frGDrCkWaNmNP7UhTbdbyj834kmEw-dHqZH3JN97eefLo9z2b7kdN_kO-g_bjwZga63HVss.LNwPV9yYQeRAKLwZfbk82fPyMRvQDY5X0gJHPLtC8NI&dib_tag=se&qid=1713857718&s=computers&sr=1-57-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=2&qid=1713857705&ref=sr_pg_1)
+2024-04-23 08:35:40 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.59 Safari/537.36
+2024-04-23 08:35:41 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/TONOR-Microphone-Professional-Voice-over-TC310/dp/B0CCV74CL7/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MToxOTYzNjI0MTIxMDgxMTEzOjE3MTM4NTc3Mjk6c3BfYnRmX2Jyb3dzZTozMDAxNTEyNDYyNjA0MzI6OjA6Og&url=%2FTONOR-Microphone-Professional-Voice-over-TC310%2Fdp%2FB0CCV74CL7%2Fref%3Dsr_1_81_sspa%3Fdib%3DeyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A%26dib_tag%3Dse%26qid%3D1713857729%26s%3Dcomputers%26sr%3D1-81-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:41 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+2024-04-23 08:35:41 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=4&qid=1713857729&ref=sr_pg_3> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=3&qid=1713857718&ref=sr_pg_2)
+2024-04-23 08:35:41 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36
+2024-04-23 08:35:42 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/SGIN-Laptops-Computer-Celeron-Processor/dp/B0CQ7N8BS8/ref=sr_1_80_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-80-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MToxOTYzNjI0MTIxMDgxMTEzOjE3MTM4NTc3Mjk6c3BfYnRmX2Jyb3dzZTozMDAxMjkwODkxMjE4MzI6OjA6Og&url=%2FSGIN-Laptops-Computer-Celeron-Processor%2Fdp%2FB0CQ7N8BS8%2Fref%3Dsr_1_80_sspa%3Fdib%3DeyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A%26dib_tag%3Dse%26qid%3D1713857729%26s%3Dcomputers%26sr%3D1-80-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:42 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:35:43 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Panchtantra-Ki-Prasiddh-Kahaniyan-Timeless/dp/9389178134/ref=sr_1_38_sspa?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-38-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:43 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36
+2024-04-23 08:35:43 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=4&qid=1713857731&ref=sr_pg_3> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=3&qid=1713857720&ref=sr_pg_2)
+2024-04-23 08:35:43 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36
+2024-04-23 08:35:44 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_54_sspa?dib=eyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ&dib_tag=se&qid=1713857731&s=books&sr=1-54-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo4OTIyOTEyNDUxMzM2MTEzOjE3MTM4NTc3MzE6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIzMzI6OjA6Og&url=%2FPhysics-Revision-Online-Videos-Quizzes%2Fdp%2F1782945784%2Fref%3Dsr_1_54_sspa%3Fdib%3DeyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ%26dib_tag%3Dse%26qid%3D1713857731%26s%3Dbooks%26sr%3D1-54-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:44 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36
+2024-04-23 08:35:44 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/New-GCSE-Chemistry-Revision-Guide/dp/1782945571/ref=sr_1_53_sspa?dib=eyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ&dib_tag=se&qid=1713857731&s=books&sr=1-53-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo4OTIyOTEyNDUxMzM2MTEzOjE3MTM4NTc3MzE6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTE4MzI6OjA6Og&url=%2FNew-GCSE-Chemistry-Revision-Guide%2Fdp%2F1782945571%2Fref%3Dsr_1_53_sspa%3Fdib%3DeyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ%26dib_tag%3Dse%26qid%3D1713857731%26s%3Dbooks%26sr%3D1-53-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:44 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36
+2024-04-23 08:35:45 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Grade-9-1-GCSE-Physics-Revision/dp/1782945733/ref=sr_1_37_sspa?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-37-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=2&qid=1713857709&ref=sr_pg_1)
+2024-04-23 08:35:45 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36
+2024-04-23 08:35:45 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Think-Grow-Rich-21st-CENTURY/product-reviews/9389931525/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Think-Grow-Rich-21st-CENTURY/dp/9389931525/ref=sr_1_36?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-36)
+2024-04-23 08:35:45 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1
+2024-04-23 08:35:45 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Think-Grow-Rich-21st-CENTURY/product-reviews/9389931525/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41aL70yoloL._SX342_SY445_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'Think and Grow Rich: THE 21st CENTURY EDITION',
+ 'RatingValue': 4.5,
+ 'RegularPrice': 0,
+ 'SKU': '9389931525',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Think-Grow-Rich-21st-CENTURY/dp/9389931525/ref=sr_1_36?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-36',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'You want money u must learn from this book',
+              'CommentDate': '2024-03-31',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Very good',
+              'CommentDate': '2023-11-20',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I purchased this for my classes to use in teaching '
+                         "kids and also used it as gifts. It's absolutely "
+                         'perfect and comes at a great price.',
+              'CommentDate': '2023-09-16',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': "I haven't finished the book yet but it's great.",
+              'CommentDate': '2023-10-05',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Reading the book make you very close to several '
+                         'success stories with enough detai',
+              'CommentDate': '2023-07-18',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'good',
+              'CommentDate': '2023-09-06',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I like to have a good knowledge and understanding of '
+                         'secrets of financial liberty.',
+              'CommentDate': '2023-06-21',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I love reading it. And thank you for fast delivery',
+              'CommentDate': '2023-06-22',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'This is such a amazing book.',
+              'CommentDate': '2023-10-06',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The knowledge of the book is too good 😊 to aqure . '
+                         'And how to became successful in the life is writen '
+                         'the book by author Napoleon hill',
+              'CommentDate': '2024-04-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Intelligent-Investor-Definitive-Investing-Practical/product-reviews/0060555661/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Intelligent-Investor-Definitive-Investing-Practical/dp/0060555661/ref=sr_1_35?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-35)
+2024-04-23 08:35:46 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+2024-04-23 08:35:46 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Intelligent-Investor-Definitive-Investing-Practical/product-reviews/0060555661/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51iUvaI2DgL._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'Intelligent Investor: The Definitive Book On Value Investing '
+                '- A Book Of Practical Counsel',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 0,
+ 'SKU': '0060555661',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Intelligent-Investor-Definitive-Investing-Practical/dp/0060555661/ref=sr_1_35?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-35',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'I hope this is  only one of the best book for become '
+                         'a successful trader.......',
+              'CommentDate': '2023-11-30',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'You need to have patients to read the book it has a '
+                         'lot of information & insight but once you are done '
+                         'you will be ready start managing your finance in a '
+                         'intelligent way reply good book of fundamentals',
+              'CommentDate': '2023-06-29',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Everything about the stock market, mutual funds and '
+                         "bounds is covered and explained. It's a source of "
+                         'real information for an investor. However, the '
+                         'finance language used is somewhat heavy for a '
+                         'layman! Thanks to the commentary that simplifies the '
+                         'chapters.',
+              'CommentDate': '2022-01-15',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'Details are very deep and good for starters.',
+              'CommentDate': '2023-02-16',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Before I don’t know anything about investing.',
+              'CommentDate': '2021-04-15',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'A book that has stood the test of time... It '
+                         'captures your attention despite its technical '
+                         'nature.',
+              'CommentDate': '2020-08-07',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'One of the few books out there that helps you think',
+              'CommentDate': '2020-11-09',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'The book cover and papers are printed in the lowest '
+                         "quality paper. Don't recommend.",
+              'CommentDate': '2024-03-29',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'Principles well organized.',
+              'CommentDate': '2020-10-25',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0},
+             {'Comment': 'The most SANE book written about the '
+                         'investment/trading INSANE world.',
+              'CommentDate': '2020-03-19',
+              'Source': '',
+              'average_rating': 4.6,
+              'max_rating': 5,
+              'rating': 4.0}]}
+2024-04-23 08:35:46 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Diary-Wimpy-Kid-Book-17/product-reviews/024158308X/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Diary-Wimpy-Kid-Book-17/dp/024158308X/ref=sr_1_34?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-34)
+2024-04-23 08:35:46 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+2024-04-23 08:35:46 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Diary-Wimpy-Kid-Book-17/product-reviews/024158308X/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51VgDimJ7aL._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'Diary of a Wimpy Kid: Book 17',
+ 'RatingValue': 4.8,
+ 'RegularPrice': 0,
+ 'SKU': '024158308X',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Diary-Wimpy-Kid-Book-17/dp/024158308X/ref=sr_1_34?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-34',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Very nice book. Would recommend for kids.',
+              'CommentDate': '2024-01-28',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'No comments about this book.',
+              'CommentDate': '2023-12-18',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Typical wimpy kid book.. my kids loved it.',
+              'CommentDate': '2023-12-15',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Good for kids',
+              'CommentDate': '2023-12-03',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'My son loved this, as with all the Wimpy Kid books.  '
+                         "He's now hoping the author hurries up and releases "
+                         'another.',
+              'CommentDate': '2023-04-28',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'My son love it',
+              'CommentDate': '2023-05-02',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Honestly this book is really nice and o would '
+                         'recommend it for all lovers of diary of a wimpy kid',
+              'CommentDate': '2023-01-21',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'not the best book compared to other wimpy kid books '
+                         'in the series',
+              'CommentDate': '2023-10-19',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': 'Good read and fun',
+              'CommentDate': '2022-11-13',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'جدااا ممل',
+              'CommentDate': '2023-12-01',
+              'Source': '',
+              'average_rating': 4.8,
+              'max_rating': 5,
+              'rating': 1.0}]}
+2024-04-23 08:35:47 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Kensukes-Kingdom-Egmont-Modern-Classics/product-reviews/1405281790/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Kensukes-Kingdom-Egmont-Modern-Classics/dp/1405281790/ref=sr_1_33?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-33)
+2024-04-23 08:35:47 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+2024-04-23 08:35:47 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Kensukes-Kingdom-Egmont-Modern-Classics/product-reviews/1405281790/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/51O-PEhX5bL._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': "Kensuke's Kingdom (Egmont Modern Classics)",
+ 'RatingValue': 4.7,
+ 'RegularPrice': 0,
+ 'SKU': '1405281790',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/Kensukes-Kingdom-Egmont-Modern-Classics/dp/1405281790/ref=sr_1_33?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-33',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'For school',
+              'CommentDate': '2022-03-05',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Ha llegado súper rápido y la temática mi hijo le '
+                         'encanta. Al principio le costó un poco la lectura, '
+                         'pero se hizo poco a poco',
+              'CommentDate': '2024-02-13',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Taught this book in the 6th grade for 3 years '
+                         'straight as extensive reading. Its amazing to teach '
+                         'countries and cultures, vocabulary, some verb tenses '
+                         'and especially values and theme.',
+              'CommentDate': '2022-03-20',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Love Michael Morpurgo and I had not read this. I '
+                         "wasn't disappointed and would highly recommend.",
+              'CommentDate': '2024-04-11',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'We used this for homeschool, and it would be a good '
+                         'book for grade 4 to grade 9.  The story is SO '
+                         'well-written, it is hard to find books of this '
+                         'caliber for kids.  I read it and enjoyed it '
+                         'immensely as an adult.  It is written so '
+                         'convincingly that I thought it might be non-fiction, '
+                         'but after some research, I found it is fiction, but '
+                         'based on many things that have happened (military '
+                         'personnel being stranded on an island), or do happen '
+                         '(turtles hatch at night), all woven into a well-told '
+                         'story.',
+              'CommentDate': '2023-11-01',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Perfetto!',
+              'CommentDate': '2020-01-09',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Conforme',
+              'CommentDate': '2023-07-18',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': "Acheté à la demande de l'école",
+              'CommentDate': '2019-11-28',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Es un libro que se deja leer y está interesante. '
+                         'Para un nivel B1 inglés estupendo. Nos lo '
+                         'aconsejaron en la Escuela Oficial de Idiomas para '
+                         'practicar leyendo y adquirir más vocabulario.',
+              'CommentDate': '2021-09-29',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'A beautiful award winning book - and for good '
+                         "reason. I like well written children's books - and "
+                         'this is one of the best.',
+              'CommentDate': '2024-02-16',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:48 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=5&qid=1713857737&ref=sr_pg_4> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=4&qid=1713857727&ref=sr_pg_3)
+2024-04-23 08:35:48 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.0) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.112 Safari/535.1
+2024-04-23 08:35:49 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/5-Am-Club-Robin-Sharma/product-reviews/0008312834/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/5-Am-Club-Robin-Sharma/dp/0008312834/ref=sr_1_32?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-32)
+2024-04-23 08:35:49 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.63 Safari/537.36
+2024-04-23 08:35:49 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/5-Am-Club-Robin-Sharma/product-reviews/0008312834/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41alUjROZ5L._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'The 5 Am Club',
+ 'RatingValue': 4.5,
+ 'RegularPrice': 0,
+ 'SKU': '0008312834',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/5-Am-Club-Robin-Sharma/dp/0008312834/ref=sr_1_32?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-32',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'I always wanted to start waking up early but I '
+                         'needed to find a good reason for it. The book was '
+                         'written in a very nice way as a story but at the '
+                         'same time great models, approaches were shared.',
+              'CommentDate': '2022-07-23',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'You get attached',
+              'CommentDate': '2022-11-13',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Poorly written and boring',
+              'CommentDate': '2023-04-30',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': 'This book is SO MUCH MORE than what the title '
+                         'suggests. When implemented, it is truly '
+                         'life-changing! I wake up at 5am and, after working '
+                         'out and meditating, I continue to read and learn the '
+                         'book while I implement everything I am learning on a '
+                         'daily basis! I feel like I have a mentor guiding me '
+                         'to success and to be a better human being!',
+              'CommentDate': '2020-05-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Nice book',
+              'CommentDate': '2022-07-30',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Life changing.. 5AM concept indeed transformed my '
+                         'morning routine..20/20/20 rule. Working toward '
+                         'implementing the 10 tactics of lifelong genuis.',
+              'CommentDate': '2021-04-30',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Love the book.',
+              'CommentDate': '2021-06-24',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'Very poorly written book. It is more of a '
+                         'compilation of quotes from famous and / or '
+                         'successful ever lived human beings. It worth to read '
+                         "the last 100 pages only or even check author' "
+                         'Youtube video, more helpful and you would not feel '
+                         'that you wasted your time.',
+              'CommentDate': '2023-02-13',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 2.0},
+             {'Comment': 'Paper quality is cheap am sure this is fake copy '
+                         'book',
+              'CommentDate': '2022-07-24',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 3.0},
+             {'Comment': 'It was my fault that I didn’t read the reviews '
+                         'before purchasing it .',
+              'CommentDate': '2023-08-31',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 1.0}]}
+2024-04-23 08:35:50 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=5&qid=1713857738&ref=sr_pg_4> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=4&qid=1713857728&ref=sr_pg_3)
+2024-04-23 08:35:50 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:35:50 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/JDDWIN-Designed-Playstation-Accessories-Compatible/dp/B0CN6K9T6S/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9.9IZqKMRUFqUyCFgyFILxy60GkI3GjGnZ_W5WMt_mNN_5mgtXYmjZM9qyGQQGIUBvswW_nw7RpCDNn00C4MA6CWRKB6_PrzmUqYpOgZj5WTa7eTF-FTUR1Fn-NonW9eiVacBxIgO1cx-P677GGY0zPQNl23B1HVa5_-6iUwIwFGJFrbEEgdxLAvWGcwsHClrRLhIdappyyistEQFi9qm6c6rCBxGm5B--fbWTEMrri0lPjJgjkhFwkbvLvf9yPUNvSyq0tZxZQd0PQ82YAiBAbWFc0yHTiiXDRUL3fHXFO50.ljDhpGBmj0yImDb6ipKqeiBkDnu7bkCrBkYKtY-ZkJw&dib_tag=se&qid=1713857728&s=electronics&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1&smid=ARGWQTP6MMV7W> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=3&qid=1713857717&ref=sr_pg_2)
+2024-04-23 08:35:50 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36
+2024-04-23 08:35:50 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/product-reviews/B0BWTXHTPW/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/dp/B0BWTXHTPW/ref=sr_1_57_sspa?dib=eyJ2IjoiMSJ9.bazJlQ1fmdwIJzMthc76sHoXP16kyuzQM-4dCp6TlSaJtPL1XI3sFSUlQM6KGdXTMYLrPs4FbCqQiObwW1ZMGxoTk-qTqRjCo-3-Y25VXJ2TGqkTbcDX70_mXXKBC1e_7y3KPapUfp3fBdqrN_RzSXiy--kAn0A5Vw3KL_JlbHOMJzsIrkn3fpKdACW8uYoRqNPd5yhvWoRJlGftWntnXNPQkhWMNKRZ3qG8frGDrCkWaNmNP7UhTbdbyj834kmEw-dHqZH3JN97eefLo9z2b7kdN_kO-g_bjwZga63HVss.LNwPV9yYQeRAKLwZfbk82fPyMRvQDY5X0gJHPLtC8NI&dib_tag=se&qid=1713857718&s=computers&sr=1-57-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1)
+2024-04-23 08:35:50 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31
+2024-04-23 08:35:51 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/product-reviews/B0BWTXHTPW/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Computers',
+ 'CategoryName': 'Computers',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71ngLTokjKL.__AC_SX300_SY300_QL70_ML2_.jpg',
+ 'Offer': 300.0,
+ 'ProductName': 'HUATOL Overbed Adjustable Table, Swivel Wheel Rolling Tray - '
+                'Foldable Bedside Home Desk,Pneumatic Mobile Laptop Computer '
+                'Standing Desk Cart with Tray',
+ 'RatingValue': 2.8,
+ 'RegularPrice': 0,
+ 'SKU': 'B0BWTXHTPW',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo4MzgzMDY3NTM5NDU4MTEzOjE3MTM4NTc3MTg6c3BfYnRmX2Jyb3dzZTozMDAxNjUyMDQxMTQzMzI6OjA6Og&url=%2FHUATOL-Overbed-Adjustable-Swivel-Rolling%2Fdp%2FB0BWTXHTPW%2Fref%3Dsr_1_57_sspa%3Fdib%3DeyJ2IjoiMSJ9.bazJlQ1fmdwIJzMthc76sHoXP16kyuzQM-4dCp6TlSaJtPL1XI3sFSUlQM6KGdXTMYLrPs4FbCqQiObwW1ZMGxoTk-qTqRjCo-3-Y25VXJ2TGqkTbcDX70_mXXKBC1e_7y3KPapUfp3fBdqrN_RzSXiy--kAn0A5Vw3KL_JlbHOMJzsIrkn3fpKdACW8uYoRqNPd5yhvWoRJlGftWntnXNPQkhWMNKRZ3qG8frGDrCkWaNmNP7UhTbdbyj834kmEw-dHqZH3JN97eefLo9z2b7kdN_kO-g_bjwZga63HVss.LNwPV9yYQeRAKLwZfbk82fPyMRvQDY5X0gJHPLtC8NI%26dib_tag%3Dse%26qid%3D1713857718%26s%3Dcomputers%26sr%3D1-57-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'It looks good but it doesn’t allow your lap to be '
+                         'fully covered. It’s is just not long enough. I was '
+                         'not able to line up my laptop in front of my body  '
+                         'comfortably.  It’s more like a tall SIDE table for '
+                         'drinks and remote.',
+              'CommentDate': '2024-01-21',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'I was looking for a small side table I could use my '
+                         'laptop on while not spending a lot of money. Things '
+                         'I want to point out. The instructions do not come in '
+                         'English but the pictures give you enough to work '
+                         "with. Second like when assembling anything if it's "
+                         'not working step back and look closer. Everything I '
+                         'thought I hit a wall when stepping back I realized I '
+                         'had something turned the wrong way like the top.',
+              'CommentDate': '2023-09-19',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Made different than depicted in the pictures. Just a '
+                         'terrible product',
+              'CommentDate': '2024-04-11',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Tried to put this together, but the pre-drilled '
+                         'holes were either in the wrong spot or in some '
+                         'spots, not there at all. Very disappointing. Had to '
+                         'send back.',
+              'CommentDate': '2023-07-08',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Nice table for the price. The adjustable top is nice '
+                         'so I can use it at the couch and by my desk. Took '
+                         'about 30 min to assemble, pretty simple. Overall '
+                         'good buy',
+              'CommentDate': '2023-09-21',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'The table arrived with damage. I still use it since '
+                         'it is lightweight and easy to move around the house. '
+                         'It is very easy to put together.',
+              'CommentDate': '2023-11-01',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'The description clearly says foldable but there are '
+                         'no hinges so it is clearly not foldable',
+              'CommentDate': '2023-09-28',
+              'Source': '',
+              'average_rating': 2.8,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:51 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/TONOR-Microphone-Professional-Voice-over-TC310/dp/B0CCV74CL7/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=3&qid=1713857718&ref=sr_pg_2)
+2024-04-23 08:35:51 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36
+2024-04-23 08:35:52 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=5&qid=1713857740&ref=sr_pg_4> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=4&qid=1713857729&ref=sr_pg_3)
+2024-04-23 08:35:52 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36
+2024-04-23 08:35:52 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/dp/B0BWTXHTPW/ref=sr_1_105_sspa?dib=eyJ2IjoiMSJ9.9j2F00yT7G0XnCaeLwI56WCsnBk994xaTHxrhCCMt7iXiBqLYxXtJTS1Fl3lM4zYlPlg1oh1vnS-ugmGp8bFl3cjTQGZuqPWMMlcqw8HDQCgJ1OlLFt6FNl7hbcpS4ivcOVi95bU7zwLnjg1rCC6-TRi5LnciqbzPrPEtdjQjCC7Tp2iJmqfVK4L2eG7LvEQybmzl4v6atIK2RIzHavGus8DqlZ-TAxz1v0Q_J1AHmRn_zZ8mH5SP6LqfujkTgx36PHY_LTYHqHvStuSHPpNgX5DcpNljxyxdQ8fMYx6LKo.fDETGkVIJHpwWWoxr4AJcfY5LKnfdU6fI_i8wJ3OsIM&dib_tag=se&qid=1713857740&s=computers&sr=1-105-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTozMzAwODQ3MzM0OTEyMTEzOjE3MTM4NTc3NDA6c3BfYnRmX2Jyb3dzZTozMDAxNjUyMDQxMTQzMzI6OjA6Og&url=%2FHUATOL-Overbed-Adjustable-Swivel-Rolling%2Fdp%2FB0BWTXHTPW%2Fref%3Dsr_1_105_sspa%3Fdib%3DeyJ2IjoiMSJ9.9j2F00yT7G0XnCaeLwI56WCsnBk994xaTHxrhCCMt7iXiBqLYxXtJTS1Fl3lM4zYlPlg1oh1vnS-ugmGp8bFl3cjTQGZuqPWMMlcqw8HDQCgJ1OlLFt6FNl7hbcpS4ivcOVi95bU7zwLnjg1rCC6-TRi5LnciqbzPrPEtdjQjCC7Tp2iJmqfVK4L2eG7LvEQybmzl4v6atIK2RIzHavGus8DqlZ-TAxz1v0Q_J1AHmRn_zZ8mH5SP6LqfujkTgx36PHY_LTYHqHvStuSHPpNgX5DcpNljxyxdQ8fMYx6LKo.fDETGkVIJHpwWWoxr4AJcfY5LKnfdU6fI_i8wJ3OsIM%26dib_tag%3Dse%26qid%3D1713857740%26s%3Dcomputers%26sr%3D1-105-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:52 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.108 Safari/537.36
+2024-04-23 08:35:53 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/SGIN-Laptops-Computer-Celeron-Processor/dp/B0CQ7N8BS8/ref=sr_1_80_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-80-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=3&qid=1713857718&ref=sr_pg_2)
+2024-04-23 08:35:53 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36
+2024-04-23 08:35:54 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_70_sspa?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-70-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo3NTc0OTI0Nzg5NzcxMTEzOjE3MTM4NTc3NDI6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIzMzI6OjA6Og&url=%2FPhysics-Revision-Online-Videos-Quizzes%2Fdp%2F1782945784%2Fref%3Dsr_1_70_sspa%3Fdib%3DeyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU%26dib_tag%3Dse%26qid%3D1713857742%26s%3Dbooks%26sr%3D1-70-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:54 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36
+2024-04-23 08:35:54 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=5&qid=1713857742&ref=sr_pg_4> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=4&qid=1713857731&ref=sr_pg_3)
+2024-04-23 08:35:54 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36
+2024-04-23 08:35:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_54_sspa?dib=eyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ&dib_tag=se&qid=1713857731&s=books&sr=1-54-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=3&qid=1713857720&ref=sr_pg_2)
+2024-04-23 08:35:55 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.170 Safari/537.36
+2024-04-23 08:35:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_54_sspa?dib=eyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ&dib_tag=se&qid=1713857731&s=books&sr=1-54-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41P6tNeNV9L._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'New GCSE Physics Revision Guide inc Online Edition, Videos & '
+                'Quizzes',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 0,
+ 'SKU': '1782945784',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo4OTIyOTEyNDUxMzM2MTEzOjE3MTM4NTc3MzE6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIzMzI6OjA6Og&url=%2FPhysics-Revision-Online-Videos-Quizzes%2Fdp%2F1782945784%2Fref%3Dsr_1_54_sspa%3Fdib%3DeyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ%26dib_tag%3Dse%26qid%3D1713857731%26s%3Dbooks%26sr%3D1-54-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11}
+2024-04-23 08:35:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/New-GCSE-Chemistry-Revision-Guide/dp/1782945571/ref=sr_1_53_sspa?dib=eyJ2IjoiMSJ9.9F5iKMX_T8lDnQ70oOuwai-L8bi3z1n8rjKCIR_P4ty6ScRwD8fZJGzNLylAuvjoYe6-OyZrPajDSFcF5bRV130se-IcBkRSMxyvu01y3z9WFFwtRtqOXHOEMKn3xEvqcgwhZgmOeJrR99wNNCRjF9xyIHSJtGimrdg0ZLx0zFTIrLVKf-8kiyIrq1iHWXVg1mwHaE333z7uLszB_hA4BbH4TbpoTbPxurLhyPB39kU.TEIJ4vjkV4GgP3LRGbROmQkwu-W2SZwyrxKBFe-pXIQ&dib_tag=se&qid=1713857731&s=books&sr=1-53-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=3&qid=1713857720&ref=sr_pg_2)
+2024-04-23 08:35:55 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+2024-04-23 08:35:55 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Grade-9-1-GCSE-Physics-Revision/product-reviews/1782945733/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/Grade-9-1-GCSE-Physics-Revision/dp/1782945733/ref=sr_1_37_sspa?dib=eyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg&dib_tag=se&qid=1713857720&s=books&sr=1-37-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1)
+2024-04-23 08:35:55 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31
+2024-04-23 08:35:55 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Grade-9-1-GCSE-Physics-Revision/product-reviews/1782945733/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41QtfPBWYwL._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'Grade 9-1 GCSE Physics: Edexcel Revision Guide with Online '
+                'Edition',
+ 'RatingValue': 4.7,
+ 'RegularPrice': 0,
+ 'SKU': '1782945733',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo0NzU5MDkyMjM1NzUzMTEzOjE3MTM4NTc3MjA6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIyMzI6OjA6Og&url=%2FGrade-9-1-GCSE-Physics-Revision%2Fdp%2F1782945733%2Fref%3Dsr_1_37_sspa%3Fdib%3DeyJ2IjoiMSJ9.IR9szXeOIg4sYCxFIRlq-z_QJruM23Je1Tq4LKI85InlLwozqSOIagLl4Y04MmXj1P-CIQtwypvfHAqed1EDp6MApBkoPdpR_53AT8_TTf2RSHZ0g2q9pW7NtxdvIzTTfODYJrPoi-VoqT9jYqT3qJ6abuL7ghlciunNvw6S5iLL-7QHKG_eZTJ75PQTSvWNvt0STU87YXEvzIs-Yvp5jR8zWXYD3iltWPt8oKFPePE.4FOAaqsf1eu2XLB0hNdibzSb69LFNM1IyIPSYxN7fKg%26dib_tag%3Dse%26qid%3D1713857720%26s%3Dbooks%26sr%3D1-37-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Helps in exams',
+              'CommentDate': '2023-11-11',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'GOOOOOOD!',
+              'CommentDate': '2020-03-12',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 5.0},
+             {'Comment': 'I bought this for my son and this is a great support '
+                         'for revision for mock exams or just simply to make '
+                         'sure you keep up to speed with lessons',
+              'CommentDate': '2024-01-27',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This helps with revising. Is ok book',
+              'CommentDate': '2024-04-10',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This is a great well written learning book that '
+                         'makes learning so easy from a great brand this even '
+                         'has an on line code to continue on the go full five '
+                         'stars recommend to all',
+              'CommentDate': '2022-10-11',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': "It's a good book will help my daughter 5 stars for "
+                         'that,  but,  although purchased used on here, it did '
+                         'not state that the cover was ripped and it seems '
+                         'some water damage to the front cover too as well as '
+                         'more rips.  Should be honest with condition.  0 '
+                         'stars for that',
+              'CommentDate': '2022-04-27',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'It’s a good book covers everything for edexcel exam '
+                         'board.',
+              'CommentDate': '2022-10-02',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Exactly what my son needs for his Physics GCSE '
+                         'revision, has all the relevant information and is '
+                         'presented well in the book.',
+              'CommentDate': '2022-10-03',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'proving useful',
+              'CommentDate': '2022-12-29',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Excellent book in easy to understand language. My '
+                         'son starting GCSE course in year 9 and this will '
+                         'help him to know what they will cover.',
+              'CommentDate': '2016-08-24',
+              'Source': '',
+              'average_rating': 4.7,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:35:55 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/New-GCSE-Chemistry-Revision-Guide/dp/1782945571/ref=sr_1_69_sspa?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-69-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo3NTc0OTI0Nzg5NzcxMTEzOjE3MTM4NTc3NDI6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTE4MzI6OjA6Og&url=%2FNew-GCSE-Chemistry-Revision-Guide%2Fdp%2F1782945571%2Fref%3Dsr_1_69_sspa%3Fdib%3DeyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU%26dib_tag%3Dse%26qid%3D1713857742%26s%3Dbooks%26sr%3D1-69-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:35:55 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36
+2024-04-23 08:35:58 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=6&qid=1713857747&ref=sr_pg_5> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=5&qid=1713857737&ref=sr_pg_4)
+2024-04-23 08:35:58 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31
+2024-04-23 08:35:58 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Find-Out-About-Lift-Flap/dp/1526381540/ref=sr_1_68?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-68> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=4&qid=1713857731&ref=sr_pg_3)
+2024-04-23 08:35:58 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:24.0) Gecko/20100101 Firefox/24.0
+2024-04-23 08:35:59 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Science-Year-Targeted-Question-answers/dp/1789088895/ref=sr_1_67?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-67> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=4&qid=1713857731&ref=sr_pg_3)
+2024-04-23 08:35:59 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:35:59 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/JDDWIN-Designed-Playstation-Accessories-Compatible/product-reviews/B0CN6K9T6S/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/JDDWIN-Designed-Playstation-Accessories-Compatible/dp/B0CN6K9T6S/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9.9IZqKMRUFqUyCFgyFILxy60GkI3GjGnZ_W5WMt_mNN_5mgtXYmjZM9qyGQQGIUBvswW_nw7RpCDNn00C4MA6CWRKB6_PrzmUqYpOgZj5WTa7eTF-FTUR1Fn-NonW9eiVacBxIgO1cx-P677GGY0zPQNl23B1HVa5_-6iUwIwFGJFrbEEgdxLAvWGcwsHClrRLhIdappyyistEQFi9qm6c6rCBxGm5B--fbWTEMrri0lPjJgjkhFwkbvLvf9yPUNvSyq0tZxZQd0PQ82YAiBAbWFc0yHTiiXDRUL3fHXFO50.ljDhpGBmj0yImDb6ipKqeiBkDnu7bkCrBkYKtY-ZkJw&dib_tag=se&qid=1713857728&s=electronics&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1&smid=ARGWQTP6MMV7W)
+2024-04-23 08:35:59 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36
+2024-04-23 08:36:00 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/JDDWIN-Designed-Playstation-Accessories-Compatible/product-reviews/B0CN6K9T6S/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Mobile Accessories',
+ 'CategoryName': 'Mobile Accessories',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71jVCjcKMxL.__AC_SX300_SY300_QL70_ML2_.jpg',
+ 'Offer': 45.0,
+ 'ProductName': 'JDDWIN Alloy Stand Designed for Playstation Portal Handheld '
+                'Console,Super Sturdy Gaming Accessories Storage Holder Stand '
+                'Bracket Compatible with Switch/Steam Deck/ROG/and Mobile '
+                'Phones (Black)',
+ 'RatingValue': 4.2,
+ 'RegularPrice': 0,
+ 'SKU': 'B0CN6K9T6S',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo0NDQ2MzIyOTE2ODk3MTEzOjE3MTM4NTc3Mjg6c3BfYnRmX2Jyb3dzZTozMDAxMTEzOTMyODI3MzI6OjA6Og&url=%2FJDDWIN-Designed-Playstation-Accessories-Compatible%2Fdp%2FB0CN6K9T6S%2Fref%3Dsr_1_81_sspa%3Fdib%3DeyJ2IjoiMSJ9.9IZqKMRUFqUyCFgyFILxy60GkI3GjGnZ_W5WMt_mNN_5mgtXYmjZM9qyGQQGIUBvswW_nw7RpCDNn00C4MA6CWRKB6_PrzmUqYpOgZj5WTa7eTF-FTUR1Fn-NonW9eiVacBxIgO1cx-P677GGY0zPQNl23B1HVa5_-6iUwIwFGJFrbEEgdxLAvWGcwsHClrRLhIdappyyistEQFi9qm6c6rCBxGm5B--fbWTEMrri0lPjJgjkhFwkbvLvf9yPUNvSyq0tZxZQd0PQ82YAiBAbWFc0yHTiiXDRUL3fHXFO50.ljDhpGBmj0yImDb6ipKqeiBkDnu7bkCrBkYKtY-ZkJw%26dib_tag%3Dse%26qid%3D1713857728%26s%3Delectronics%26sr%3D1-81-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1%26smid%3DARGWQTP6MMV7W',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Not all selling these are the same.  This particular '
+                         'merchant sells a heavier (about +20%) which is '
+                         'better.  Nice & sturdy (with rubber, non-slip feet). '
+                         'Great to dock PS Portal (display and/or charge via '
+                         'USB-C cable).',
+              'CommentDate': '2024-01-06',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'It’s good for what it is.',
+              'CommentDate': '2024-02-21',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This device is not tall enough for the controller '
+                         'handles. They will rub on any flat surface. The pads '
+                         'on the bottom need to be lifted more. False '
+                         'advertising in the images too.',
+              'CommentDate': '2024-02-19',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:36:00 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Samsung-EI-T5600BWEGWW-Galaxy-SmartTag2-White/dp/B0CJWDCXWM/ref=sr_1_120?dib=eyJ2IjoiMSJ9.PhPNkF3GK48wH7eCuzOkkbE_CYb8XLFo-ESvXWcagLAphXXAXQSS3bAmyHWLd8gEmMcRWCwJbOIERBSM5JwCfTxXlxB_56DpjPOt1CT3-bN7by6NFUJxTCa2YdsHIQShUsNwC3HL4EV26lu-lxiX7EXTkQarL5GlFm5qz-frZCKgye8XS3D9Flycdvi_bI6qRblRNDS7wZmcp8noqbIOT70o5I8T_g0ReEWF_h7VaCrVY5AHaK35dzjsmPXCj4gu9iwZBVq9Yym8_JmOIaUSaYu63C8UzSUVSvxTRZcFBcY.k1ddlP3dJ3XnIWRXArUdbJzm30uEQ1fp_izACHN7z4k&dib_tag=se&qid=1713857747&s=electronics&sr=1-120> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=5&qid=1713857737&ref=sr_pg_4)
+2024-04-23 08:36:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36
+2024-04-23 08:36:00 [scrapy.extensions.logstats] INFO: Crawled 73 pages (at 73 pages/min), scraped 22 items (at 22 items/min)
+2024-04-23 08:36:00 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=6&qid=1713857748&ref=sr_pg_5> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303803031&fs=true&page=5&qid=1713857738&ref=sr_pg_4)
+2024-04-23 08:36:00 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36
+2024-04-23 08:36:01 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/UGREEN%E3%80%902024-Gen-Upgraded-Dashboard-Windshield-AirVent/dp/B0CQ4MBJK9/ref=sr_1_119?dib=eyJ2IjoiMSJ9.PhPNkF3GK48wH7eCuzOkkbE_CYb8XLFo-ESvXWcagLAphXXAXQSS3bAmyHWLd8gEmMcRWCwJbOIERBSM5JwCfTxXlxB_56DpjPOt1CT3-bN7by6NFUJxTCa2YdsHIQShUsNwC3HL4EV26lu-lxiX7EXTkQarL5GlFm5qz-frZCKgye8XS3D9Flycdvi_bI6qRblRNDS7wZmcp8noqbIOT70o5I8T_g0ReEWF_h7VaCrVY5AHaK35dzjsmPXCj4gu9iwZBVq9Yym8_JmOIaUSaYu63C8UzSUVSvxTRZcFBcY.k1ddlP3dJ3XnIWRXArUdbJzm30uEQ1fp_izACHN7z4k&dib_tag=se&qid=1713857747&s=electronics&sr=1-119> (referer: https://www.amazon.ae/s?i=electronics&rh=n%3A12303750031&fs=true&page=5&qid=1713857737&ref=sr_pg_4)
+2024-04-23 08:36:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36
+2024-04-23 08:36:01 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/TONOR-Microphone-Professional-Voice-over-TC310/product-reviews/B0CCV74CL7/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/TONOR-Microphone-Professional-Voice-over-TC310/dp/B0CCV74CL7/ref=sr_1_81_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-81-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1)
+2024-04-23 08:36:01 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36
+2024-04-23 08:36:01 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/TONOR-Microphone-Professional-Voice-over-TC310/product-reviews/B0CCV74CL7/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Computers',
+ 'CategoryName': 'Computers',
+ 'MainImage': 'https://m.media-amazon.com/images/I/71ucAMitTgL.__AC_SX300_SY300_QL70_ML2_.jpg',
+ 'Offer': 199.0,
+ 'ProductName': 'TONOR Micro PC Gaming RGB, USB Microphone Condenser '
+                'Professional Mic with Arm Support for Streaming, Recording, '
+                'YouTube Discord Gaming, Voice-over for Computer Laptop Mac '
+                'TC310+',
+ 'RatingValue': 4.5,
+ 'RegularPrice': 0,
+ 'SKU': 'B0CCV74CL7',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MToxOTYzNjI0MTIxMDgxMTEzOjE3MTM4NTc3Mjk6c3BfYnRmX2Jyb3dzZTozMDAxNTEyNDYyNjA0MzI6OjA6Og&url=%2FTONOR-Microphone-Professional-Voice-over-TC310%2Fdp%2FB0CCV74CL7%2Fref%3Dsr_1_81_sspa%3Fdib%3DeyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A%26dib_tag%3Dse%26qid%3D1713857729%26s%3Dcomputers%26sr%3D1-81-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Lo llevo usando ya de hace unos meses y es de las '
+                         'mejores compras que he hecho en Amazon, creí que por '
+                         'el precio no me acabaría de convencer su calidad, '
+                         'pero es perfecto, se escucha mucho mejor que '
+                         'cualquier otro micro que haya tenido, recomiendo '
+                         'totalmente :)',
+              'CommentDate': '2024-03-16',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': "J'ai commandé ce micro aujourd'hui et je l'ai reçu "
+                         "aujourd'hui (voir date) donc le jour même, j'avais "
+                         'déjà un micro de la même marque le Tonor Q9 qui '
+                         'était satisfaisant, mais au niveau rendu, celui ci '
+                         "est nettement mieux, j'ai testé sur Audacity, et "
+                         "c'est sans appel, ce micro est excellent. A la base "
+                         "je voulais juste un micro RGB et au final j'ai le "
+                         'RGB et un son de meilleure qualité, je ne regrette '
+                         'pas du tout mon achat. Le bras est bien ferme et le '
+                         "micro ne bouge pas d'un poil. J'apprécie aussi la "
+                         'connexion en USB-C. Je recommande donc ;)',
+              'CommentDate': '2024-02-09',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'The microphone works really well. I use it for '
+                         'online gaming. According to my friends the audio is '
+                         'clear. It also looks really nice with the lights.',
+              'CommentDate': '2024-04-09',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Nichts zu beanstanden',
+              'CommentDate': '2024-04-14',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'PRO:',
+              'CommentDate': '2024-02-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Got this for my son as he is an avid gamer and a '
+                         'budding streamer and we are both very impressed with '
+                         'the mic and boom arm. It was simple to set up, '
+                         'delivery was exactly as stated and arrived on time '
+                         'with no damages. Overall we are very impressed. '
+                         'Sound quality is excellent. Thank you Tenor!',
+              'CommentDate': '2024-03-02',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Funciona muy bien y es muy fácil de usar las '
+                         'funciones que trae. Con luces diferentes.',
+              'CommentDate': '2024-03-30',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'il microfono in se è anche buono, ma non a '
+                         'condensatore, assorbe troppi rumori esterni alla '
+                         'voce e di questo spiace',
+              'CommentDate': '2024-03-26',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'The sound quality is actually surprisingly good for '
+                         'the price of these mics.  Whether they last a while, '
+                         "we'll see. But it seems to be an excellent way to "
+                         'get started with a podcast setup.  Very attractive, '
+                         'the color changing is a nice touch.  They definitely '
+                         'feel like a cheaper mic, made of plastic, but the '
+                         'features are there and the price is right.  Also, '
+                         'the arm is very sturdy, made of metal, and has a '
+                         'circular clamp that seems to be much broader than a '
+                         'lot of the other arms available.',
+              'CommentDate': '2024-03-07',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'I needed to download obs still for some more noise '
+                         "suppression but it's a very good mic overall. It was "
+                         'ok with noise suppression with itself already.',
+              'CommentDate': '2024-04-21',
+              'Source': '',
+              'average_rating': 4.5,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:36:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=6&qid=1713857751&ref=sr_pg_5> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=5&qid=1713857740&ref=sr_pg_4)
+2024-04-23 08:36:03 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36
+2024-04-23 08:36:03 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/HUATOL-Overbed-Adjustable-Swivel-Rolling/dp/B0BWTXHTPW/ref=sr_1_105_sspa?dib=eyJ2IjoiMSJ9.9j2F00yT7G0XnCaeLwI56WCsnBk994xaTHxrhCCMt7iXiBqLYxXtJTS1Fl3lM4zYlPlg1oh1vnS-ugmGp8bFl3cjTQGZuqPWMMlcqw8HDQCgJ1OlLFt6FNl7hbcpS4ivcOVi95bU7zwLnjg1rCC6-TRi5LnciqbzPrPEtdjQjCC7Tp2iJmqfVK4L2eG7LvEQybmzl4v6atIK2RIzHavGus8DqlZ-TAxz1v0Q_J1AHmRn_zZ8mH5SP6LqfujkTgx36PHY_LTYHqHvStuSHPpNgX5DcpNljxyxdQ8fMYx6LKo.fDETGkVIJHpwWWoxr4AJcfY5LKnfdU6fI_i8wJ3OsIM&dib_tag=se&qid=1713857740&s=computers&sr=1-105-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=computers&rh=n%3A11497745031&fs=true&page=4&qid=1713857729&ref=sr_pg_3)
+2024-04-23 08:36:03 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 5.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36
+2024-04-23 08:36:04 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/SGIN-Laptops-Computer-Celeron-Processor/product-reviews/B0CQ7N8BS8/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews> (referer: https://www.amazon.ae/SGIN-Laptops-Computer-Celeron-Processor/dp/B0CQ7N8BS8/ref=sr_1_80_sspa?dib=eyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A&dib_tag=se&qid=1713857729&s=computers&sr=1-80-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1)
+2024-04-23 08:36:04 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36
+2024-04-23 08:36:04 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/SGIN-Laptops-Computer-Celeron-Processor/product-reviews/B0CQ7N8BS8/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Computers',
+ 'CategoryName': 'Computers',
+ 'MainImage': 'https://m.media-amazon.com/images/I/81-tfyJBJBL.__AC_SY300_SX300_QL70_ML2_.jpg',
+ 'Offer': 1211.99,
+ 'ProductName': 'SGIN Laptop, 17 Inch 8GB RAM 512GB SSD Laptops Computer with '
+                'Intel Celeron Quad Core Processor, IPS FHD Display, Webcam, '
+                'Dual Wi-Fi, 8000Amh Battery Life, Mini HDMI, USB, Gray',
+ 'RatingValue': 4.2,
+ 'RegularPrice': 0,
+ 'SKU': 'B0CQ7N8BS8',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MToxOTYzNjI0MTIxMDgxMTEzOjE3MTM4NTc3Mjk6c3BfYnRmX2Jyb3dzZTozMDAxMjkwODkxMjE4MzI6OjA6Og&url=%2FSGIN-Laptops-Computer-Celeron-Processor%2Fdp%2FB0CQ7N8BS8%2Fref%3Dsr_1_80_sspa%3Fdib%3DeyJ2IjoiMSJ9._9glW6Ko-SXxOh2BYDuGfYUZGtwifv45BeBXF4n8LglAGpYEQSFjzM5wLSV1RJr8ZbVQ3NN5hFzhL-AFlsCcAPtynkxMgERth4dd6qqFb9XrX7oWtUuQMoaAlCSBDcFXNfWOpKn6lqMVpyjKvFQvC7A-cb7KQ9RSxPTWCGMxAD0DSRdSlkstfSJwrmqzZueV3O2MKrdrU2adia7_pB9igVGQifqCkBrbjcn1eFW5q-pqUuhbo5J5Rf1L_Wd0SaMbCwegubr11p9TgCDxDaLGumwOUCQan_DixKOyUdnlpAw.TqyEc0vaHQxqY9c1ohh2kv0c0yxa6AO8Dj9BlzmEA-A%26dib_tag%3Dse%26qid%3D1713857729%26s%3Dcomputers%26sr%3D1-80-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11,
+ 'reviews': [{'Comment': 'Bad',
+              'CommentDate': '2024-04-11',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 1.0},
+             {'Comment': 'I need a laptop with large screen and crystal clear '
+                         "display, this one fit my use perfectly. I'm "
+                         'impressed with its display quality at this price, '
+                         'better than some expensive ones I used previously',
+              'CommentDate': '2024-02-05',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This laptop was purchased to replace an outdated '
+                         "one.  It's much lighter and easier to handle than "
+                         "the former device I had.  It's easy to use and the "
+                         'huge screen makes it convenient for working.  '
+                         "Overall, this was  an amazing deal on sale, and I'm "
+                         'very happy with it.',
+              'CommentDate': '2023-11-15',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'I am very happy with this laptop! It works very fast '
+                         'which is what I was looking for and I have not had '
+                         'any issues so far for the first few months of using '
+                         'it. It was for a reasonable price for the good '
+                         'quality and the 17 inch screen makes it an enjoyably '
+                         'large viewing experience. I would recommend this '
+                         'laptop for anyone who is seeking a larger than '
+                         'normal screen size, fast speed and without breaking '
+                         'the bank. Happy customer!',
+              'CommentDate': '2024-02-15',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Decent screen size and good colour!',
+              'CommentDate': '2024-03-17',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'Works great for an inexpensive laptop. Does the same '
+                         'job as one that is twice as much money. If you’re '
+                         'looking for a basic computer (I only use for doing '
+                         'books and some photos) this one is great.',
+              'CommentDate': '2024-03-09',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'This laptop is perfect for my computer needs.',
+              'CommentDate': '2024-03-31',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'We only recently received this laptop but so far are '
+                         'very happy with it. It is very easy to do work on. '
+                         'Will update with future reviews.',
+              'CommentDate': '2023-10-21',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': 'When I first turned on the new laptop, my eyes '
+                         'immediately felt very comfortable - the sharp and '
+                         'bigger images did make a contrast to those with '
+                         'my15-inch HP laptop. The 17-inch large screen makes '
+                         'everything on it bigger, and the Full HD resolution '
+                         'results in sharper images.',
+              'CommentDate': '2023-12-28',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0},
+             {'Comment': "J'AI DÛ LE RETOURNER CAR IL N'Y AVAIS PAS ASSEZ DE "
+                         'PORTS ET PAS DE PORT SÉRIE ( RS32)',
+              'CommentDate': '2024-01-11',
+              'Source': '',
+              'average_rating': 4.2,
+              'max_rating': 5,
+              'rating': 0.0}]}
+2024-04-23 08:36:04 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_70_sspa?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-70-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=4&qid=1713857731&ref=sr_pg_3)
+2024-04-23 08:36:04 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36
+2024-04-23 08:36:04 [scrapy.core.scraper] DEBUG: Scraped from <200 https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_70_sspa?dib=eyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU&dib_tag=se&qid=1713857742&s=books&sr=1-70-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1>
+{'BrandCode': '',
+ 'BrandName': '',
+ 'CatalogueName': 'Books',
+ 'CategoryName': 'Books',
+ 'MainImage': 'https://m.media-amazon.com/images/I/41P6tNeNV9L._SY445_SX342_.jpg',
+ 'Offer': 0,
+ 'ProductName': 'New GCSE Physics Revision Guide inc Online Edition, Videos & '
+                'Quizzes',
+ 'RatingValue': 4.6,
+ 'RegularPrice': 0,
+ 'SKU': '1782945784',
+ 'StockAvailability': True,
+ 'URL': 'https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTo3NTc0OTI0Nzg5NzcxMTEzOjE3MTM4NTc3NDI6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIzMzI6OjA6Og&url=%2FPhysics-Revision-Online-Videos-Quizzes%2Fdp%2F1782945784%2Fref%3Dsr_1_70_sspa%3Fdib%3DeyJ2IjoiMSJ9.0lH6LLA4JdJhEPMGQfkJFskB1fcO267XUMrdWsD3_yho8WuO8bQyAJC9s4cwppXrQw_GA1PrHUcP6zaHRLiXTA0OIRVcWKxacir1Y7fFvdEUeKgstQ2VW6UkCp5OMA4I4dn4bogaemlLLDKSkPVG8QcUefZbM_76-1UoD0HCu79cGWWrjfuwnbDldErR154n2J4QS0qcfScrIJ6h8Hoq4YyGtzopTNe4kt7ZpcI9ZQ4.gUf_HigSfUc64aMqFbOi2Xk7fdZCwwiP9eK8hPsMtPU%26dib_tag%3Dse%26qid%3D1713857742%26s%3Dbooks%26sr%3D1-70-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1',
+ 'VendorCode': 11}
+2024-04-23 08:36:05 [scrapy.core.engine] DEBUG: Crawled (200) <GET https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=6&qid=1713857753&ref=sr_pg_5> (referer: https://www.amazon.ae/s?i=stripbooks&rh=n%3A11497688031&fs=true&page=5&qid=1713857742&ref=sr_pg_4)
+2024-04-23 08:36:05 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36
+2024-04-23 08:36:05 [scrapy.downloadermiddlewares.redirect] DEBUG: Redirecting (302) to <GET https://www.amazon.ae/Physics-Revision-Online-Videos-Quizzes/dp/1782945784/ref=sr_1_86_sspa?dib=eyJ2IjoiMSJ9.8eLimZCwV0MDVU_9d5c7yKcvzChF5q8AFdUwX4TeOyawKoYN4psbYX9QBeDBSXsu_jlMx4eGsAstm4SWFNcM6i6aPOgyCiK-lBXMVsYm5RycRbLMPw-1khcPxYgdIJM6AgG6SlXASDtk0npJuqyUSv9CubANyaaJnp7JJWGvK2U9_dLFup9byo0BJJKxlpvZ_cICGJOYR3jO_UkcdiLCS5bUl5YLKgyqFCtAeQCZj_E.IbJv5culbDiS8AGiP0yD18FoAxQ076HzauO5mMD4yXw&dib_tag=se&qid=1713857753&s=books&sr=1-86-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl&psc=1> from <GET https://www.amazon.ae/sspa/click?ie=UTF8&spc=MTozMjgxNTU4MzI4ODkyMTEzOjE3MTM4NTc3NTM6c3BfYnRmX2Jyb3dzZTozMDAxMDc2NjQ0OTIzMzI6OjA6Og&url=%2FPhysics-Revision-Online-Videos-Quizzes%2Fdp%2F1782945784%2Fref%3Dsr_1_86_sspa%3Fdib%3DeyJ2IjoiMSJ9.8eLimZCwV0MDVU_9d5c7yKcvzChF5q8AFdUwX4TeOyawKoYN4psbYX9QBeDBSXsu_jlMx4eGsAstm4SWFNcM6i6aPOgyCiK-lBXMVsYm5RycRbLMPw-1khcPxYgdIJM6AgG6SlXASDtk0npJuqyUSv9CubANyaaJnp7JJWGvK2U9_dLFup9byo0BJJKxlpvZ_cICGJOYR3jO_UkcdiLCS5bUl5YLKgyqFCtAeQCZj_E.IbJv5culbDiS8AGiP0yD18FoAxQ076HzauO5mMD4yXw%26dib_tag%3Dse%26qid%3D1713857753%26s%3Dbooks%26sr%3D1-86-spons%26sp_csd%3Dd2lkZ2V0TmFtZT1zcF9idGZfYnJvd3Nl%26psc%3D1>
+2024-04-23 08:36:05 [scrapy_user_agents.middlewares] DEBUG: Assigned User-Agent Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36

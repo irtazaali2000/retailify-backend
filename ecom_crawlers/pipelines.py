@@ -570,6 +570,15 @@ class FilterItemPipelineEmax(object):
         if 'RegularPrice' in item and item['RegularPrice']:  
             item['RegularPrice'] = round(float(item['RegularPrice']), 2)
 
+        # if 'Cost' in item and item['Cost']:  
+        #     item['Cost'] = round(float(item['Cost']), 2)
+
+        # if 'MyPrice' in item and item['MyPrice']:  
+        #     item['MyPrice'] = round(float(item['MyPrice']), 2)
+
+        if 'About' in item and item['About']:
+            item['About'] = item['About'].replace('<br>', '').replace('<p>', '').replace('</p>', '')
+
         # if 'percentage_discount' in item and item['percentage_discount']:  
         #     item['percentage_discount'] = round(float(item['percentage_discount']), 2)
 
@@ -1121,24 +1130,34 @@ class UploadPipelineSunAndSandSports(object):
     ######################  Amazon  #######################################
 class FilterItemPipelineAmazon(object):
     def process_item(self, item, spider):
+        # Process 'Offer'
         if 'Offer' in item and item['Offer']:
-            value = item['Offer'].replace(',', '')
-            item['Offer'] = round(float(value), 2)
-        
-        if 'RegularPrice' in item and item['RegularPrice']:  
-            value = item['RegularPrice'].split('AED')[1].strip()
-            value = value.replace(',', '')
-            item['RegularPrice'] = round(float(value), 2)
+            if isinstance(item['Offer'], str):  # Check if it's a string first
+                value = item['Offer'].replace(',', '')
+                item['Offer'] = round(float(value), 2)
 
+        # Process 'RegularPrice'
+        if 'RegularPrice' in item and item['RegularPrice']:
+            if isinstance(item['RegularPrice'], str):  # Check if it's a string first
+                value = item['RegularPrice'].split('AED')[1].strip()
+                value = value.replace(',', '')
+                item['RegularPrice'] = round(float(value), 2)
+
+        # Process 'ProductName'
         if 'ProductName' in item and item['ProductName']:
-            item['ProductName'] = item['ProductName'].strip()
-        
-        if 'RatingValue' in item and item['RatingValue']:
-            value = str(item['RatingValue']).strip()
-            item['RatingValue'] = round(float(value), 2)
+            if isinstance(item['ProductName'], str):  # Check if it's a string first
+                item['ProductName'] = item['ProductName'].strip()
 
+        # Process 'RatingValue'
+        if 'RatingValue' in item and item['RatingValue']:
+            if isinstance(item['RatingValue'], str) or isinstance(item['RatingValue'], (int, float)):  # Ensure it's str or numeric
+                value = str(item['RatingValue']).strip()  # Convert to string, strip spaces
+                item['RatingValue'] = round(float(value), 2)
+
+        # Process 'CategoryName'
         if 'CategoryName' in item and item['CategoryName']:
-            item['CategoryName'] = item['CategoryName'].strip()
+            if isinstance(item['CategoryName'], str):  # Check if it's a string first
+                item['CategoryName'] = item['CategoryName'].strip()
 
         return item
     

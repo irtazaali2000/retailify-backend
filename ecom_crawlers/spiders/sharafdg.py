@@ -12,8 +12,8 @@ from ecom_crawlers.utils import *
 from fake_useragent import UserAgent
 import scrapy
 import copy
-import mysql.connector
-
+import psycopg2
+import os
 
 
 class SharafDGSpider(Spider):
@@ -71,85 +71,90 @@ class SharafDGSpider(Spider):
         'DOWNLOAD_DELAY': 0.1,
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
-        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
     }
 
     page = 0
     count = 0
     item_reviews = []
-    conn = mysql.connector.connect(
-            # host='localhost',
-            # user='root',
-            # password='admin',
-            # database='gb',
-
-            host='mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com',
-            user='datapillar',
-            password='4wIwdBmMSJ3BLBVCesJT',
-            database='scrappers_db'
-        )
-    cursor = conn.cursor(buffered=True)
+    conn = psycopg2.connect(
+        dbname="retailifydb",
+        user="postgres",
+        password="admin",
+        host="localhost",
+        port="5432"
+    )
+    cursor = conn.cursor()
 
 
     categories = {
         'Mobiles Tablets & Wearables': {
-                'Mobile Accessories': body_mobile_accessories,
+                #'Mobile Accessories': body_mobile_accessories,
                 'Mobile Phones': body_mobiles,
-                'Tablets Accessories': body_tablets_accessories,
-                'Tablets': body_tablets
+                #'Tablets Accessories': body_tablets_accessories,
+                #'Tablets': body_tablets
         },
 
         'Personal Care & Beauty': {
-            'Makeup & Accessories': body_health_fitness_beauty
+            #'Makeup & Accessories': body_health_fitness_beauty
         },
 
         'Computers': {
-            'Computers & Accessories': body_computing_accessories,
+            #'Computers & Accessories': body_computing_accessories,
             'Laptops': body_computing_laptops,
-            'Networking & Wireless': body_computing_networking_wireless,
-            'Printers & Ink': body_computing_printers_ink,
-            'Hard Drives & Storage': body_computing_storage,
-            'Monitors': body_computing_monitors,
-            'Desktop': body_computing_desktop_pc,
-            'Software': body_computing_software,
-            'Scanners' :body_computing_scanners            
+            #'Networking & Wireless': body_computing_networking_wireless,
+            #'Printers & Ink': body_computing_printers_ink,
+            #'Hard Drives & Storage': body_computing_storage,
+            #'Monitors': body_computing_monitors,
+            #'Desktop': body_computing_desktop_pc,
+            #'Software': body_computing_software,
+            #'Scanners' :body_computing_scanners            
         },
 
         'Video, Lcd & Oled': {
             'Tv': body_tv,
-            'Home Theater': body_home_cinema_soundbars,
-            'Video & Tv Accessories': body_tv_accessories,
-            'Projectors & Screens': body_projectors
+            #'Home Theater': body_home_cinema_soundbars,
+            #'Video & Tv Accessories': body_tv_accessories,
+            #'Projectors & Screens': body_projectors
         },
 
         'Audio, Headphones & Music Players': {
-            'Audio Accessories': body_audio
+           # 'Audio Accessories': body_audio
         },
 
         'Men & Women Watches': {
-            'Unisex Watches': body_wearables_smartwatches
+            #'Unisex Watches': body_wearables_smartwatches
         },
 
         'Home Appliances': {
-            'Home Appliances Accessories': body_home_appliance,
-            'Home Appliances Accessories': body_home_improvements
+            #'Home Appliances Accessories': body_home_appliance,
+            #'Home Appliances Accessories': body_home_improvements
         },
 
         'Video Games & Consoles': {
-            'Games Accessories': body_gaming
+            #'Games Accessories': body_gaming
         },
 
         'Camcorders & Cameras': {
-           'Camera Accessories': body_camera_accessories,
+           #'Camera Accessories': body_camera_accessories,
            'Digital Cameras': body_digital_cameras,
-           'Camcorders': body_camcorders,
-           'Binoculars, Telescopes & Optics': body_binoculars
+           #'Camcorders': body_camcorders,
+           #'Binoculars, Telescopes & Optics': body_binoculars
         },
             }
     
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
+
+         # Set up the log directory and file path
+        log_dir = 'scrapy-logs'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)  # Create the directory if it doesn't exist
+
+        log_file = f'{log_dir}/{self.name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log'
+        self.custom_settings['LOG_FILE'] = log_file
+
 
         self.reviews = reviews.lower() == 'true'
         self.short_scraper = short_scraper.lower() == 'true'
@@ -161,26 +166,29 @@ class SharafDGSpider(Spider):
 
     def get_catalogue_code(self, catalogue_name):
         # Attempt to retrieve the catalog code and name from the database
-        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        query_select = 'SELECT "CatalogueCode", "CatalogueName" FROM product_catalogue WHERE "CatalogueName" = %s'
         self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the catalog code exists, check if the name needs to be updated
             if result[1] != catalogue_name:
-                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                update_query = 'UPDATE product_catalogue SET "CatalogueName" = %s WHERE "CatalogueCode" = %s'
                 self.cursor.execute(update_query, (catalogue_name, result[0]))
                 self.conn.commit()  # Commit the transaction
                 
             return result[0]
         else:
             # If the catalog code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
+            insert_query = 'INSERT INTO product_catalogue ("CatalogueName") VALUES (%s) RETURNING "CatalogueCode"'
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
-            
-            # Retrieve the newly inserted catalog code and name
-            self.cursor.execute(query_select, (catalogue_name,))
+
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (catalogue_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
+        
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -188,26 +196,28 @@ class SharafDGSpider(Spider):
     
     def get_category_code(self, category_name, catalogue_code):
         # Attempt to retrieve the category code and name from the database
-        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        query_select = 'SELECT "CategoryCode", "CategoryName" FROM product_category WHERE "CategoryName" = %s'
         self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the category code exists, check if the name needs to be updated
             if result[1] != category_name:
-                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                update_query = 'UPDATE product_category SET "CategoryName" = %s WHERE "CategoryCode" = %s'
                 self.cursor.execute(update_query, (category_name, result[0]))
                 self.conn.commit()  # Commit the transaction
             
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_category (CategoryName, CatalogueCode_id) VALUES (%s, %s)"
+            insert_query = 'INSERT INTO product_category ("CategoryName", "CatalogueCode_id") VALUES (%s, %s) RETURNING "CategoryCode"'
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code and name
-            self.cursor.execute(query_select, (category_name,))
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (category_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
             result = self.cursor.fetchone()
             return result[0] if result else None
         
@@ -283,7 +293,7 @@ class SharafDGSpider(Spider):
                 category_code = self.get_category_code(sub_category, catalogue_code)
                 vendor_code = self.vendor_code
                 
-
+                
                 yield scrapy.Request(url=self.review_api_1.format(sku), callback=self.parse_pid, 
                     meta={
                     'title': title, 
@@ -339,37 +349,42 @@ class SharafDGSpider(Spider):
         #item['SubBrandName'] = ''
         item['BrandCode'] = ''
         #item['BestRating'] = 0
+        item['Currency'] = 'AED'
+        item['About'] = ''
+        
+        yield item
 
-        data = json.loads(response.text)
-        pid_url = data.get('user_review_url')
-        if pid_url:
-            pid_match_re = re.search(r'pid=(\d+)', pid_url)
-            if pid_match_re:
-                pid = pid_match_re.group(1)
-                yield scrapy.Request(url=self.review_api_2.format(pid), callback=self.parse_review, 
-                                                         meta={
-                                                            'ProductName': item['ProductName'], 
-                                                            'SKU': item['SKU'],
-                                                            'MainImage': item['MainImage'],
-                                                            'URL': item['URL'],
-                                                            'RegularPrice': item['RegularPrice'],
-                                                            'Offer': item['Offer'],
-                                                            'BrandName': item['BrandName'],
-                                                            'CategoryName': item['CategoryName'],
-                                                            'StockAvailability': item['StockAvailability'],
-                                                            'RatingValue': item['RatingValue'],
-                                                            'CatalogueName': item['CatalogueName'],
-                                                            #'ReviewCount': item['ReviewCount'],
-                                                            'CatalogueCode': item['CatalogueCode'],
-                                                            'CategoryCode': item['CategoryCode'],
-                                                            'VendorCode': item['VendorCode']
+        #YEH SAHI CODE HAI REVIEWS NAHI CHAHIYE FILHAL IS LYE COMMENT KAR RAHA
+        # data = json.loads(response.text)
+        # pid_url = data.get('user_review_url')
+        # if pid_url:
+        #     pid_match_re = re.search(r'pid=(\d+)', pid_url)
+        #     if pid_match_re:
+        #         pid = pid_match_re.group(1)
+        #         yield scrapy.Request(url=self.review_api_2.format(pid), callback=self.parse_review, 
+        #                                                  meta={
+        #                                                     'ProductName': item['ProductName'], 
+        #                                                     'SKU': item['SKU'],
+        #                                                     'MainImage': item['MainImage'],
+        #                                                     'URL': item['URL'],
+        #                                                     'RegularPrice': item['RegularPrice'],
+        #                                                     'Offer': item['Offer'],
+        #                                                     'BrandName': item['BrandName'],
+        #                                                     'CategoryName': item['CategoryName'],
+        #                                                     'StockAvailability': item['StockAvailability'],
+        #                                                     'RatingValue': item['RatingValue'],
+        #                                                     'CatalogueName': item['CatalogueName'],
+        #                                                     #'ReviewCount': item['ReviewCount'],
+        #                                                     'CatalogueCode': item['CatalogueCode'],
+        #                                                     'CategoryCode': item['CategoryCode'],
+        #                                                     'VendorCode': item['VendorCode']
                                                             
-                                                            })
-            else:
-                print("PID not found in user_review_url: %s", pid_url)
-        else:
-            #print('user_review_url not found in response data.')
-            yield item
+        #                                                     })
+        #     else:
+        #         print("PID not found in user_review_url: %s", pid_url)
+        # else:
+        #     #print('user_review_url not found in response data.')
+        #     yield item
 
 
     def parse_review(self, response):

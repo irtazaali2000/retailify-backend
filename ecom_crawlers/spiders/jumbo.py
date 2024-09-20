@@ -12,8 +12,8 @@ from ..items import ProductItemJumbo
 from ecom_crawlers.utils import *
 from fake_useragent import UserAgent
 import scrapy
-import mysql.connector
-
+import psycopg2
+import os
 
 
 class JumboSpider(Spider):
@@ -28,8 +28,8 @@ class JumboSpider(Spider):
     categories = {
         "Mobiles Tables & Wearables": {
             'Mobile Phones': 401,
-            "Mobile Accessories": 353,
-            "Wearables": 416,
+            # "Mobile Accessories": 353,
+            # "Wearables": 416,
         },
 
         'Computers': {
@@ -44,29 +44,29 @@ class JumboSpider(Spider):
             'Camera Accessories': 359
         },
 
-        'Home Appliances': {
-            "Home Appliances Accessories": 371
-        },
+        # 'Home Appliances': {
+        #     "Home Appliances Accessories": 371
+        # },
 
         'Audio, Headphones & Music Players': {
             "Headphones & Speakers": 374
         },
 
-        'Computers': {
-            "Networking & Wireless": 389,
-        },
+        # 'Computers': {
+        #     "Networking & Wireless": 389,
+        # },
         
-        'Video Games & Consoles': {
-            "Games Accessories": 365
-        },
+        # 'Video Games & Consoles': {
+        #     "Games Accessories": 365
+        # },
         
-        'Office Supplies': {
-            "Warehouse Equipment": 392,
-        },
+        # 'Office Supplies': {
+        #     "Warehouse Equipment": 392,
+        # },
 
-        'Personal Care & Beauty': {
-            "Makeup & Accessories": 377,
-        }
+        # 'Personal Care & Beauty': {
+        #     "Makeup & Accessories": 377,
+        # }
         
         }
 
@@ -76,27 +76,32 @@ class JumboSpider(Spider):
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100, 
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
-        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        # 'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        'LOG_FILE': None
     }
 
     count = 0
     item_reviews = []
 
-    conn = mysql.connector.connect(
-            # host='localhost',
-            # user='root',
-            # password='admin',
-            # database='gb'
-            host="mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com",
-            user="datapillar",
-            password="4wIwdBmMSJ3BLBVCesJT",
-            database="scrappers_db",
-            port="3306"
-        )
-    cursor = conn.cursor(buffered=True)
+    conn = psycopg2.connect(
+        dbname="retailifydb",
+        user="postgres",
+        password="admin",
+        host="localhost",
+        port="5432"
+    )
+    cursor = conn.cursor()
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
+
+         # Set up the log directory and file path
+        log_dir = 'scrapy-logs'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)  # Create the directory if it doesn't exist
+
+        log_file = f'{log_dir}/{self.name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log'
+        self.custom_settings['LOG_FILE'] = log_file
 
         self.reviews = reviews.lower() == 'true'
         self.short_scraper = short_scraper.lower() == 'true'
@@ -108,26 +113,29 @@ class JumboSpider(Spider):
 
     def get_catalogue_code(self, catalogue_name):
         # Attempt to retrieve the catalog code and name from the database
-        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        query_select = 'SELECT "CatalogueCode", "CatalogueName" FROM product_catalogue WHERE "CatalogueName" = %s'
         self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the catalog code exists, check if the name needs to be updated
             if result[1] != catalogue_name:
-                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                update_query = 'UPDATE product_catalogue SET "CatalogueName" = %s WHERE "CatalogueCode" = %s'
                 self.cursor.execute(update_query, (catalogue_name, result[0]))
                 self.conn.commit()  # Commit the transaction
                 
             return result[0]
         else:
             # If the catalog code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
+            insert_query = 'INSERT INTO product_catalogue ("CatalogueName") VALUES (%s) RETURNING "CatalogueCode"'
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
-            
-            # Retrieve the newly inserted catalog code and name
-            self.cursor.execute(query_select, (catalogue_name,))
+
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (catalogue_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
+        
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -135,26 +143,28 @@ class JumboSpider(Spider):
     
     def get_category_code(self, category_name, catalogue_code):
         # Attempt to retrieve the category code and name from the database
-        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        query_select = 'SELECT "CategoryCode", "CategoryName" FROM product_category WHERE "CategoryName" = %s'
         self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the category code exists, check if the name needs to be updated
             if result[1] != category_name:
-                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                update_query = 'UPDATE product_category SET "CategoryName" = %s WHERE "CategoryCode" = %s'
                 self.cursor.execute(update_query, (category_name, result[0]))
                 self.conn.commit()  # Commit the transaction
             
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_category (CategoryName, CatalogueCode_id) VALUES (%s, %s)"
+            insert_query = 'INSERT INTO product_category ("CategoryName", "CatalogueCode_id") VALUES (%s, %s) RETURNING "CategoryCode"'
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code and name
-            self.cursor.execute(query_select, (category_name,))
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (category_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -210,6 +220,8 @@ class JumboSpider(Spider):
                 item['VendorCode'] = vendor_code
                 # item['RatingValue'] = 0
                 item['BrandCode'] = ''
+                item['Currency'] = 'AED'
+                item['About'] = hit.get('KeyProductFeatures', '')
                 catalogue_code = response.meta['catalogue_code']
                 category_code = self.get_category_code(item['CategoryName'], catalogue_code)
                 item['CatalogueCode']= catalogue_code
@@ -249,49 +261,54 @@ class JumboSpider(Spider):
             yield item
 
 
+    # def parse_review(self, response):
+    #     item = response.meta['item']
+    #     data = json.loads(response.text)
+    #     next_page_url = data.get('next_page_url')
+    #     reviews = data.get('reviews', [])
+    #     item_reviews = []
+        
+    #     if reviews:
+    #         for review in reviews:
+    #             comment = review.get('extract', '')
+    #             source = review.get('source', '')
+    #             comment_date = review.get('date', '')
+    #             rating = round(float(review.get('score')) / 2, 2)
+    #             max_rating = round(float(review.get('score_max')) / 2, 2)
+
+    #             review_data = {
+    #                 'Comment': comment,
+    #                 'Source': source,
+    #                 'CommentDate': comment_date,
+    #                 'rating': rating,
+    #                 'max_rating': max_rating,
+    #                 'average_rating': item['RatingValue']
+    #             }
+    #             item_reviews.append(review_data)
+            
+    #         item['reviews'] = item_reviews
+    #         #Next Page
+    #         # if next_page_url:
+    #         #     yield scrapy.Request(url=next_page_url, callback=self.parse_review, meta={'item': item})
+            
+    #     else:
+    #         pass
+    #         # # If no reviews are found, set default values for review fields
+    #         # item['reviews'] = [{
+    #         #     'Comment': '',
+    #         #     'Source': '',
+    #         #     'CommentDate': '',
+    #         #     'rating': 0,
+    #         #     'max_rating': 0,
+    #         #     'average_rating': item['RatingValue']
+    #         # }]
+
+
+    #     yield item
+
+
     def parse_review(self, response):
         item = response.meta['item']
-        data = json.loads(response.text)
-        next_page_url = data.get('next_page_url')
-        reviews = data.get('reviews', [])
-        item_reviews = []
-
-        if reviews:
-            for review in reviews:
-                comment = review.get('extract', '')
-                source = review.get('source', '')
-                comment_date = review.get('date', '')
-                rating = round(float(review.get('score')) / 2, 2)
-                max_rating = round(float(review.get('score_max')) / 2, 2)
-
-                review_data = {
-                    'Comment': comment,
-                    'Source': source,
-                    'CommentDate': comment_date,
-                    'rating': rating,
-                    'max_rating': max_rating,
-                    'average_rating': item['RatingValue']
-                }
-                item_reviews.append(review_data)
-            
-            item['reviews'] = item_reviews
-            #Next Page
-            # if next_page_url:
-            #     yield scrapy.Request(url=next_page_url, callback=self.parse_review, meta={'item': item})
-            
-        else:
-            pass
-            # # If no reviews are found, set default values for review fields
-            # item['reviews'] = [{
-            #     'Comment': '',
-            #     'Source': '',
-            #     'CommentDate': '',
-            #     'rating': 0,
-            #     'max_rating': 0,
-            #     'average_rating': item['RatingValue']
-            # }]
-
-
         yield item
 
 

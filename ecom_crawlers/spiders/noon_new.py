@@ -12,8 +12,8 @@ from ..items import ProductItemNoon
 from ecom_crawlers.utils import *
 from fake_useragent import UserAgent
 import scrapy
-import mysql.connector
-
+import psycopg2
+import os
 
 
 class NoonSpider(Spider):
@@ -84,7 +84,7 @@ class NoonSpider(Spider):
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
         'RETRY_HTTP_CODES': [500, 502, 503, 504, 522, 524, 408],
-        'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
+        #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
     }
 
@@ -94,255 +94,259 @@ class NoonSpider(Spider):
     categories = {
         'Mobiles Tablets & Wearables': {
             'Mobile Phones': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/mobiles-and-accessories/mobiles-20905/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Mobile Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/mobiles-and-accessories/accessories-16176/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Tablets & Ereaders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/tablets/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Computers Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/webcams/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+         #   'Mobile Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/mobiles-and-accessories/accessories-16176/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+         #   'Tablets & Ereaders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/tablets/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+          #  'Computers Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/webcams/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
             
         
         },
 
-        'Computers': {
-            'Laptops': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/laptops/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Software': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/software-10182/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Scanners': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/bar-code-scanners/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Scanners': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/scanner/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Computers': {
+        #     'Laptops': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/computers-and-accessories/laptops/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Software': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/software-10182/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Scanners': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/bar-code-scanners/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Scanners': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/scanner/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
-        'Video Games & Consoles': {
-            'Games Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/video-games-10181/gaming-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Consoles': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/video-games-10181/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
-        },
+        # 'Video Games & Consoles': {
+        #     'Games Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/video-games-10181/gaming-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Consoles': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/video-games-10181/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
+        # },
 
-        'Men & Women Watches': {
-            'Watch Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/wearable-technology/smart-watches-and-accessories/smartwatch-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Unisex Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/wearable-technology/smart-watches-and-accessories/smartwatches/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/womens-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Men Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/mens-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            "Women Watches": 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/girls-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            "Men Watches": 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/boys-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Men & Women Watches': {
+        #     'Watch Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/wearable-technology/smart-watches-and-accessories/smartwatch-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Unisex Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/wearable-technology/smart-watches-and-accessories/smartwatches/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/womens-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Men Watches': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/mens-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     "Women Watches": 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/girls-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     "Men Watches": 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/boys-watches/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
         'Camcorders & Cameras': {
             'Camera Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/accessories-16794/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Security Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/surveillance-cameras-18886/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Security Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/surveillance-cameras-18886/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
             'Camera Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/bags-and-cases-19385/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Camcorders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/video-17975/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Digital Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/digital-cameras/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Camcorders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/video-17975/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Digital Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/digital-cameras/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
             'Camera Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/lenses-16166/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Binoculars, Telescopes & Optics': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/binoculars-and-scopes/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Digital Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/instant-cameras/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Camcorders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/camcorders/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Binoculars, Telescopes & Optics': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/binoculars-and-scopes/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Digital Cameras': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/instant-cameras/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Camcorders': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/camcorders/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
             'Camera Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/camera-and-photo-16165/flashes/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',    
         },
 
         'Video, Lcd & Oled': {
-            'Video & Tv Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/television-accessories-16510/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Video & Tv Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/television-accessories-16510/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
             'Tv': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/televisions/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Projectors & Screens': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/projectors/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Projectors & Screens': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/projection-screens-20836/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Home Theater': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/home-theater-systems-19095/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Video & Tv Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/set-top-boxes-47527/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Dvd, Blurays & Digital Media Players': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/streaming-media-players/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Dvd, Blurays & Digital Media Players': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/portable-audio-and-video/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Projectors & Screens': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/projectors/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Projectors & Screens': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/projection-screens-20836/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Home Theater': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/home-theater-systems-19095/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Video & Tv Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/set-top-boxes-47527/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Dvd, Blurays & Digital Media Players': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/streaming-media-players/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+            #'Dvd, Blurays & Digital Media Players': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/portable-audio-and-video/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
         },
 
-        'Audio, Headphones & Music Players': { 
-            'Satellite Radios': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/satellite-equipments-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Home Audio': 'https://www.noon.com/_next/data/348a8bd34cca6abfd7639a39880e563d6e4d7391/uae-en/electronics-and-mobiles/home-audio.json?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc&catalog=electronics-and-mobiles&catalog=home-audio'
-            },
+        # 'Audio, Headphones & Music Players': { 
+        #     'Satellite Radios': 'https://www.noon.com/_svc/catalog/api/v3/u/electronics-and-mobiles/television-and-video/satellite-equipments-accessories/?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Home Audio': 'https://www.noon.com/_next/data/348a8bd34cca6abfd7639a39880e563d6e4d7391/uae-en/electronics-and-mobiles/home-audio.json?limit=50&originalQuery=electronics&page={}&q=electronics&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc&catalog=electronics-and-mobiles&catalog=home-audio'
+        #     },
 
-        'Fashion': {
-            'Women Clothes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/clothing-16021/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/shoes-16238/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/womens-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/girls-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/accessories-16273/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Women Bags': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/handbags-16699/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Men Clothes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/clothing-16204/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc', 
-            'Men Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/shoes-17421/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Men Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/mens-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Men Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/accessories-16205/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Men Bags': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/handbags-and-shoulder-bags/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Fashion': {
+        #     'Women Clothes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/clothing-16021/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/shoes-16238/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/womens-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/girls-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/accessories-16273/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Women Bags': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/women-31229/handbags-16699/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Men Clothes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/clothing-16204/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc', 
+        #     'Men Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/shoes-17421/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Men Jewellery': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/mens-jewellery/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Men Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/accessories-16205/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Men Bags': 'https://www.noon.com/_svc/catalog/api/v3/u/fashion/men-31225/handbags-and-shoulder-bags/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
-        'Baby & Kids': {
-            'Girls Clothing': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/clothing-16580/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Girls Shoes': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/shoes-17594/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Girls Accessories': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/accessories-17054/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Boys Clothing': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/clothing-16097/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Boys Shoes': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/shoes-16689/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Boys Accessories': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/accessories-17386/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Feeding & Nursing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/feeding-16153/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Diapers, Bath & Skincare': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/bathing-and-skin-care/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Nursery': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/nursery/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Diapers, Bath & Skincare': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/diapering/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Strollers, Gear & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-transport/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Safety Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/safety-17316/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Girls Clothing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/clothing-31217/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Girls Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/shoes-27443/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Girls Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/accessories-16978/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Boys Clothing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/clothing-31216/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Boys Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/shoes-27430/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Boys Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/accessories-20234/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc', 
-            'Strollers, Gear & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-gear-accessories/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Baby Walkers': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/infant-activity/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Toys': 'https://www.noon.com/_svc/catalog/api/v3/u/toys-and-games/?limit=50&originalQuery=Toys%20and%20Games&page={}&q=Toys%20and%20Games&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
+        # 'Baby & Kids': {
+        #     'Girls Clothing': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/clothing-16580/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Girls Shoes': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/shoes-17594/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Girls Accessories': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/girls-31223/accessories-17054/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Boys Clothing': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/clothing-16097/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Boys Shoes': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/shoes-16689/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Boys Accessories': "https://www.noon.com/_svc/catalog/api/v3/u/fashion/boys-31221/accessories-17386/?limit=50&originalQuery=Fashion&page={}&q=Fashion&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Feeding & Nursing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/feeding-16153/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Diapers, Bath & Skincare': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/bathing-and-skin-care/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Nursery': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/nursery/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Diapers, Bath & Skincare': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/diapering/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Strollers, Gear & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-transport/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Safety Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/safety-17316/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Girls Clothing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/clothing-31217/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Girls Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/shoes-27443/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Girls Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-girls-16977/accessories-16978/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Boys Clothing': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/clothing-31216/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Boys Shoes': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/shoes-27430/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Boys Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/clothing-shoes-and-accessories/baby-boys-16213/accessories-20234/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc', 
+        #     'Strollers, Gear & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-gear-accessories/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Baby Walkers': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/infant-activity/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Toys': 'https://www.noon.com/_svc/catalog/api/v3/u/toys-and-games/?limit=50&originalQuery=Toys%20and%20Games&page={}&q=Toys%20and%20Games&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
         
-        },
+        # },
 
-        'Groceries': {
-            'Baby Food': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-food/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Pet Foods': 'https://www.noon.com/_svc/catalog/api/v3/u/pet-supplies/?limit=50&originalQuery=Pet%20Supplies&page={}&q=Pet%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Groceries': {
+        #     'Baby Food': 'https://www.noon.com/_svc/catalog/api/v3/u/baby-products/baby-food/?limit=50&originalQuery=Baby%20Products&page={}&q=Baby%20Products&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Pet Foods': 'https://www.noon.com/_svc/catalog/api/v3/u/pet-supplies/?limit=50&originalQuery=Pet%20Supplies&page={}&q=Pet%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
-        'Home Appliances': {
-            'Kitchen Appliances': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/kitchen-and-dining/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/storage-and-organisation/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/home-appliances-31235/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/household-supplies/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Power Tools': 'https://www.noon.com/_svc/catalog/api/v3/u/tools-and-home-improvement/?limit=50&originalQuery=Tools%20and%20Home%20Improvement&page={}&q=Tools%20and%20Home%20Improvement&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Home Appliances': {
+        #     'Kitchen Appliances': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/kitchen-and-dining/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/storage-and-organisation/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/home-appliances-31235/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Home Appliances Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/household-supplies/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Power Tools': 'https://www.noon.com/_svc/catalog/api/v3/u/tools-and-home-improvement/?limit=50&originalQuery=Tools%20and%20Home%20Improvement&page={}&q=Tools%20and%20Home%20Improvement&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
         
-        'Furniture, Home And Garden': {
-            'Home Decor And Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/home-decor/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Furniture': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/furniture-10180/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Bathroom Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/bath-16182/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Beds': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/bedding-16171/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Outdoor': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/patio-lawn-and-garden/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Furniture, Home And Garden': {
+        #     'Home Decor And Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/home-decor/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Furniture': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/furniture-10180/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Bathroom Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/bath-16182/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Beds': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/bedding-16171/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Outdoor': 'https://www.noon.com/_svc/catalog/api/v3/u/home-and-kitchen/patio-lawn-and-garden/?limit=50&originalQuery=Home%20and%20Kitchen&page={}&q=Home%20and%20Kitchen&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
         
-        'Personal Care & Beauty': {
-            'Fragrances & Perfumes': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/fragrance/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/personal-care-16343/?f%5Bfragrance_department%5D%5B%5D=unisex&f%5Bfragrance_department%5D%5B%5D=women&limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Personal Care For Men': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/personal-care-16343/?f%5Bfragrance_department%5D%5B%5D=unisex&f%5Bfragrance_department%5D%5B%5D=men&limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/skin-care-16813/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Makeup & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/beauty/makeup-16142/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/hair-care/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Relaxation': "https://www.noon.com/_svc/catalog/api/v3/u/health/wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Dental Care': 'https://www.noon.com/_svc/catalog/api/v3/u/health/dental-supplies/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
-        },
+        # 'Personal Care & Beauty': {
+        #     'Fragrances & Perfumes': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/fragrance/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/personal-care-16343/?f%5Bfragrance_department%5D%5B%5D=unisex&f%5Bfragrance_department%5D%5B%5D=women&limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Personal Care For Men': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/personal-care-16343/?f%5Bfragrance_department%5D%5B%5D=unisex&f%5Bfragrance_department%5D%5B%5D=men&limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/skin-care-16813/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Makeup & Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/beauty/makeup-16142/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Personal Care For Women': "https://www.noon.com/_svc/catalog/api/v3/u/beauty/hair-care/?limit=50&originalQuery=Beauty%20and%20Fragrance&page={}&q=Beauty%20and%20Fragrance&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Relaxation': "https://www.noon.com/_svc/catalog/api/v3/u/health/wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Dental Care': 'https://www.noon.com/_svc/catalog/api/v3/u/health/dental-supplies/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
+        # },
 
-        'Books': {
-            'Children Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/childrens-books/?limit=50&originalQuery=Books&&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Fiction Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/fiction-F/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Education & Reference Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/reference-G/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Health, Mind & Body Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/health-and-personal-development/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Photography & Art Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/arts-architecture-and-photography/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            "Business & Investment Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/business-and-finance/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            "Cooking & Food Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/lifestyle-sport-and-leisure/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Cooking & Food Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/food-drink/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Biography Books': 'https://www.noon.com/_svc/catalog/api/v3/u/books/biography-and-true-stories/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Biography Books': 'https://www.noon.com/_svc/catalog/api/v3/u/books/history-and-archaeology/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Languages & Dictionaries': "https://www.noon.com/_svc/catalog/api/v3/u/books/language/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Languages & Dictionaries': "https://www.noon.com/_svc/catalog/api/v3/u/books/english-language-teaching-(elt)/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Religion Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/religious-and-spiritual/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Self Help Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/society-and-social-sciences/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            "Science & Technology Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/computer-and-technology/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc"
-        },
+        # 'Books': {
+        #     'Children Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/childrens-books/?limit=50&originalQuery=Books&&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Fiction Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/fiction-F/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Education & Reference Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/reference-G/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Health, Mind & Body Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/health-and-personal-development/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Photography & Art Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/arts-architecture-and-photography/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     "Business & Investment Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/business-and-finance/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     "Cooking & Food Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/lifestyle-sport-and-leisure/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Cooking & Food Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/food-drink/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Biography Books': 'https://www.noon.com/_svc/catalog/api/v3/u/books/biography-and-true-stories/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Biography Books': 'https://www.noon.com/_svc/catalog/api/v3/u/books/history-and-archaeology/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Languages & Dictionaries': "https://www.noon.com/_svc/catalog/api/v3/u/books/language/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Languages & Dictionaries': "https://www.noon.com/_svc/catalog/api/v3/u/books/english-language-teaching-(elt)/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Religion Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/religious-and-spiritual/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Self Help Books': "https://www.noon.com/_svc/catalog/api/v3/u/books/society-and-social-sciences/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     "Science & Technology Books": "https://www.noon.com/_svc/catalog/api/v3/u/books/computer-and-technology/?limit=50&originalQuery=Books&page={}&q=Books&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc"
+        # },
 
 
-        'Health & Medical': {
-            'Health And Fitness': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/exercise-and-fitness/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # 'Health & Medical': {
+        #     'Health And Fitness': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/exercise-and-fitness/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
 
-        },
+        # },
 
-        'Sports Equipment': {
-            'Watersports': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/boating-and-water-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Rugby & Football': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/football-17178/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Cricket': "https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/cricket-16076/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Basketball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/basketball-17917/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Volleyball': "https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/volleyball-16527/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
-            'Baseball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/baseball-17952/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Basketball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/handball/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Mixed Martial Arts - MMA': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/combat-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Badminton': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/badminton-19736/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/tennis-16543/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Table Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/table-tennis-18224/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Table Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/padel-tennis/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Squash': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/squash-21389/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Golf': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/golf-16322/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Darts': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/darts-and-dartboards/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Snooker & Pool': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/billiards/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Horse Riding': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/equestrian-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Cycling & Skating': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/cycling-16009/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Hiking & Outdoor': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/outdoor-recreation/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Sports Supplements': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports-nutrition-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Fishing': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/hunting-and-fishing/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Cycling & Skating': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/action-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Sports Bottles': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports-medicine/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Sports Supplements': 'https://www.noon.com/_svc/catalog/api/v3/u/health/sports-nutrition/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # 'Sports Equipment': {
+        #     'Watersports': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/boating-and-water-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Rugby & Football': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/football-17178/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Cricket': "https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/cricket-16076/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Basketball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/basketball-17917/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Volleyball': "https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/volleyball-16527/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc",
+        #     'Baseball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/baseball-17952/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Basketball': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/team-sports/handball/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Mixed Martial Arts - MMA': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/combat-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Badminton': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/badminton-19736/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/tennis-16543/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Table Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/table-tennis-18224/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Table Tennis': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/padel-tennis/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Squash': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/racquet-sports-16542/squash-21389/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Golf': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/golf-16322/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Darts': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/darts-and-dartboards/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Snooker & Pool': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/precision-sports/billiards/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Horse Riding': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports/equestrian-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Cycling & Skating': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/cycling-16009/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Hiking & Outdoor': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/outdoor-recreation/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Sports Supplements': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports-nutrition-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Fishing': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/hunting-and-fishing/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Cycling & Skating': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/action-sports/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Sports Bottles': 'https://www.noon.com/_svc/catalog/api/v3/u/sports-and-outdoors/sports-medicine/?limit=50&originalQuery=Sports%2C%20Fitness%20and%20Outdoors&page={}&q=Sports%2C%20Fitness%20and%20Outdoors&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Sports Supplements': 'https://www.noon.com/_svc/catalog/api/v3/u/health/sports-nutrition/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
         
-        },
+        # },
 
-        'Office Supplies': {
-            'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/writing-and-correction-supplies-16515/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/stationery-16397/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Id Card Printer & Supplies': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/printer-accessories-18895/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Id Card Printer & Supplies': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/stationery-printers/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Interactive Whiteboards': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/presentation-products/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Shredders': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/shredders/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Calculators': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/calculators/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Laminators': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/laminators/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/gift-wrapping-supplies/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Label & Barcode Printers': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/label-makers-24710/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Point Of Sale': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/cash-registers-18518/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Desk-Phones': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/telephones-and-accessories/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Paper Products': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/paper-16454/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/envelopes-mailers-and-shipping-supplies/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Time Recorder, Cards & Racks': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/time-clocks-and-cards/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # 'Office Supplies': {
+        #     'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/writing-and-correction-supplies-16515/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/stationery-16397/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Id Card Printer & Supplies': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/printer-accessories-18895/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Id Card Printer & Supplies': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/stationery-printers/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Interactive Whiteboards': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/presentation-products/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Shredders': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/shredders/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Calculators': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/calculators/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Laminators': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/laminators/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/gift-wrapping-supplies/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Label & Barcode Printers': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/label-makers-24710/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Point Of Sale': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/cash-registers-18518/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Desk-Phones': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/office-electronics/telephones-and-accessories/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Paper Products': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/paper-16454/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Stationary': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/envelopes-mailers-and-shipping-supplies/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Time Recorder, Cards & Racks': 'https://www.noon.com/_svc/catalog/api/v3/u/office-supplies/time-clocks-and-cards/?limit=50&originalQuery=Office%20Supplies&page={}&q=Office%20Supplies&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
 
-        },
+        # },
 
-        'Health & Medical': {
-            'Vitamins & Herbals': 'https://www.noon.com/_svc/catalog/api/v3/u/health/vitamins-and-dietary-supplements/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Appliances': 'https://www.noon.com/_svc/catalog/api/v3/u/health/medical-supplies-and-equipment/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Medicine': 'https://www.noon.com/_svc/catalog/api/v3/u/health/health-care/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Nutrition': 'https://www.noon.com/_svc/catalog/api/v3/u/health/nutrition-and-wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Cold, Cough & Flu': 'https://www.noon.com/_svc/catalog/api/v3/u/health/cough-cold-and-flu/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Sexual Wellness': 'https://www.noon.com/_svc/catalog/api/v3/u/health/sexual-wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
-        },
+        # 'Health & Medical': {
+        #     'Vitamins & Herbals': 'https://www.noon.com/_svc/catalog/api/v3/u/health/vitamins-and-dietary-supplements/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Appliances': 'https://www.noon.com/_svc/catalog/api/v3/u/health/medical-supplies-and-equipment/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Medicine': 'https://www.noon.com/_svc/catalog/api/v3/u/health/health-care/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Nutrition': 'https://www.noon.com/_svc/catalog/api/v3/u/health/nutrition-and-wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Cold, Cough & Flu': 'https://www.noon.com/_svc/catalog/api/v3/u/health/cough-cold-and-flu/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Sexual Wellness': 'https://www.noon.com/_svc/catalog/api/v3/u/health/sexual-wellness/?limit=50&originalQuery=Health%20and%20Nutrition&page={}&q=Health%20and%20Nutrition&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc'
+        # },
 
-        'Car Parts & Accessories': {
-            'Interior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/interior-accessories/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Exterior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/exterior-accessories/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/replacement-parts-16014/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Interior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-care/interior-care/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Exterior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-care/exterior-care/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-body-parts/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Video': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-and-vehicle-electronics/car-electronics-16079/car-video/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Audio': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-and-vehicle-electronics/car-electronics-16079/car-audio/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/tires-and-wheels-16878/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/oils-and-fluids/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/rv-parts-and-accessories/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Car Parts & Accessories': {
+        #     'Interior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/interior-accessories/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Exterior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/exterior-accessories/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/replacement-parts-16014/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Interior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-care/interior-care/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Exterior Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-care/exterior-care/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-body-parts/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Video': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-and-vehicle-electronics/car-electronics-16079/car-video/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Audio': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/car-and-vehicle-electronics/car-electronics-16079/car-audio/?limit=50&originalQuery=Automotive&page={}&q=Automotive&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/tires-and-wheels-16878/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/oils-and-fluids/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Car Accessories': 'https://www.noon.com/_svc/catalog/api/v3/u/automotive/rv-parts-and-accessories/?limit=50&page={}&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
 
-        'Musical Instruments': {
-            'Guitar Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/guitars/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Drums & Percussions Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/percussion-music/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Keyboards & Midi Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/pianos-keyboards-synthesizers/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-            'Orchestral Strings Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/stringed-instruments/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
-        },
+        # 'Musical Instruments': {
+        #     'Guitar Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/guitars/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Drums & Percussions Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/percussion-music/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Keyboards & Midi Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/pianos-keyboards-synthesizers/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        #     'Orchestral Strings Instruments': 'https://www.noon.com/_svc/catalog/api/v3/u/music-movies-and-tv-shows/musical-instruments-24670/stringed-instruments/?limit=50&originalQuery=Musical%20Instruments&page={}&q=Musical%20Instruments&searchDebug=false&sort%5Bby%5D=popularity&sort%5Bdir%5D=desc',
+        # },
     }
 
     page = 0
     count = 0
 
-    conn = mysql.connector.connect(
-            # host='localhost',
-            # user='root',
-            # password='admin',
-            # database='gb',
-
-            host='mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com',
-            user='datapillar',
-            password='4wIwdBmMSJ3BLBVCesJT',
-            database='scrappers_db'
-        )
-    cursor = conn.cursor(buffered=True)
+    conn = psycopg2.connect(
+        dbname="retailifydb",
+        user="postgres",
+        password="admin",
+        host="localhost",
+        port="5432"
+    )
+    cursor = conn.cursor()
 
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
         super().__init__()
+
+         # Set up the log directory and file path
+        log_dir = 'scrapy-logs'
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)  # Create the directory if it doesn't exist
+
+        log_file = f'{log_dir}/{self.name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log'
+        self.custom_settings['LOG_FILE'] = log_file
 
         self.reviews = reviews.lower() == 'true'
         self.short_scraper = short_scraper.lower() == 'true'
@@ -354,26 +358,29 @@ class NoonSpider(Spider):
 
     def get_catalogue_code(self, catalogue_name):
         # Attempt to retrieve the catalog code and name from the database
-        query_select = "SELECT CatalogueCode, CatalogueName FROM product_catalogue WHERE CatalogueName = %s"
+        query_select = 'SELECT "CatalogueCode", "CatalogueName" FROM product_catalogue WHERE "CatalogueName" = %s'
         self.cursor.execute(query_select, (catalogue_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the catalog code exists, check if the name needs to be updated
             if result[1] != catalogue_name:
-                update_query = "UPDATE product_catalogue SET CatalogueName = %s WHERE CatalogueCode = %s"
+                update_query = 'UPDATE product_catalogue SET "CatalogueName" = %s WHERE "CatalogueCode" = %s'
                 self.cursor.execute(update_query, (catalogue_name, result[0]))
                 self.conn.commit()  # Commit the transaction
                 
             return result[0]
         else:
             # If the catalog code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_catalogue (CatalogueName) VALUES (%s)"
+            insert_query = 'INSERT INTO product_catalogue ("CatalogueName") VALUES (%s) RETURNING "CatalogueCode"'
             self.cursor.execute(insert_query, (catalogue_name,))
             self.conn.commit()  # Commit the transaction
-            
-            # Retrieve the newly inserted catalog code and name
-            self.cursor.execute(query_select, (catalogue_name,))
+
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (catalogue_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
+        
             result = self.cursor.fetchone()
             return result[0] if result else None
 
@@ -381,26 +388,28 @@ class NoonSpider(Spider):
     
     def get_category_code(self, category_name, catalogue_code):
         # Attempt to retrieve the category code and name from the database
-        query_select = "SELECT CategoryCode, CategoryName FROM product_category WHERE CategoryName = %s"
+        query_select = 'SELECT "CategoryCode", "CategoryName" FROM product_category WHERE "CategoryName" = %s'
         self.cursor.execute(query_select, (category_name,))
         result = self.cursor.fetchone()
         
         if result:
             # If the category code exists, check if the name needs to be updated
             if result[1] != category_name:
-                update_query = "UPDATE product_category SET CategoryName = %s WHERE CategoryCode = %s"
+                update_query = 'UPDATE product_category SET "CategoryName" = %s WHERE "CategoryCode" = %s'
                 self.cursor.execute(update_query, (category_name, result[0]))
                 self.conn.commit()  # Commit the transaction
             
             return result[0]
         else:
             # If the category code doesn't exist, insert it into the database
-            insert_query = "INSERT INTO product_category (CategoryName, CatalogueCode_id) VALUES (%s, %s)"
+            insert_query = 'INSERT INTO product_category ("CategoryName", "CatalogueCode_id") VALUES (%s, %s) RETURNING "CategoryCode"'
             self.cursor.execute(insert_query, (category_name, catalogue_code))
             self.conn.commit()  # Commit the transaction
             
-            # Retrieve the newly inserted category code and name
-            self.cursor.execute(query_select, (category_name,))
+            # # Retrieve the newly inserted category code and name
+            # self.cursor.execute(query_select, (category_name,))
+            # result = self.cursor.fetchone()
+            # return result[0] if result else None
             result = self.cursor.fetchone()
             return result[0] if result else None
     
@@ -450,6 +459,8 @@ class NoonSpider(Spider):
 
                 item['VendorCode'] = vendor_code
                 item['BrandCode'] = ''
+                item['Currency'] = 'AED'
+                item['About'] = ''
                 catalogue_code = response.meta['catalogue_code']
                 category_code = self.get_category_code(item['CategoryName'], catalogue_code)
                 item['CatalogueCode'] = catalogue_code

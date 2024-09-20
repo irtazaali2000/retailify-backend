@@ -59,11 +59,13 @@ class Product(BaseModel):
     SKU = models.CharField(max_length=250, unique=True)
     ProductName = models.TextField(blank=True)
     URL = models.TextField(blank=True)
-    MainImage = models.TextField(blank=True)
+    MainImage = models.TextField(max_length=500, blank=True, null=True)
     CatalogueName = models.CharField(max_length=250)
     CategoryName = models.CharField(max_length=250)
     BrandCode = models.CharField(max_length=255, null=True, blank=True)
     BrandName = models.CharField(max_length=255, blank=True)
+    Currency = models.CharField(max_length=100)
+    About = models.TextField(blank=True, null=True, default='')
     StockAvailability = models.BooleanField(default=True)
     Offer = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=19)
     RegularPrice = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=19)
@@ -109,52 +111,27 @@ class Review(models.Model):
         return str(self.ProductCode.ProductCode)
 
 
+class OurStoreProduct(BaseModel):
+    ProductCode = models.AutoField(primary_key=True)
+    ProductName = models.CharField(max_length=250)
+    SKU = models.CharField(max_length=250, unique=True)
+    URL = models.TextField(blank=True, null=True)
+    MainImage = models.TextField(max_length=500, blank=True, null=True)
+    BrandName = models.CharField(max_length=255, blank=True)
+    Currency = models.CharField(max_length=100)
+    About = models.TextField(blank=True, null=True, default='')
+    StockAvailability = models.BooleanField(default=True)
+    Cost = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=19)
+    MyPrice = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=19)
+    ModelNumber = models.CharField(max_length=255, null=True, blank=True)
+    RatingValue = models.DecimalField(default=0, decimal_places=2, max_digits=19)
+    CatalogueCode = models.ForeignKey(Catalogue, on_delete=models.CASCADE, null=True)
+    CatalogueName = models.CharField(max_length=255)  # Added CatalogueName
+    CategoryCode = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    CategoryName = models.CharField(max_length=255)   # Added CategoryName
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def __str__(self):
+        return str(self.ProductCode)
 
 
 

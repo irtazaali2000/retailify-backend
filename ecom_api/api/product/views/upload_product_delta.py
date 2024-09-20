@@ -114,18 +114,26 @@ class ProductUpload(CreateAPIView):
                 # Update related category data and CategoryNameMapping
                 self.update_related_categories(instance)
                 self.update_category_name_mapping(instance)
-
-                if 'MainImage' in image and image['MainImage']:
+                # if 'MainImage' in image:
+                if image:
                     img_serializer = ImageSerializer(data={
                         'ProductCode': instance.ProductCode,
                         'SKU': instance.SKU,
-                        'image_url': instance.MainImage
+                        'image_url': image
+                        
                     })
                     if img_serializer.is_valid(raise_exception=True):
                         img_serializer.save()
+                        LOGGER.info(f"Product Images Inserted: {instance.SKU}")
 
-                    LOGGER.info(f"Product Images Inserted: {instance.SKU}")
+                        # Update the MainImage field in the Product instance after saving the image
+                        instance.MainImage = image  # This updates the MainImage field in the Product table
+                        instance.save(update_fields=['MainImage'])  # Save only the MainImage field
                     
+                    else:
+                        LOGGER.error(f"Image Serializer Errors: {img_serializer.errors}")
+                        #return Response(data={'error': True, 'message': 'Image upload failed', 'details': img_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
                 if additional_properties:
                     ap_serializer = AdditionalPropertiesSerializer(data={
                         'ProductCode': instance.ProductCode,
@@ -167,5 +175,5 @@ class ProductUpload(CreateAPIView):
                                 else:
                                     LOGGER.error(f"Review Serializer Errors: {review_serializer.errors}")
                 
-        
+        #Means The Scraped Data is same as the Data in the Database so nothing happens
         return Response(data={'error': False, 'message': 'Product added'})

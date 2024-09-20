@@ -64,6 +64,8 @@ class ProductItemAmazon(scrapy.Item):
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    Currency = scrapy.Field()
+    About = scrapy.Field()
 
 
 class ProductItemJumbo(scrapy.Item):
@@ -77,6 +79,8 @@ class ProductItemJumbo(scrapy.Item):
     CatalogueCode = scrapy.Field()
     BrandCode = scrapy.Field()
     BrandName = scrapy.Field()
+    Currency = scrapy.Field()
+    About = scrapy.Field()
     StockAvailability = scrapy.Field()
     Offer = scrapy.Field()
     RegularPrice = scrapy.Field()
@@ -204,10 +208,14 @@ class ProductItemEmax(scrapy.Item):
     StockAvailability = scrapy.Field()
     Offer = scrapy.Field()
     RegularPrice = scrapy.Field()
+    # Cost = scrapy.Field()
+    # MyPrice = scrapy.Field()
     ModelNumber = scrapy.Field()
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    Currency = scrapy.Field()
+    About = scrapy.Field()
 
 
 
@@ -306,6 +314,8 @@ class ProductItemSharafDG(scrapy.Item):
     #ReviewCount = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    About = scrapy.Field()
+    Currency = scrapy.Field()
     
 
 
@@ -413,6 +423,8 @@ class ProductItemNoon(scrapy.Item):
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    Currency = scrapy.Field()
+    About = scrapy.Field()
 
 
 class ProductItemCarrefour(scrapy.Item):
@@ -433,5 +445,7 @@ class ProductItemCarrefour(scrapy.Item):
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    Currency = scrapy.Field()
+    About = scrapy.Field()
 
                                                         

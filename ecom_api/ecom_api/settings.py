@@ -11,12 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
 
 # import pymysql
 # pymysql.version_info = (1, 3, 13, "final", 0)
 # pymysql.install_as_MySQLdb()
 
-
+load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,7 +33,8 @@ SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '52.179.252.54', '127.0.0.1', '0.0.0.0', '*']
+# ALLOWED_HOSTS = ['localhost', '52.179.252.54', '127.0.0.1', '0.0.0.0', '*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -48,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'retailify_api',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -58,7 +62,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
+
 
 ROOT_URLCONF = 'ecom_api.urls'
 TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
@@ -100,21 +106,31 @@ WSGI_APPLICATION = 'ecom_api.wsgi.application'
 # }
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'scrappers_db',
+#         'USER': 'datapillar',
+#         'PASSWORD': '4wIwdBmMSJ3BLBVCesJT',
+#         'HOST': 'mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             'sql_mode': 'traditional',
+#         }
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'scrappers_db',
-        'USER': 'datapillar',
-        'PASSWORD': '4wIwdBmMSJ3BLBVCesJT',
-        'HOST': 'mysqldb.cb2aesoymr8i.eu-west-2.rds.amazonaws.com',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'sql_mode': 'traditional',
-        }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
-
 
 
 
@@ -219,6 +235,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/media/'
+
+CORS_ALLOW_ALL_ORIGINS = True
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 try:
     from .local_settings import *

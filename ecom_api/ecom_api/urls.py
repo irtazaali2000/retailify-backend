@@ -20,4 +20,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/private/', include('api.urls')),
     path('', include('api.urls')),
+
+    path('api/', include('retailify_api.urls'))
 ]
