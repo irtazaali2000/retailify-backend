@@ -10,8 +10,12 @@ from .views import (VendorList, VendorDetail, CatalogueList, CatalogueDetail, Ca
                    AllBrandNames, AllCategoryNames, AllCatalogueNames,
                    VendorDetailsByCategoryView, VendorDetailsByBrandView,
                    VendorDetailsByCatalogueView, InStockProductsByMonthView, CategoryPriceByYearView,
-                   IntelligenceProductPriceView, IntelligenceProductPriceHigher, IntelligenceProductPriceLower,
-                   IntelligenceProductPriceEqual, IntelligenceProductPriceDifference)
+                #    IntelligenceProductPriceView, 
+                   IntelligenceProductPriceHigher,
+                   IntelligenceProductPriceLower,
+                   IntelligenceProductPriceEqual, IntelligenceProductPriceDifference, ProductCountHigher, ProductCountLower, ProductCountEqual,
+                   ProductCountRange
+                   )
                 #    IntelligenceProductPriceAve
 
 urlpatterns = [
@@ -59,11 +63,16 @@ urlpatterns = [
     path('vendor_details_by_catalogue/', VendorDetailsByCatalogueView.as_view(), name='vendor-details-by-catalogue'),
     path('instock_products_by_month/', InStockProductsByMonthView.as_view(), name='instock_products_by_month'),
     path('category-price-by-year/', CategoryPriceByYearView.as_view(), name='category-price-by-year'),
-    path('price-intelligence/', IntelligenceProductPriceView.as_view(), name='price-intelligence'),
+    # path('price-intelligence/', IntelligenceProductPriceView.as_view(), name='price-intelligence'),
     path('price-intelligence-higher/', IntelligenceProductPriceHigher.as_view(), name='price-intelligence-higher'),
     path('price-intelligence-lower/', IntelligenceProductPriceLower.as_view(), name='price-intelligence-lower'),
     path('price-intelligence-equal/', IntelligenceProductPriceEqual.as_view(), name='price-intelligence-equal'),
     path('price-intelligence-difference/', IntelligenceProductPriceDifference.as_view(), name='price-intelligence-difference'),
+
+    path('price-intelligence-higher-count/', ProductCountHigher.as_view(), name='price-intelligence-higher-count'),
+    path('price-intelligence-lower-count/', ProductCountLower.as_view(), name='price-intelligence-lower-count'),
+    path('price-intelligence-equal-count/', ProductCountEqual.as_view(), name='price-intelligence-equal-count'),
+    path('price-intelligence-range-count/', ProductCountRange.as_view(), name='price-intelligence-range-count'),    
     # path('testing/', Testing.as_view(), name='testing')
 
 ]

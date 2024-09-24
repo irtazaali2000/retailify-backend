@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.views import APIView
-from api.product.models import Vendor, Catalogue, Category, Product, Review, Image
+from api.product.models import *
 from .serializers import (VendorSerializer, CatalogueSerializer, CategorySerializer, 
                           ProductSerializer, ReviewSerializer, ImageSerializer, CustomProductSerializer,
                           OurStoreProduct, ProductDetailsByCategorySerializer,
@@ -20,6 +20,14 @@ from calendar import month_name
 from django.utils import timezone
 from django.db.models.functions import TruncMonth
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from django.db.models import Prefetch
+from django.core.cache import cache
+from urllib.parse import quote
+import hashlib
+import time
+from math import ceil
+from django.db import connection
 
 # Vendor API Views
 class VendorList(generics.ListCreateAPIView):
@@ -148,89 +156,177 @@ class ProductsWithMultipleVendorsByCategoryView(generics.ListAPIView):
 
 
 class CompareProductsView(generics.GenericAPIView):
-    """
-    Compare products between the Product and OurStoreProduct tables based on product names with pagination.
-    """
-    serializer_class = VendorSerializer
-
-    def process_product(self, our_product):
-        # Approximate matching using TrigramSimilarity on the product name
-        matching_products = Product.objects.annotate(
-            similarity=TrigramSimilarity(F('ProductName'), our_product.ProductName.lower())
-        ).annotate(
-            similarity_rounded=Round(F('similarity'), 2)  # Round similarity score for better accuracy
-        ).filter(
-            Q(ProductName__icontains=our_product.ProductName.lower()) |  # Prioritize exact matches
-            Q(similarity_rounded__gt=0.29)  # Increase similarity threshold for relevance
-        ).order_by('-similarity_rounded')
-
-        if matching_products.exists():
-            vendor_products = []
-            for product in matching_products:
-                serializer = VendorSerializer(product, context={'our_product': our_product})  # Pass our product here
-                serialized_data = serializer.data
-                serialized_data['similarity_score'] = product.similarity_rounded
-                vendor_products.append(serialized_data)
-
-            comparison = {
-                "our_store_product": {
-                    "name": our_product.ProductName,
-                    "sku": our_product.SKU,
-                    "brand": our_product.BrandName,
-                    "my_price": our_product.MyPrice,
-                    "cost": our_product.Cost,
-                    "currency": our_product.Currency,
-                    "image_url": our_product.MainImage if our_product.MainImage else '',  # Adjust if MainImage is an ImageField
-                    'about': [our_product.About]
-                },
-                "retailer_products": vendor_products
-            }
-            return comparison
-        return None
 
     def get(self, request, *args, **kwargs):
-        # Get pagination parameters
-        page_number = request.query_params.get('page', 1)
-        page_size = request.query_params.get('page_size', 10)  # Default to 10 items per page
-
-        min_price = request.query_params.get('min_price', None)
-        max_price = request.query_params.get('max_price', None)
-
-        # Fetch all the products from OurStoreProduct
-        our_store_products = OurStoreProduct.objects.all()
-
-        # Apply price filtering if min_price or max_price is provided
-        if min_price is not None:
-            our_store_products = our_store_products.filter(MyPrice__gte=min_price)
-        if max_price is not None:
-            our_store_products = our_store_products.filter(MyPrice__lte=max_price)
-
-        # Order by ProductCode for consistency with pagination
-        our_store_products = our_store_products.order_by('ProductCode')
-
-        # Paginate results
-        paginator = Paginator(our_store_products, page_size)
         try:
-            page = paginator.page(page_number)
-        except PageNotAnInteger:
-            page = paginator.page(1)
+            # Get user input parameters (optional)
+            brand_name = request.GET.get('brand_name', None)
+            category_name = request.GET.get('category_name', None)
+            product_name = request.GET.get('product_name', None)
+
+            # Get pagination parameters
+            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page = int(request.GET.get('page', 1))  # Default to page 1
+
+            # Base SQL query for ModelNumber matching
+            query = '''
+                SELECT 
+                    p."ProductCode" AS product_product_code,
+                    p."ProductName" AS product_product_name,
+                    p."SKU" AS product_sku,
+                    p."ModelNumber" AS product_model_number,
+                    p."BrandName" AS product_brand_name,
+                    p."RegularPrice" AS product_regular_price,
+                    p."Offer" AS product_offer_price,
+                    p."Currency" AS product_currency,
+                    p."StockAvailability" AS product_stock,  -- Fetch stock availability
+                    v."VendorName" AS vendor_name,  -- Fetch VendorName from Vendor model
+                    os."ProductCode" AS ourstore_product_code,
+                    os."ProductName" AS ourstore_product_name,
+                    os."SKU" AS ourstore_sku,
+                    os."ModelNumber" AS ourstore_model_number,
+                    os."BrandName" AS ourstore_brand_name,
+                    os."MyPrice" AS ourstore_my_price,
+                    os."Currency" AS ourstore_currency,
+                    os."MainImage" AS ourstore_image,
+                    os."Cost" AS ourstore_cost,
+                    os."About" AS ourstore_about
+
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+            '''
+
+            # Dynamic filters
+            query_conditions = []
+            query_params = []
+
+            if brand_name:
+                query_conditions.append('LOWER(p."BrandName") = LOWER(%s) AND LOWER(os."BrandName") = LOWER(%s)')
+                query_params.extend([brand_name, brand_name])
+
+            if category_name:
+                query_conditions.append('p."CategoryName" ILIKE %s')
+                query_params.append(f'%{category_name}%')
+
+            if product_name:
+                query_conditions.append('os."ProductName" ILIKE %s')
+                query_params.append(f'%{product_name}%')
+
+            if query_conditions:
+                query += " AND " + " AND ".join(query_conditions)
+
+            with connection.cursor() as cursor:
+                cursor.execute(query, query_params)
+                columns = [col[0] for col in cursor.description]
+                model_number_result = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                print(f"SQL Query Result Count: {len(model_number_result)}")
+
+            # Prepare results for model number matches
+            product_map = {}
+            for product in model_number_result:
+                sku = product['ourstore_sku']
+                if sku not in product_map:
+                    product_map[sku] = {
+                        "ProductName": product['ourstore_product_name'],
+                        "SKU": product['ourstore_sku'],
+                        "MyPrice": product['ourstore_my_price'],
+                        "ModelNumber": product['ourstore_model_number'],
+                        "Currency": product['ourstore_currency'],
+                        "MainImage": product['ourstore_image'],
+                        "Cost": product['ourstore_cost'],
+                        "Brand": product['ourstore_brand_name'],
+                        "About": [product['ourstore_about']],
+                        "match_by": "ModelNumber",
+                        "Vendors": [],
+                    }
+
+                # Functions for calculating additional keys
+                def get_stock(obj):
+                    return "Instock" if obj['product_stock'] else "Out of stock"
+
+                def get_discounted_price(obj):
+                    return obj['product_offer_price'] if obj['product_offer_price'] else 0
+
+                def get_regular_price(obj):
+                    return obj['product_regular_price']
+
+                def get_price_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price:
+                        price_difference = our_product['MyPrice'] - retailer_price
+                        price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
+                        return round(price_match_percentage, 2)
+                    return 0
+
+                def get_net_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price and our_product['Cost']:
+                        net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
+                        return round(net_margin, 2)
+                    return 0
+
+                def get_discount(obj):
+                    if obj['product_offer_price'] and obj['product_regular_price'] and obj['product_regular_price'] != 0:
+                        discount_percentage = round(((obj['product_regular_price'] - obj['product_offer_price']) / obj['product_regular_price']) * 100, 2)
+                        return discount_percentage
+                    return 0
+
+                # Append vendor details with new keys
+                product_map[sku]["Vendors"].append({
+                    "VendorName": product['vendor_name'],
+                    "SKU": product['product_sku'],
+                    "ModelNumber": product['product_model_number'],
+                    "Price": product['product_offer_price'] or product['product_regular_price'],
+                    "Currency": product['product_currency'],
+                    "ProductName": product['product_product_name'],
+                    "Stock": get_stock(product),
+                    "DiscountedPrice": get_discounted_price(product),
+                    "RegularPrice": get_regular_price(product),
+                    "PriceMatch": get_price_match(product_map[sku], product),
+                    "NetMatch": get_net_match(product_map[sku], product),
+                    "Discount": get_discount(product),
+                })
+
+            # Filter out products with empty "Vendors"
+            total_matches_before_filter = len(product_map)  # Include all products in the count
+            print(f"Total Matches Before Filter: {total_matches_before_filter}")
+            filtered_results = [product for product in product_map.values() if product["Vendors"]]
+
+            # Convert dict to list for response
+            final_result = filtered_results
+
+            # Apply pagination
+            paginator = Paginator(final_result, page_size)
+            page_data = paginator.page(page)
+
+            # Prepare the response
+            response_data = {
+                'products': page_data.object_list,
+                'page': page,
+                'page_size': page_size,
+                'next_page': page_data.has_next(),
+                'previous_page': page_data.has_previous(),
+                'total_matches': len(final_result)
+            }
+
+            return Response(response_data)
+
         except EmptyPage:
-            page = paginator.page(paginator.num_pages)
+            return Response({'message': 'Page not found'}, status=404)
 
-        compared_products = []
-        with ThreadPoolExecutor() as executor:
-            results = list(executor.map(self.process_product, page.object_list))
+        except Exception as e:
+            return Response({'message': str(e)}, status=404)
 
-        # Filter out any None results (if no matching products were found for certain our_store_products)
-        compared_products = [result for result in results if result is not None]
-
-        return Response({
-            'results': compared_products,
-            'page': page.number,
-            'page_size': page.paginator.per_page,
-            'total_pages': page.paginator.num_pages,
-            'total_count': page.paginator.count
-        })
 
 
 
@@ -911,800 +1007,1050 @@ class CategoryPriceByYearView(generics.GenericAPIView):
 
 
 
-# class IntelligenceProductPriceView(generics.GenericAPIView):
 
-#     def get(self, request, *args, **kwargs):
-#         # Get the product name from user input (query parameter)
-#         product_name = request.GET.get('product_name', None)
-
-#         if not product_name:
-#             return Response({"error": "Product name is required."}, status=400)
-
-#         # Preprocess product name for case-insensitive filtering and trigram
-#         lower_product_name = product_name.lower()
-
-#         # Fetch all matching OurStoreProduct using TrigramSimilarity and filtering by product name
-#         our_store_products = (
-#             OurStoreProduct.objects
-#             .annotate(similarity=TrigramSimilarity(F('ProductName'), lower_product_name))
-#             .annotate(similarity_rounded=Round(F('similarity'), 2))  # Round the similarity
-#             .filter(
-#                 Q(ProductName__icontains=product_name) |  # Prioritize exact matches first
-#                 Q(similarity_rounded__gt=0.2)  # Increase similarity threshold to reduce irrelevant matches
-#             )
-#             .order_by('-similarity_rounded')  # Order by highest rounded similarity
-#         )
-
-#         if not our_store_products.exists():
-#             return Response({"error": "No similar products found in our store."}, status=404)
-
-#         # Iterate over the store products to fetch the vendors with lower price
-#         results = []
-#         for our_store_product in our_store_products:
-#             my_price = our_store_product.MyPrice
-#             our_similarity = round(our_store_product.similarity, 2)  # Get similarity for OurStoreProduct
-
-#             # Fetch all vendors with a similar product name who have a lower price than MyPrice
-#             vendors_with_lower_price = (
-#                 Product.objects
-#                 .annotate(similarity=TrigramSimilarity(F('ProductName'), lower_product_name))
-#                 .annotate(similarity_rounded=Round(F('similarity'), 2))  # Round the similarity
-#                 .filter(
-#                     Q(ProductName__icontains=product_name) |  # Prioritize exact matches for vendors too
-#                     Q(similarity_rounded__gt=0.2)  # Increase similarity threshold for vendors as well
-#                 )
-#                 .filter(Q(Offer__lt=my_price) | Q(RegularPrice__lt=my_price))
-#                 .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'similarity_rounded')  # Fetch similarity
-#                 .order_by('-similarity_rounded')  # Order by similarity
-#             )
-
-#             # Filter out vendors with similarity lower than the threshold
-#             vendor_data = []
-#             for vendor in vendors_with_lower_price:
-#                 if vendor['similarity_rounded'] > 0.2:  # Ensure vendors with similarity > 0.3 only
-#                     vendor_data.append({
-#                         'VendorName': vendor['VendorCode__VendorName'],
-#                         'Price': vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice'],
-#                         'ProductName': vendor['ProductName'],
-#                         'Similarity': vendor['similarity_rounded']  # Include and round similarity score for vendor products
-#                     })
-
-#             # Only include products where there are valid vendors with lower prices
-#             if vendor_data:
-#                 # Prepare the response data for each OurStoreProduct
-#                 results.append({
-#                     "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-#                     "MyPrice": my_price,
-#                     "Similarity": our_similarity,  # Include similarity for OurStoreProduct
-#                     "VendorsWithLowerPrice": vendor_data
-#                 })
-
-#         return Response(results)
-
-
-class IntelligenceProductPriceView(generics.GenericAPIView):
-
+class IntelligenceProductPriceLower(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
-        # Get the product name, brand name, and category from user input (query parameters)
-        product_name = request.GET.get('product_name', None)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
+        try:
+            # Get user input parameters (optional)
+            brand_name = request.GET.get('brand_name', None)
+            category_name = request.GET.get('category_name', None)
+            product_name = request.GET.get('product_name', None)
 
-        if not product_name:
-            return Response({"error": "Product name is required."}, status=400)
+            # Get pagination parameters
+            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page = int(request.GET.get('page', 1))  # Default to page 1
 
-        # Tokenize the product name into individual words
-        product_name_tokens = product_name.lower().split()
+            # Base SQL query for ModelNumber matching
+            query = '''
+                SELECT 
+                    p."ProductCode" AS product_product_code,
+                    p."ProductName" AS product_product_name,
+                    p."SKU" AS product_sku,
+                    p."ModelNumber" AS product_model_number,
+                    p."BrandName" AS product_brand_name,
+                    p."RegularPrice" AS product_regular_price,
+                    p."Offer" AS product_offer_price,
+                    p."Currency" AS product_currency,
+                    p."StockAvailability" AS product_stock,
+                    v."VendorName" AS vendor_name,  -- Fetch VendorName from Vendor model
+                    os."ProductCode" AS ourstore_product_code,
+                    os."ProductName" AS ourstore_product_name,
+                    os."SKU" AS ourstore_sku,
+                    os."ModelNumber" AS ourstore_model_number,
+                    os."BrandName" AS ourstore_brand_name,
+                    os."MyPrice" AS ourstore_my_price,
+                    os."Currency" AS ourstore_currency,
+                    os."MainImage" AS ourstore_image,
+                    os."Cost" AS ourstore_cost,
+                    os."About" AS ourstore_about
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" < COALESCE(NULLIF(p."Offer", 0), p."RegularPrice")
 
-        # Create a filtering condition that matches all tokens in the product name
-        token_conditions = Q()
-        for token in product_name_tokens:
-            token_conditions &= Q(ProductName__icontains=token)
+            '''
 
-        # If brand name is provided, include it in the filtering condition
-        if brand_name:
-            token_conditions &= Q(BrandName__icontains=brand_name)
+            # Dynamic filters
+            query_conditions = []
+            query_params = []
 
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            token_conditions &= Q(CategoryName__icontains=category_name)
+            if brand_name:
+                query_conditions.append('LOWER(p."BrandName") = LOWER(%s) AND LOWER(os."BrandName") = LOWER(%s)')
+                query_params.extend([brand_name, brand_name])
 
-        # Fetch all matching OurStoreProduct using TrigramSimilarity and keyword filtering
-        our_store_products = (
-            OurStoreProduct.objects
-            .annotate(similarity=TrigramSimilarity(F('ProductName'), Value(product_name)))
-            .filter(token_conditions)  # Ensure all tokens, brand, and category are matched
-            .order_by('-similarity')  # Order by similarity score
-        )
+            if category_name:
+                query_conditions.append('p."CategoryName" ILIKE %s')
+                query_params.append(f'%{category_name}%')
 
-        if not our_store_products.exists():
-            return Response({"error": "No similar products found in our store."}, status=404)
+            if product_name:
+                query_conditions.append('os."ProductName" ILIKE %s')
+                query_params.append(f'%{product_name}%')
 
-        # Iterate over the store products to fetch vendors with lower price
-        results = []
-        for our_store_product in our_store_products:
-            my_price = our_store_product.MyPrice
-            our_similarity = round(our_store_product.similarity, 2)  # Get similarity for OurStoreProduct
+            if query_conditions:
+                query += " AND " + " AND ".join(query_conditions)
 
-            # Fetch all vendors with a similar product name who have a lower price than MyPrice
-            vendors_with_lower_price = (
-                Product.objects
-                .annotate(similarity=TrigramSimilarity(F('ProductName'), Value(product_name)))
-                .filter(token_conditions)  # Ensure all tokens, brand, and category are matched for vendors as well
-                .filter(Q(Offer__lt=my_price) | Q(RegularPrice__lt=my_price))
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'similarity')
-                .order_by('-similarity')  # Order by similarity score
-            )
+            with connection.cursor() as cursor:
+                cursor.execute(query, query_params)
+                columns = [col[0] for col in cursor.description]
+                model_number_result = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                print(f"SQL Query Result Count: {len(model_number_result)}")
 
-            # Filter out vendors with similarity lower than the threshold
-            vendor_data = []
-            for vendor in vendors_with_lower_price:
-                if vendor['similarity'] > 0.15:  # Ensure vendors with similarity > 0.2 only
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice'],
-                        'ProductName': vendor['ProductName'],
-                        'Similarity': round(vendor['similarity'], 2)  # Include and round similarity score for vendor products
+            # Prepare results for model number matches
+            product_map = {}
+            for product in model_number_result:
+                sku = product['ourstore_sku']
+                if sku not in product_map:
+                    product_map[sku] = {
+                        "ProductName": product['ourstore_product_name'],
+                        "SKU": product['ourstore_sku'],
+                        "MyPrice": product['ourstore_my_price'],
+                        "ModelNumber": product['ourstore_model_number'],
+                        "Currency": product['ourstore_currency'],
+                        "MainImage": product['ourstore_image'],
+                        "Cost": product['ourstore_cost'],
+                        "Brand": product['ourstore_brand_name'],
+                        "About": [product['ourstore_about']],
+                        "match_by": "ModelNumber",
+                        "VendorsWithHigherPrice": [], 
+                    }
+
+
+                # Functions for calculating additional keys
+                def get_stock(obj):
+                    return "Instock" if obj['product_stock'] else "Out of stock"
+
+                def get_discounted_price(obj):
+                    return obj['product_offer_price'] if obj['product_offer_price'] else 0
+
+                def get_regular_price(obj):
+                    return obj['product_regular_price']
+
+                def get_price_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price:
+                        price_difference = our_product['MyPrice'] - retailer_price
+                        price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
+                        return round(price_match_percentage, 2)
+                    return 0
+
+                def get_net_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price and our_product['Cost']:
+                        net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
+                        return round(net_margin, 2)
+                    return 0
+
+                def get_discount(obj):
+                    if obj['product_offer_price'] and obj['product_regular_price'] and obj['product_regular_price'] != 0:
+                        discount_percentage = round(((obj['product_regular_price'] - obj['product_offer_price']) / obj['product_regular_price']) * 100, 2)
+                        return discount_percentage
+                    return 0
+                
+
+                if product['ourstore_my_price'] < (product['product_offer_price'] or product['product_regular_price']):
+                    product_map[sku]["VendorsWithHigherPrice"].append({
+                        "VendorName": product['vendor_name'],  # Fetch the correct VendorName
+                        "SKU": product['product_sku'],
+                        "ModelNumber": product['product_model_number'],
+                        "Price": product['product_offer_price'] or product['product_regular_price'],  # Offer first, then RegularPrice
+                        "Currency": product['product_currency'],
+                        "ProductName": product['product_product_name'],
+                        "Stock": get_stock(product),
+                        "DiscountedPrice": get_discounted_price(product),
+                        "RegularPrice": get_regular_price(product),
+                        "PriceMatch": get_price_match(product_map[sku], product),
+                        "NetMatch": get_net_match(product_map[sku], product),
+                        "Discount": get_discount(product),
                     })
 
-            # Only include products where there are valid vendors with lower prices
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Similarity": our_similarity,  # Include similarity for OurStoreProduct
-                    "VendorsWithLowerPrice": vendor_data
-                })
 
-        return Response(results)
+            # Filter out products with empty "VendorsWithHigherPrice"
+            total_matches_before_filter = len(product_map)  # Include all products in the count
+            print(f"Total Matches Before Filter: {total_matches_before_filter}")
+            filtered_results = [product for product in product_map.values() if product["VendorsWithHigherPrice"]]
 
+            # Convert dict to list for response
+            final_result = filtered_results
 
+            # Apply pagination
+            paginator = Paginator(final_result, page_size)
+            page_data = paginator.page(page)
 
-# class IntelligenceProductPriceDefault(generics.GenericAPIView):
+            # Prepare the response
+            response_data = {
+                'products': page_data.object_list,
+                'page': page,
+                'page_size': page_size,
+                'next_page': page_data.has_next(),
+                'previous_page': page_data.has_previous(),
+                'total_matches': len(final_result)
+            }
 
-#     def get(self, request, *args, **kwargs):
-#         # Get the brand name, category, and product name from user input (query parameters)
-#         brand_name = request.GET.get('brand_name', None)
-#         category_name = request.GET.get('category_name', None)
-#         product_name = request.GET.get('product_name', None)
+            return Response(response_data)
 
-#         # Validate that brand_name is provided
-#         if not brand_name:
-#             return Response({"error": "Brand name is required."}, status=400)
+        except EmptyPage:
+            return Response({'message': 'Page not found'}, status=404)
 
-#         # Create a filtering condition that matches the brand name
-#         filter_conditions = Q(BrandName__icontains=brand_name)
-
-#         # If category name is provided, include it in the filtering condition
-#         if category_name:
-#             filter_conditions &= Q(CategoryName__icontains=category_name)
-
-#         # If product name is provided, include it in the filtering condition
-#         if product_name:
-#             product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-#             product_name_conditions = Q()
-#             for token in product_name_tokens:
-#                 product_name_conditions &= Q(ProductName__icontains=token)
-#             filter_conditions &= product_name_conditions
-
-#         # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-#         our_store_products = (
-#             OurStoreProduct.objects
-#             .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-#             .order_by('ProductName')  # Optionally order by product name or other fields
-#         )
-
-#         if not our_store_products.exists():
-#             return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
-
-#         # Iterate over the store products to fetch vendors with lower price
-#         results = []
-#         for our_store_product in our_store_products:
-#             my_price = our_store_product.MyPrice
-
-#             # Fetch all vendors with a similar brand name and optional category or product name who have a lower price than MyPrice
-#             vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (Q(Offer__lt=my_price) | Q(RegularPrice__lt=my_price))
-
-#             # Apply category filter if provided
-#             if category_name:
-#                 vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
-
-#             # Apply product name filter if provided
-#             if product_name:
-#                 vendor_product_name_conditions = Q()
-#                 for token in product_name_tokens:
-#                     vendor_product_name_conditions &= Q(ProductName__icontains=token)
-#                 vendor_filter_conditions &= vendor_product_name_conditions
-
-#             vendor_products = (
-#                 Product.objects
-#                 .filter(vendor_filter_conditions)
-#                 .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName')  # Fetch relevant fields
-#                 .order_by('ProductName')  # Optionally order by product name
-#             )
-
-#             # Collect vendor data
-#             vendor_data = []
-#             for vendor in vendor_products:
-#                 vendor_data.append({
-#                     'VendorName': vendor['VendorCode__VendorName'],
-#                     'Price': vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice'],
-#                     'ProductName': vendor['ProductName'],
-#                 })
-
-#             # Only include products where there are valid vendors with lower prices
-#             if vendor_data:
-#                 results.append({
-#                     "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-#                     "MyPrice": my_price,
-#                     "VendorsWithLowerPrice": vendor_data
-#                 })
-
-#         return Response(results)
-
-
+        except Exception as e:
+            return Response({'message': str(e)}, status=404)
 
 
 class IntelligenceProductPriceHigher(generics.GenericAPIView):
-
     def get(self, request, *args, **kwargs):
-        # Get the brand name, category, and product name from user input (query parameters)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
-        product_name = request.GET.get('product_name', None)
+        try:
+            # Get user input parameters (optional)
+            brand_name = request.GET.get('brand_name', None)
+            category_name = request.GET.get('category_name', None)
+            product_name = request.GET.get('product_name', None)
 
-        # Validate that brand_name is provided
-        if not brand_name:
-            return Response({"error": "Brand name is required."}, status=400)
+            # Get pagination parameters
+            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page = int(request.GET.get('page', 1))  # Default to page 1
 
-        # Create a filtering condition that matches the brand name
-        filter_conditions = Q(BrandName__icontains=brand_name)
+            # Base SQL query for ModelNumber matching
+            query = '''
+                SELECT 
+                    p."ProductCode" AS product_product_code,
+                    p."ProductName" AS product_product_name,
+                    p."SKU" AS product_sku,
+                    p."ModelNumber" AS product_model_number,
+                    p."BrandName" AS product_brand_name,
+                    p."RegularPrice" AS product_regular_price,
+                    p."Offer" AS product_offer_price,
+                    p."Currency" AS product_currency,
+                    p."StockAvailability" AS product_stock,
+                    v."VendorName" AS vendor_name,  -- Fetch VendorName from Vendor model
+                    os."ProductCode" AS ourstore_product_code,
+                    os."ProductName" AS ourstore_product_name,
+                    os."SKU" AS ourstore_sku,
+                    os."ModelNumber" AS ourstore_model_number,
+                    os."BrandName" AS ourstore_brand_name,
+                    os."MyPrice" AS ourstore_my_price,
+                    os."Currency" AS ourstore_currency,
+                    os."MainImage" AS ourstore_image,
+                    os."Cost" AS ourstore_cost,
+                    os."About" AS ourstore_about
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                    --OR SIMILARITY(p."ModelNumber", os."ModelNumber") > 0.8
+                    --OR SIMILARITY(p."ProductName", os."ProductName") > 0.9)
+                    
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" > COALESCE(NULLIF(p."Offer", 0), p."RegularPrice")
 
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            filter_conditions &= Q(CategoryName__icontains=category_name)
+            '''
 
-        # If product name is provided, include it in the filtering condition
-        if product_name:
-            product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-            product_name_conditions = Q()
-            numeric_tokens = []
-            
-            for token in product_name_tokens:
-                if token.isdigit():
-                    numeric_tokens.append(token)  # Collect numeric tokens for strict matching
-                else:
-                    product_name_conditions &= Q(ProductName__icontains=token)
-            
-            filter_conditions &= product_name_conditions
+            # Dynamic filters
+            query_conditions = []
+            query_params = []
 
-        # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-        our_store_products = (
-            OurStoreProduct.objects
-            .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-            .order_by('ProductName')  # Optionally order by product name or other fields
-        )
+            if brand_name:
+                query_conditions.append('LOWER(p."BrandName") = LOWER(%s) AND LOWER(os."BrandName") = LOWER(%s)')
+                query_params.extend([brand_name, brand_name])
 
-        if not our_store_products.exists():
-            return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
-
-        results = []
-
-        for our_store_product in our_store_products:
-            # Check if numeric tokens (model numbers) exactly match
-            if product_name and numeric_tokens:
-                product_name_lower = our_store_product.ProductName.lower()
-                # Ensure all numeric tokens are present exactly
-                if not all(f" {token} " in f" {product_name_lower} " for token in numeric_tokens):
-                    continue  # Skip this product if it doesn't match all numeric tokens
-
-            my_price = our_store_product.MyPrice
-
-            # Fetch all vendors with a similar brand name and optional category or product name who have a lower price than MyPrice
-            vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (
-                Q(Offer__lt=my_price) | Q(RegularPrice__lt=my_price)
-            )
-
-            # Apply category filter if provided
             if category_name:
-                vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
+                query_conditions.append('p."CategoryName" ILIKE %s')
+                query_params.append(f'%{category_name}%')
 
-            # Apply product name filter if provided
             if product_name:
-                vendor_product_name_conditions = Q()
-                for token in product_name_tokens:
-                    if token.isdigit():
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                    else:
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                vendor_filter_conditions &= vendor_product_name_conditions
+                query_conditions.append('os."ProductName" ILIKE %s')
+                query_params.append(f'%{product_name}%')
 
-            vendor_products = (
-                Product.objects
-                .filter(vendor_filter_conditions)
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'Currency')  # Fetch relevant fields
-                .order_by('ProductName')  # Optionally order by product name
-            )
+            if query_conditions:
+                query += " AND " + " AND ".join(query_conditions)
 
-            # Collect vendor data where vendor price is lower than our price
-            vendor_data = []
-            for vendor in vendor_products:
-                vendor_price = vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice']
+            with connection.cursor() as cursor:
+                cursor.execute(query, query_params)
+                columns = [col[0] for col in cursor.description]
+                model_number_result = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                print(f"SQL Query Result Count: {len(model_number_result)}")
+
+            # Prepare results for model number matches
+            product_map = {}
+            for product in model_number_result:
+                sku = product['ourstore_sku']
+                if sku not in product_map:
+                    product_map[sku] = {
+                        "ProductName": product['ourstore_product_name'],
+                        "SKU": product['ourstore_sku'],
+                        "MyPrice": product['ourstore_my_price'],
+                        "ModelNumber": product['ourstore_model_number'],
+                        "Currency": product['ourstore_currency'],
+                        "MainImage": product['ourstore_image'],
+                        "Cost": product['ourstore_cost'],
+                        "Brand": product['ourstore_brand_name'],
+                        "About": [product['ourstore_about']],
+                        "match_by": "ModelNumber",
+                        "VendorsWithLowerPrice": [], 
+                    }
+
+                # Functions for calculating additional keys
+                def get_stock(obj):
+                    return "Instock" if obj['product_stock'] else "Out of stock"
+
+                def get_discounted_price(obj):
+                    return obj['product_offer_price'] if obj['product_offer_price'] else 0
+
+                def get_regular_price(obj):
+                    return obj['product_regular_price']
+
+                def get_price_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price:
+                        price_difference = our_product['MyPrice'] - retailer_price
+                        price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
+                        return round(price_match_percentage, 2)
+                    return 0
+
+                def get_net_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price and our_product['Cost']:
+                        net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
+                        return round(net_margin, 2)
+                    return 0
+
+                def get_discount(obj):
+                    if obj['product_offer_price'] and obj['product_regular_price'] and obj['product_regular_price'] != 0:
+                        discount_percentage = round(((obj['product_regular_price'] - obj['product_offer_price']) / obj['product_regular_price']) * 100, 2)
+                        return discount_percentage
+                    return 0
                 
-                # Ensure that the vendor price is indeed lower than `my_price`
-                if vendor_price < my_price:
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor_price,
-                        'Currency': vendor['Currency'],
-                        'ProductName': vendor['ProductName'],
+
+                if product['ourstore_my_price'] > (product['product_offer_price'] or product['product_regular_price']):
+                    product_map[sku]["VendorsWithLowerPrice"].append({
+                        "VendorName": product['vendor_name'],  # Fetch the correct VendorName
+                        "SKU": product['product_sku'],
+                        "ModelNumber": product['product_model_number'],
+                        "Price": product['product_offer_price'] or product['product_regular_price'],  # Offer first, then RegularPrice
+                        "Currency": product['product_currency'],
+                        "ProductName": product['product_product_name'],
+                        "Stock": get_stock(product),
+                        "DiscountedPrice": get_discounted_price(product),
+                        "RegularPrice": get_regular_price(product),
+                        "PriceMatch": get_price_match(product_map[sku], product),
+                        "NetMatch": get_net_match(product_map[sku], product),
+                        "Discount": get_discount(product),
                     })
 
-            # Only include products where there are valid vendors with lower prices
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Currency": our_store_product.Currency,
-                    "VendorsWithLowerPrice": vendor_data
-                })
 
-        return Response(results)
+            # Filter out products with empty "VendorsWithHigherPrice"
+            total_matches_before_filter = len(product_map)  # Include all products in the count
+            print(f"Total Matches Before Filter: {total_matches_before_filter}")
+            filtered_results = [product for product in product_map.values() if product["VendorsWithLowerPrice"]]
 
-    
+            # Convert dict to list for response
+            final_result = filtered_results
+
+            # Apply pagination
+            paginator = Paginator(final_result, page_size)
+            page_data = paginator.page(page)
+
+            # Prepare the response
+            response_data = {
+                'products': page_data.object_list,
+                'page': page,
+                'page_size': page_size,
+                'next_page': page_data.has_next(),
+                'previous_page': page_data.has_previous(),
+                'total_matches': len(final_result)
+            }
+
+            return Response(response_data)
+
+        except EmptyPage:
+            return Response({'message': 'Page not found'}, status=404)
+
+        except Exception as e:
+            return Response({'message': str(e)}, status=404)
 
 
-class IntelligenceProductPriceLower(generics.GenericAPIView):
 
-    def get(self, request, *args, **kwargs):
-        # Get the brand name, category, and product name from user input (query parameters)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
-        product_name = request.GET.get('product_name', None)
 
-        # Validate that brand_name is provided
-        if not brand_name:
-            return Response({"error": "Brand name is required."}, status=400)
-
-        # Create a filtering condition that matches the brand name
-        filter_conditions = Q(BrandName__icontains=brand_name)
-
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            filter_conditions &= Q(CategoryName__icontains=category_name)
-
-        # If product name is provided, include it in the filtering condition
-        if product_name:
-            product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-            product_name_conditions = Q()
-            numeric_tokens = []
-            
-            for token in product_name_tokens:
-                if token.isdigit():
-                    numeric_tokens.append(token)  # Collect numeric tokens for strict matching
-                else:
-                    product_name_conditions &= Q(ProductName__icontains=token)
-            
-            filter_conditions &= product_name_conditions
-
-        # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-        our_store_products = (
-            OurStoreProduct.objects
-            .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-            .order_by('ProductName')  # Optionally order by product name or other fields
-        )
-
-        if not our_store_products.exists():
-            return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
-
-        results = []
-
-        for our_store_product in our_store_products:
-            # Check if numeric tokens (model numbers) exactly match
-            if product_name and numeric_tokens:
-                product_name_lower = our_store_product.ProductName.lower()
-                # Ensure all numeric tokens are present exactly
-                if not all(f" {token} " in f" {product_name_lower} " for token in numeric_tokens):
-                    continue  # Skip this product if it doesn't match all numeric tokens
-
-            my_price = our_store_product.MyPrice
-
-            # Fetch all vendors with a similar brand name and optional category or product name who have a price lower than MyPrice
-            vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (Q(Offer__lt=my_price) | Q(RegularPrice__lt=my_price))
-
-            # Apply category filter if provided
-            if category_name:
-                vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
-
-            # Apply product name filter if provided
-            if product_name:
-                vendor_product_name_conditions = Q()
-                for token in product_name_tokens:
-                    if token.isdigit():
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                    else:
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                vendor_filter_conditions &= vendor_product_name_conditions
-
-            vendor_products = (
-                Product.objects
-                .filter(vendor_filter_conditions)
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'Currency')  # Fetch relevant fields
-                .order_by('ProductName')  # Optionally order by product name
-            )
-
-            # Collect vendor data where vendor price is higher than our price
-            vendor_data = []
-            for vendor in vendor_products:
-                vendor_price = vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice']
-                
-                # Ensure that the vendor price is indeed higher than `my_price`
-                if vendor_price > my_price:
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor_price,
-                        'Currency': vendor['Currency'],
-                        'ProductName': vendor['ProductName'],
-                    })
-
-            # Only include products where there are valid vendors with higher prices
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Currency": our_store_product.Currency,
-                    "VendorsWithHigherPrice": vendor_data
-                })
-
-        return Response(results)
-
-    
 
 
 class IntelligenceProductPriceEqual(generics.GenericAPIView):
-
     def get(self, request, *args, **kwargs):
-        # Get the brand name, category, and product name from user input (query parameters)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
-        product_name = request.GET.get('product_name', None)
+        try:
+            # Get user input parameters (optional)
+            brand_name = request.GET.get('brand_name', None)
+            category_name = request.GET.get('category_name', None)
+            product_name = request.GET.get('product_name', None)
 
-        # Validate that brand_name is provided
-        if not brand_name:
-            return Response({"error": "Brand name is required."}, status=400)
+            # Get pagination parameters
+            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page = int(request.GET.get('page', 1))  # Default to page 1
 
-        # Create a filtering condition that matches the brand name
-        filter_conditions = Q(BrandName__icontains=brand_name)
+            # Base SQL query for ModelNumber matching
+            query = '''
+                SELECT 
+                    p."ProductCode" AS product_product_code,
+                    p."ProductName" AS product_product_name,
+                    p."SKU" AS product_sku,
+                    p."ModelNumber" AS product_model_number,
+                    p."BrandName" AS product_brand_name,
+                    p."RegularPrice" AS product_regular_price,
+                    p."Offer" AS product_offer_price,
+                    p."Currency" AS product_currency,
+                    p."StockAvailability" AS product_stock,
+                    v."VendorName" AS vendor_name,  -- Fetch VendorName from Vendor model
+                    os."ProductCode" AS ourstore_product_code,
+                    os."ProductName" AS ourstore_product_name,
+                    os."SKU" AS ourstore_sku,
+                    os."ModelNumber" AS ourstore_model_number,
+                    os."BrandName" AS ourstore_brand_name,
+                    os."MyPrice" AS ourstore_my_price,
+                    os."Currency" AS ourstore_currency,
+                    os."MainImage" AS ourstore_image,
+                    os."Cost" AS ourstore_cost,
+                    os."About" AS ourstore_about
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
 
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            filter_conditions &= Q(CategoryName__icontains=category_name)
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" = COALESCE(NULLIF(p."Offer", 0), p."RegularPrice")
 
-        # If product name is provided, include it in the filtering condition
-        if product_name:
-            product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-            product_name_conditions = Q()
-            numeric_tokens = []
+            '''
 
-            for token in product_name_tokens:
-                if token.isdigit():
-                    numeric_tokens.append(token)  # Collect numeric tokens for strict matching
-                else:
-                    product_name_conditions &= Q(ProductName__icontains=token)
+            # Dynamic filters
+            query_conditions = []
+            query_params = []
 
-            filter_conditions &= product_name_conditions
+            if brand_name:
+                query_conditions.append('LOWER(p."BrandName") = LOWER(%s) AND LOWER(os."BrandName") = LOWER(%s)')
+                query_params.extend([brand_name, brand_name])
 
-        # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-        our_store_products = (
-            OurStoreProduct.objects
-            .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-            .order_by('ProductName')  # Optionally order by product name or other fields
-        )
-
-        if not our_store_products.exists():
-            return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
-
-        results = []
-
-        for our_store_product in our_store_products:
-            # Check if numeric tokens (model numbers) exactly match
-            if product_name and numeric_tokens:
-                product_name_lower = our_store_product.ProductName.lower()
-                # Ensure all numeric tokens are present exactly
-                if not all(f" {token} " in f" {product_name_lower} " for token in numeric_tokens):
-                    continue  # Skip this product if it doesn't match all numeric tokens
-
-            my_price = our_store_product.MyPrice
-
-            # Fetch all vendors with a similar brand name and optional category or product name where prices are **equal** to MyPrice
-            vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (Q(Offer=my_price) | Q(RegularPrice=my_price))
-
-            # Apply category filter if provided
             if category_name:
-                vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
+                query_conditions.append('p."CategoryName" ILIKE %s')
+                query_params.append(f'%{category_name}%')
 
-            # Apply product name filter if provided
             if product_name:
-                vendor_product_name_conditions = Q()
-                for token in product_name_tokens:
-                    if token.isdigit():
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                    else:
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                vendor_filter_conditions &= vendor_product_name_conditions
+                query_conditions.append('os."ProductName" ILIKE %s')
+                query_params.append(f'%{product_name}%')
 
-            vendor_products = (
-                Product.objects
-                .filter(vendor_filter_conditions)
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'Currency')  # Fetch relevant fields
-                .order_by('ProductName')  # Optionally order by product name
-            )
+            if query_conditions:
+                query += " AND " + " AND ".join(query_conditions)
 
-            # Collect vendor data where vendor price is equal to our price
-            vendor_data = []
-            for vendor in vendor_products:
-                vendor_price = vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice']
+            with connection.cursor() as cursor:
+                cursor.execute(query, query_params)
+                columns = [col[0] for col in cursor.description]
+                model_number_result = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                print(f"SQL Query Result Count: {len(model_number_result)}")
+
+            # Prepare results for model number matches
+            product_map = {}
+            for product in model_number_result:
+                sku = product['ourstore_sku']
+                if sku not in product_map:
+                    product_map[sku] = {
+                        "ProductName": product['ourstore_product_name'],
+                        "SKU": product['ourstore_sku'],
+                        "MyPrice": product['ourstore_my_price'],
+                        "ModelNumber": product['ourstore_model_number'],
+                        "Currency": product['ourstore_currency'],
+                        "MainImage": product['ourstore_image'],
+                        "Cost": product['ourstore_cost'],
+                        "Brand": product['ourstore_brand_name'],
+                        "About": [product['ourstore_about']],
+                        "match_by": "ModelNumber",
+                        "VendorsWithEqualPrice": [], 
+                    }
                 
-                # Ensure that the vendor price is indeed equal to `my_price`
-                if vendor_price == my_price:
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor_price,
-                        'Currency': vendor['Currency'],
-                        'ProductName': vendor['ProductName'],
+                # Functions for calculating additional keys
+                def get_stock(obj):
+                    return "Instock" if obj['product_stock'] else "Out of stock"
+
+                def get_discounted_price(obj):
+                    return obj['product_offer_price'] if obj['product_offer_price'] else 0
+
+                def get_regular_price(obj):
+                    return obj['product_regular_price']
+
+                def get_price_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price:
+                        price_difference = our_product['MyPrice'] - retailer_price
+                        price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
+                        return round(price_match_percentage, 2)
+                    return 0
+
+                def get_net_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price and our_product['Cost']:
+                        net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
+                        return round(net_margin, 2)
+                    return 0
+
+                def get_discount(obj):
+                    if obj['product_offer_price'] and obj['product_regular_price'] and obj['product_regular_price'] != 0:
+                        discount_percentage = round(((obj['product_regular_price'] - obj['product_offer_price']) / obj['product_regular_price']) * 100, 2)
+                        return discount_percentage
+                    return 0
+
+
+                if product['ourstore_my_price'] == (product['product_offer_price'] or product['product_regular_price']):
+                    product_map[sku]["VendorsWithEqualPrice"].append({
+                        "VendorName": product['vendor_name'],  # Fetch the correct VendorName
+                        "SKU": product['product_sku'],
+                        "ModelNumber": product['product_model_number'],
+                        "Price": product['product_offer_price'] or product['product_regular_price'],  # Offer first, then RegularPrice
+                        "Currency": product['product_currency'],
+                        "ProductName": product['product_product_name'],
+                        "Stock": get_stock(product),
+                        "DiscountedPrice": get_discounted_price(product),
+                        "RegularPrice": get_regular_price(product),
+                        "PriceMatch": get_price_match(product_map[sku], product),
+                        "NetMatch": get_net_match(product_map[sku], product),
+                        "Discount": get_discount(product),
                     })
 
-            # Only include products where there are valid vendors with equal prices
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Currency": our_store_product.Currency,
-                    "VendorsWithEqualPrice": vendor_data
-                })
 
-        return Response(results)
+            # Filter out products with empty "VendorsWithHigherPrice"
+            total_matches_before_filter = len(product_map)  # Include all products in the count
+            print(f"Total Matches Before Filter: {total_matches_before_filter}")
+            filtered_results = [product for product in product_map.values() if product["VendorsWithEqualPrice"]]
 
-    
+            # Convert dict to list for response
+            final_result = filtered_results
+
+            # Apply pagination
+            paginator = Paginator(final_result, page_size)
+            page_data = paginator.page(page)
+
+            # Prepare the response
+            response_data = {
+                'products': page_data.object_list,
+                'page': page,
+                'page_size': page_size,
+                'next_page': page_data.has_next(),
+                'previous_page': page_data.has_previous(),
+                'total_matches': len(final_result)
+            }
+
+            return Response(response_data)
+
+        except EmptyPage:
+            return Response({'message': 'Page not found'}, status=404)
+
+        except Exception as e:
+            return Response({'message': str(e)}, status=404)
+
 
 
 class IntelligenceProductPriceDifference(generics.GenericAPIView):
-
     def get(self, request, *args, **kwargs):
-        # Get the brand name, category, and product name from user input (query parameters)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
-        product_name = request.GET.get('product_name', None)
+        try:
+            # Get user input parameters (optional)
+            brand_name = request.GET.get('brand_name', None)
+            category_name = request.GET.get('category_name', None)
+            product_name = request.GET.get('product_name', None)
 
-        # Validate that brand_name is provided
-        if not brand_name:
-            return Response({"error": "Brand name is required."}, status=400)
+            # Get pagination parameters
+            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page = int(request.GET.get('page', 1))  # Default to page 1
 
-        # Create a filtering condition that matches the brand name
-        filter_conditions = Q(BrandName__icontains=brand_name)
+            # Base SQL query for ModelNumber matching
+            query = '''
+                SELECT 
+                    p."ProductCode" AS product_product_code,
+                    p."ProductName" AS product_product_name,
+                    p."SKU" AS product_sku,
+                    p."ModelNumber" AS product_model_number,
+                    p."BrandName" AS product_brand_name,
+                    p."RegularPrice" AS product_regular_price,
+                    p."Offer" AS product_offer_price,
+                    p."Currency" AS product_currency,
+                    p."StockAvailability" AS product_stock,
+                    v."VendorName" AS vendor_name,  -- Fetch VendorName from Vendor model
+                    os."ProductCode" AS ourstore_product_code,
+                    os."ProductName" AS ourstore_product_name,
+                    os."SKU" AS ourstore_sku,
+                    os."ModelNumber" AS ourstore_model_number,
+                    os."BrandName" AS ourstore_brand_name,
+                    os."MyPrice" AS ourstore_my_price,
+                    os."Currency" AS ourstore_currency,
+                    os."MainImage" AS ourstore_image,
+                    os."Cost" AS ourstore_cost,
+                    os."About" AS ourstore_about
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE
+                    os."MyPrice" >= (COALESCE(p."Offer", p."RegularPrice") - 10) 
+                    AND os."MyPrice" <= (COALESCE(p."Offer", p."RegularPrice") + 10)
 
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            filter_conditions &= Q(CategoryName__icontains=category_name)
+            '''
 
-        # If product name is provided, include it in the filtering condition
-        if product_name:
-            product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-            product_name_conditions = Q()
-            numeric_tokens = []
+            # Dynamic filters
+            query_conditions = []
+            query_params = []
 
-            for token in product_name_tokens:
-                if token.isdigit():
-                    numeric_tokens.append(token)  # Collect numeric tokens for strict matching
-                else:
-                    product_name_conditions &= Q(ProductName__icontains=token)
+            if brand_name:
+                query_conditions.append('LOWER(p."BrandName") = LOWER(%s) AND LOWER(os."BrandName") = LOWER(%s)')
+                query_params.extend([brand_name, brand_name])
 
-            filter_conditions &= product_name_conditions
-
-        # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-        our_store_products = (
-            OurStoreProduct.objects
-            .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-            .order_by('ProductName')  # Optionally order by product name or other fields
-        )
-
-        if not our_store_products.exists():
-            return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
-
-        results = []
-
-        for our_store_product in our_store_products:
-            # Check if numeric tokens (model numbers) exactly match
-            if product_name and numeric_tokens:
-                product_name_lower = our_store_product.ProductName.lower()
-                # Ensure all numeric tokens are present exactly
-                if not all(f" {token} " in f" {product_name_lower} " for token in numeric_tokens):
-                    continue  # Skip this product if it doesn't match all numeric tokens
-
-            my_price = our_store_product.MyPrice
-
-            # Fetch all vendors with a similar brand name and optional category or product name
-            # where the price difference is within ±10 from MyPrice
-            vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (
-                Q(Offer__gte=my_price - 10, Offer__lte=my_price + 10) |
-                Q(RegularPrice__gte=my_price - 10, RegularPrice__lte=my_price + 10)
-            )
-
-            # Apply category filter if provided
             if category_name:
-                vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
+                query_conditions.append('p."CategoryName" ILIKE %s')
+                query_params.append(f'%{category_name}%')
 
-            # Apply product name filter if provided
             if product_name:
-                vendor_product_name_conditions = Q()
-                for token in product_name_tokens:
-                    if token.isdigit():
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                    else:
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                vendor_filter_conditions &= vendor_product_name_conditions
+                query_conditions.append('os."ProductName" ILIKE %s')
+                query_params.append(f'%{product_name}%')
 
-            vendor_products = (
-                Product.objects
-                .filter(vendor_filter_conditions)
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'Currency')  # Fetch relevant fields
-                .order_by('ProductName')  # Optionally order by product name
-            )
+            if query_conditions:
+                query += " AND " + " AND ".join(query_conditions)
 
-            # Collect vendor data where price difference is within ±10
-            vendor_data = []
-            for vendor in vendor_products:
-                vendor_price = vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice']
+            with connection.cursor() as cursor:
+                cursor.execute(query, query_params)
+                columns = [col[0] for col in cursor.description]
+                model_number_result = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                print(f"SQL Query Result Count: {len(model_number_result)}")
 
-                # Ensure that the vendor price is within ±10 of MyPrice
-                if my_price - 10 <= vendor_price <= my_price + 10:
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor_price,
-                        'Currency': vendor['Currency'],
-                        'ProductName': vendor['ProductName'],
+            # Prepare results for model number matches
+            product_map = {}
+            for product in model_number_result:
+                sku = product['ourstore_sku']
+                if sku not in product_map:
+                    product_map[sku] = {
+                        "ProductName": product['ourstore_product_name'],
+                        "SKU": product['ourstore_sku'],
+                        "MyPrice": product['ourstore_my_price'],
+                        "ModelNumber": product['ourstore_model_number'],
+                        "Currency": product['ourstore_currency'],
+                        "MainImage": product['ourstore_image'],
+                        "Cost": product['ourstore_cost'],
+                        "Brand": product['ourstore_brand_name'],
+                        "About": [product['ourstore_about']],
+                        "match_by": "ModelNumber",
+                        "Vendors": [], 
+                    }
+                
+                # Functions for calculating additional keys
+                def get_stock(obj):
+                    return "Instock" if obj['product_stock'] else "Out of stock"
+
+                def get_discounted_price(obj):
+                    return obj['product_offer_price'] if obj['product_offer_price'] else 0
+
+                def get_regular_price(obj):
+                    return obj['product_regular_price']
+
+                def get_price_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price:
+                        price_difference = our_product['MyPrice'] - retailer_price
+                        price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
+                        return round(price_match_percentage, 2)
+                    return 0
+
+                def get_net_match(our_product, obj):
+                    retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
+                    if our_product and retailer_price and our_product['Cost']:
+                        net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
+                        return round(net_margin, 2)
+                    return 0
+
+                def get_discount(obj):
+                    if obj['product_offer_price'] and obj['product_regular_price'] and obj['product_regular_price'] != 0:
+                        discount_percentage = round(((obj['product_regular_price'] - obj['product_offer_price']) / obj['product_regular_price']) * 100, 2)
+                        return discount_percentage
+                    return 0
+                
+
+                if product['ourstore_my_price'] > ((product['product_offer_price'] or product['product_regular_price']) - 10) \
+                and product['ourstore_my_price'] < ((product['product_offer_price'] or product['product_regular_price']) + 10):
+                    product_map[sku]["Vendors"].append({
+                        "VendorName": product['vendor_name'],  # Fetch the correct VendorName
+                        "SKU": product['product_sku'],
+                        "ModelNumber": product['product_model_number'],
+                        "Price": product['product_offer_price'] or product['product_regular_price'],  # Offer first, then RegularPrice
+                        "Currency": product['product_currency'],
+                        "ProductName": product['product_product_name'],
+                        "Stock": get_stock(product),
+                        "DiscountedPrice": get_discounted_price(product),
+                        "RegularPrice": get_regular_price(product),
+                        "PriceMatch": get_price_match(product_map[sku], product),
+                        "NetMatch": get_net_match(product_map[sku], product),
+                        "Discount": get_discount(product),
                     })
 
-            # Only include products where there are valid vendors with a price difference of ±10
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Currency": our_store_product.Currency,
-                    "VendorsWithPriceDifference": vendor_data
-                })
 
-        return Response(results)
+            # Filter out products with empty "VendorsWithHigherPrice"
+            total_matches_before_filter = len(product_map)  # Include all products in the count
+            print(f"Total Matches Before Filter: {total_matches_before_filter}")
+            filtered_results = [product for product in product_map.values() if product["Vendors"]]
+
+            # Convert dict to list for response
+            final_result = filtered_results
+
+            # Apply pagination
+            paginator = Paginator(final_result, page_size)
+            page_data = paginator.page(page)
+
+            # Prepare the response
+            response_data = {
+                'products': page_data.object_list,
+                'page': page,
+                'page_size': page_size,
+                'next_page': page_data.has_next(),
+                'previous_page': page_data.has_previous(),
+                'total_matches': len(final_result)
+            }
+
+            return Response(response_data)
+
+        except EmptyPage:
+            return Response({'message': 'Page not found'}, status=404)
+
+        except Exception as e:
+            return Response({'message': str(e)}, status=404)
+
 
     
 
 
-
-class IntelligenceProductPriceLower(generics.GenericAPIView):
+class ProductCountHigher(generics.GenericAPIView):
+    """
+    API View to return the total count of distinct products based on SKU.
+    """
 
     def get(self, request, *args, **kwargs):
-        # Get the brand name, category, and product name from user input (query parameters)
-        brand_name = request.GET.get('brand_name', None)
-        category_name = request.GET.get('category_name', None)
-        product_name = request.GET.get('product_name', None)
+        try:
+            # SQL query to count distinct products based on SKU
+            query_total = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+ 
+            '''
 
-        # Validate that brand_name is provided
-        if not brand_name:
-            return Response({"error": "Brand name is required."}, status=400)
+            query_higher = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" > COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
+ 
+            '''
 
-        # Create a filtering condition that matches the brand name
-        filter_conditions = Q(BrandName__icontains=brand_name)
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_total)
+                result = cursor.fetchone()
+                total_products = result[0] if result else 0
 
-        # If category name is provided, include it in the filtering condition
-        if category_name:
-            filter_conditions &= Q(CategoryName__icontains=category_name)
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_higher)
+                result = cursor.fetchone()
+                higher_products = result[0] if result else 0
 
-        # If product name is provided, include it in the filtering condition
-        if product_name:
-            product_name_tokens = product_name.lower().split()  # Tokenize product name for more flexible matching
-            product_name_conditions = Q()
-            numeric_tokens = []
 
-            for token in product_name_tokens:
-                if token.isdigit():
-                    numeric_tokens.append(token)  # Collect numeric tokens for strict matching
-                else:
-                    product_name_conditions &= Q(ProductName__icontains=token)
+            difference = total_products - higher_products
 
-            filter_conditions &= product_name_conditions
+            if total_products > 0:
+                higher_products_percentage = (higher_products/total_products) * 100
+                difference_percentage = ((total_products - higher_products) / total_products) * 100
+            else:
+                higher_products_percentage = 0 
+                difference_percentage = 0
+            # Return the total count as a response
+            return Response(
+                {'total_products_count': total_products,
+                'higher_products_count': higher_products,
+                'difference_count': difference,
+                'higher_products_percentage': round(higher_products_percentage, 2),
+                'difference_percentage': round(difference_percentage, 2),
+                'name': 'High Price SKUs'
+                },
+                )
 
-        # Fetch all matching OurStoreProduct using the brand name, category, and optional product name
-        our_store_products = (
-            OurStoreProduct.objects
-            .filter(filter_conditions)  # Match based on BrandName, CategoryName, and optionally ProductName
-            .order_by('ProductName')  # Optionally order by product name or other fields
-        )
+        except Exception as e:
+            # Handle errors and return appropriate response
+            return Response({'error': str(e)}, status=500)
+        
 
-        if not our_store_products.exists():
-            return Response({"error": "No products found for the given brand, category, or product name."}, status=404)
 
-        results = []
 
-        for our_store_product in our_store_products:
-            # Check if numeric tokens (model numbers) exactly match
-            if product_name and numeric_tokens:
-                product_name_lower = our_store_product.ProductName.lower()
-                # Ensure all numeric tokens are present exactly
-                if not all(f" {token} " in f" {product_name_lower} " for token in numeric_tokens):
-                    continue  # Skip this product if it doesn't match all numeric tokens
+class ProductCountLower(generics.GenericAPIView):
+    """
+    API View to return the total count of distinct products based on SKU.
+    """
 
-            my_price = our_store_product.MyPrice
+    def get(self, request, *args, **kwargs):
+        try:
+            # SQL query to count distinct products based on SKU
+            query_total = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+ 
+            '''
 
-            # Fetch all vendors with a similar brand name and optional category or product name who have a higher price than MyPrice
-            vendor_filter_conditions = Q(BrandName__icontains=brand_name) & (Q(Offer__gt=my_price) | Q(RegularPrice__gt=my_price))
+            query_lower = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" < COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
+ 
+            '''
 
-            # Apply category filter if provided
-            if category_name:
-                vendor_filter_conditions &= Q(CategoryName__icontains=category_name)
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_total)
+                result = cursor.fetchone()
+                total_products = result[0] if result else 0
 
-            # Apply product name filter if provided
-            if product_name:
-                vendor_product_name_conditions = Q()
-                for token in product_name_tokens:
-                    if token.isdigit():
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                    else:
-                        vendor_product_name_conditions &= Q(ProductName__icontains=token)
-                vendor_filter_conditions &= vendor_product_name_conditions
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_lower)
+                result = cursor.fetchone()
+                lower_products = result[0] if result else 0
 
-            # Fetch products from competitors that match strictly based on product name (no Pro/Plus mismatches)
-            vendor_products = (
-                Product.objects
-                .filter(vendor_filter_conditions)
-                .values('VendorCode__VendorName', 'Offer', 'RegularPrice', 'ProductName', 'Currency')  # Fetch relevant fields
-                .order_by('ProductName')  # Optionally order by product name
-            )
 
-            # Collect vendor data
-            vendor_data = []
-            for vendor in vendor_products:
-                # Stricter matching: Ensure the product name matches precisely (without Pro mismatches)
-                if self.is_strict_model_match(our_store_product.ProductName, vendor['ProductName']):
-                    vendor_data.append({
-                        'VendorName': vendor['VendorCode__VendorName'],
-                        'Price': vendor['Offer'] if vendor['Offer'] else vendor['RegularPrice'],
-                        'Currency': vendor['Currency'],
-                        'ProductName': vendor['ProductName'],
-                    })
+            difference = total_products - lower_products
 
-            # Only include products where there are valid vendors with higher prices
-            if vendor_data:
-                results.append({
-                    "ProductName": our_store_product.ProductName,  # Return the matched product name from OurStoreProduct
-                    "MyPrice": my_price,
-                    "Currency": our_store_product.Currency,
-                    "VendorsWithHigherPrice": vendor_data
-                })
+            if total_products > 0:
+                lower_products_percentage = (lower_products/total_products) * 100
+                difference_percentage = ((total_products - lower_products) / total_products) * 100
+            else:
+                lower_products_percentage = 0 
+                difference_percentage = 0
+            # Return the total count as a response
+            return Response(
+                {'total_products_count': total_products,
+                'lower_products_count': lower_products,
+                'difference_count': difference,
+                'lower_products_percentage': round(lower_products_percentage, 2),
+                'difference_percentage': round(difference_percentage, 2),
+                'name': 'Low Price SKUs'
+                },
+                )
 
-        return Response(results)
+        except Exception as e:
+            # Handle errors and return appropriate response
+            return Response({'error': str(e)}, status=500)
+        
 
-    def is_strict_model_match(self, our_product_name, vendor_product_name):
-        """Ensure that both product names refer to the same model, ignoring slight variations."""
-        # Normalize product names to lowercase
-        our_product_tokens = set(our_product_name.lower().split())
-        vendor_product_tokens = set(vendor_product_name.lower().split())
 
-        # Model-specific tokens that need to match exactly
-        model_keywords = {"pro", "max", "plus", "mini", "ultra"}
+class ProductCountEqual(generics.GenericAPIView):
+    """
+    API View to return the total count of distinct products based on SKU.
+    """
 
-        # Ensure that the basic product name tokens (e.g., "iphone" and "15") match
-        basic_tokens_match = our_product_tokens & vendor_product_tokens
-        if not basic_tokens_match:
-            return False
+    def get(self, request, *args, **kwargs):
+        try:
+            # SQL query to count distinct products based on SKU
+            query_total = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+ 
+            '''
 
-        # Ensure that if one product has a model-specific token (e.g., "Pro"), the other must also have it
-        our_model_tokens = our_product_tokens & model_keywords
-        vendor_model_tokens = vendor_product_tokens & model_keywords
+            query_equal = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" = COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
+ 
+            '''
 
-        if our_model_tokens != vendor_model_tokens:
-            return False
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_total)
+                result = cursor.fetchone()
+                total_products = result[0] if result else 0
 
-        return True
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_equal)
+                result = cursor.fetchone()
+                equal_products = result[0] if result else 0
+
+
+            difference = total_products - equal_products
+
+            if total_products > 0:
+                equal_products_percentage = (equal_products/total_products) * 100
+                difference_percentage = ((total_products - equal_products) / total_products) * 100
+            else:
+                equal_products_percentage = 0 
+                difference_percentage = 0
+            # Return the total count as a response
+            return Response(
+                {'total_products_count': total_products,
+                'equal_products_count': equal_products,
+                'difference_count': difference,
+                'equal_products_percentage': round(equal_products_percentage, 2),
+                'difference_percentage': round(difference_percentage, 2),
+                'name': 'Equal Price SKUs'
+                },
+                )
+
+        except Exception as e:
+            # Handle errors and return appropriate response
+            return Response({'error': str(e)}, status=500)
+
+
+class ProductCountRange(generics.GenericAPIView):
+    """
+    API View to return the total count of distinct products based on SKU.
+    """
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # SQL query to count distinct products based on SKU
+            query_total = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+ 
+            '''
+
+            query_range = '''
+                SELECT 
+                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                FROM 
+                    product_product p
+                JOIN 
+                    product_ourstoreproduct os
+                ON 
+                    (p."ModelNumber" = os."ModelNumber"
+                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
+                JOIN 
+                    product_vendor v  -- Join Vendor table
+                ON 
+                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
+                WHERE 
+                    os."MyPrice" >= (COALESCE(p."Offer", p."RegularPrice") - 10) 
+                    AND os."MyPrice" <= (COALESCE(p."Offer", p."RegularPrice") + 10)
+ 
+            '''
+
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_total)
+                result = cursor.fetchone()
+                total_products = result[0] if result else 0
+
+            # Execute the raw SQL query
+            with connection.cursor() as cursor:
+                cursor.execute(query_range)
+                result = cursor.fetchone()
+                range_products = result[0] if result else 0
+
+
+            difference = total_products - range_products
+
+            if total_products > 0:
+                range_products_percentage = (range_products/total_products) * 100
+                difference_percentage = ((total_products - range_products) / total_products) * 100
+            else:
+                range_products_percentage = 0 
+                difference_percentage = 0
+            # Return the total count as a response
+            return Response(
+                {'total_products_count': total_products,
+                'range_products_count': range_products,
+                'difference_count': difference,
+                'range_products_percentage': round(range_products_percentage, 2),
+                'difference_percentage': round(difference_percentage, 2),
+                'name': 'Average Price SKUs'
+                },
+                )
+
+        except Exception as e:
+            # Handle errors and return appropriate response
+            return Response({'error': str(e)}, status=500)
+
+
 
 
 
