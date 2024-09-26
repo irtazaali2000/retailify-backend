@@ -163,6 +163,8 @@ class CompareProductsView(generics.GenericAPIView):
             brand_name = request.GET.get('brand_name', None)
             category_name = request.GET.get('category_name', None)
             product_name = request.GET.get('product_name', None)
+            min_price = request.GET.get('min_price', None)
+            max_price = request.GET.get('max_price', None)
 
             # Get pagination parameters
             page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
@@ -221,6 +223,14 @@ class CompareProductsView(generics.GenericAPIView):
             if product_name:
                 query_conditions.append('os."ProductName" ILIKE %s')
                 query_params.append(f'%{product_name}%')
+            
+            if min_price:
+                query_conditions.append('os."MyPrice" >= %s')
+                query_params.append(min_price)
+
+            if max_price:
+                query_conditions.append('os."MyPrice" <= %s')
+                query_params.append(max_price)
 
             if query_conditions:
                 query += " AND " + " AND ".join(query_conditions)
@@ -758,7 +768,8 @@ class VendorDetailsByCategoryView(generics.GenericAPIView):
         except PageNotAnInteger:
             paginated_categories = paginator.page(1)
         except EmptyPage:
-            paginated_categories = paginator.page(paginator.num_pages)
+            return Response({'message': 'Page not found'}, status=404)
+            #paginated_categories = paginator.page(paginator.num_pages)
 
         # Prepare the response data for each category
         results = []
@@ -832,7 +843,8 @@ class VendorDetailsByBrandView(generics.GenericAPIView):
         except PageNotAnInteger:
             paginated_brands = paginator.page(1)
         except EmptyPage:
-            paginated_brands = paginator.page(paginator.num_pages)
+            return Response({'message': 'Page not found'}, status=404)
+            #paginated_brands = paginator.page(paginator.num_pages)
 
         # Prepare the response data for each brand
         results = []
@@ -1725,15 +1737,20 @@ class IntelligenceProductPriceDifference(generics.GenericAPIView):
 
 class ProductCountHigher(generics.GenericAPIView):
     """
-    API View to return the total count of distinct products based on SKU.
+    API View to return the total count of distinct products based on SKU, 
+    including higher-priced products.
     """
 
     def get(self, request, *args, **kwargs):
         try:
-            # SQL query to count distinct products based on SKU
-            query_total = '''
+            # SQL query to count distinct products and higher-priced products in one query
+            query = '''
                 SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                    COUNT(DISTINCT os."SKU") AS total_products,  -- Total distinct products
+                    COUNT(DISTINCT CASE 
+                        WHEN os."MyPrice" > COALESCE(NULLIF(p."Offer", 0), p."RegularPrice") 
+                        THEN os."SKU" 
+                    END) AS higher_products  -- Count distinct higher-priced products
                 FROM 
                     product_product p
                 JOIN 
@@ -1744,79 +1761,60 @@ class ProductCountHigher(generics.GenericAPIView):
                 JOIN 
                     product_vendor v  -- Join Vendor table
                 ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
- 
-            '''
-
-            query_higher = '''
-                SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
-                FROM 
-                    product_product p
-                JOIN 
-                    product_ourstoreproduct os
-                ON 
-                    (p."ModelNumber" = os."ModelNumber"
-                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
-                JOIN 
-                    product_vendor v  -- Join Vendor table
-                ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
-                WHERE 
-                    os."MyPrice" > COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
- 
+                    p."VendorCode_id" = v."VendorCode";  -- Use VendorCode_id for the foreign key
             '''
 
             # Execute the raw SQL query
             with connection.cursor() as cursor:
-                cursor.execute(query_total)
+                cursor.execute(query)
                 result = cursor.fetchone()
                 total_products = result[0] if result else 0
+                higher_products = result[1] if result else 0
 
-            # Execute the raw SQL query
-            with connection.cursor() as cursor:
-                cursor.execute(query_higher)
-                result = cursor.fetchone()
-                higher_products = result[0] if result else 0
-
-
+            # Calculate the difference and percentages
             difference = total_products - higher_products
 
             if total_products > 0:
-                higher_products_percentage = (higher_products/total_products) * 100
-                difference_percentage = ((total_products - higher_products) / total_products) * 100
+                higher_products_percentage = (higher_products / total_products) * 100
+                difference_percentage = (difference / total_products) * 100
             else:
-                higher_products_percentage = 0 
+                higher_products_percentage = 0
                 difference_percentage = 0
-            # Return the total count as a response
-            return Response(
-                {'total_products_count': total_products,
+
+            # Return the results in the response
+            return Response({
+                'total_products_count': total_products,
                 'higher_products_count': higher_products,
                 'difference_count': difference,
                 'higher_products_percentage': round(higher_products_percentage, 2),
                 'difference_percentage': round(difference_percentage, 2),
                 'name': 'High Price SKUs'
-                },
-                )
+            })
 
         except Exception as e:
-            # Handle errors and return appropriate response
+            # Handle errors and return an appropriate response
             return Response({'error': str(e)}, status=500)
+
         
 
 
 
 class ProductCountLower(generics.GenericAPIView):
     """
-    API View to return the total count of distinct products based on SKU.
+    API View to return the total count of distinct products based on SKU, 
+    including higher-priced products.
     """
 
     def get(self, request, *args, **kwargs):
         try:
-            # SQL query to count distinct products based on SKU
-            query_total = '''
+            # SQL query to count distinct products and higher-priced products in one query
+            query = '''
                 SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                    COUNT(DISTINCT os."SKU") AS total_products,  -- Total distinct products
+                    COUNT(DISTINCT CASE 
+                        WHEN os."MyPrice" < COALESCE(NULLIF(p."Offer", 0), p."RegularPrice") 
+                        THEN os."SKU" 
+                    END) AS lower_products  -- Count distinct lower-priced products
                 FROM 
                     product_product p
                 JOIN 
@@ -1827,78 +1825,59 @@ class ProductCountLower(generics.GenericAPIView):
                 JOIN 
                     product_vendor v  -- Join Vendor table
                 ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
- 
-            '''
-
-            query_lower = '''
-                SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
-                FROM 
-                    product_product p
-                JOIN 
-                    product_ourstoreproduct os
-                ON 
-                    (p."ModelNumber" = os."ModelNumber"
-                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
-                JOIN 
-                    product_vendor v  -- Join Vendor table
-                ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
-                WHERE 
-                    os."MyPrice" < COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
- 
+                    p."VendorCode_id" = v."VendorCode";  -- Use VendorCode_id for the foreign key
             '''
 
             # Execute the raw SQL query
             with connection.cursor() as cursor:
-                cursor.execute(query_total)
+                cursor.execute(query)
                 result = cursor.fetchone()
                 total_products = result[0] if result else 0
+                lower_products = result[1] if result else 0
 
-            # Execute the raw SQL query
-            with connection.cursor() as cursor:
-                cursor.execute(query_lower)
-                result = cursor.fetchone()
-                lower_products = result[0] if result else 0
-
-
+            # Calculate the difference and percentages
             difference = total_products - lower_products
 
             if total_products > 0:
-                lower_products_percentage = (lower_products/total_products) * 100
-                difference_percentage = ((total_products - lower_products) / total_products) * 100
+                lower_products_percentage = (lower_products / total_products) * 100
+                difference_percentage = (difference / total_products) * 100
             else:
-                lower_products_percentage = 0 
+                lower_products_percentage = 0
                 difference_percentage = 0
-            # Return the total count as a response
-            return Response(
-                {'total_products_count': total_products,
+
+            # Return the results in the response
+            return Response({
+                'total_products_count': total_products,
                 'lower_products_count': lower_products,
                 'difference_count': difference,
                 'lower_products_percentage': round(lower_products_percentage, 2),
                 'difference_percentage': round(difference_percentage, 2),
                 'name': 'Low Price SKUs'
-                },
-                )
+            })
 
         except Exception as e:
-            # Handle errors and return appropriate response
+            # Handle errors and return an appropriate response
             return Response({'error': str(e)}, status=500)
+
         
 
 
 class ProductCountEqual(generics.GenericAPIView):
     """
-    API View to return the total count of distinct products based on SKU.
+    API View to return the total count of distinct products based on SKU, 
+    including higher-priced products.
     """
 
     def get(self, request, *args, **kwargs):
         try:
-            # SQL query to count distinct products based on SKU
-            query_total = '''
+            # SQL query to count distinct products and higher-priced products in one query
+            query = '''
                 SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                    COUNT(DISTINCT os."SKU") AS total_products,  -- Total distinct products
+                    COUNT(DISTINCT CASE 
+                        WHEN os."MyPrice" = COALESCE(NULLIF(p."Offer", 0), p."RegularPrice") 
+                        THEN os."SKU" 
+                    END) AS equal_products  -- Count distinct higher-priced products
                 FROM 
                     product_product p
                 JOIN 
@@ -1909,77 +1888,59 @@ class ProductCountEqual(generics.GenericAPIView):
                 JOIN 
                     product_vendor v  -- Join Vendor table
                 ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
- 
-            '''
-
-            query_equal = '''
-                SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
-                FROM 
-                    product_product p
-                JOIN 
-                    product_ourstoreproduct os
-                ON 
-                    (p."ModelNumber" = os."ModelNumber"
-                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
-                JOIN 
-                    product_vendor v  -- Join Vendor table
-                ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
-                WHERE 
-                    os."MyPrice" = COALESCE(NULLIF(p."Offer", 0), p."RegularPrice");
- 
+                    p."VendorCode_id" = v."VendorCode";  -- Use VendorCode_id for the foreign key
             '''
 
             # Execute the raw SQL query
             with connection.cursor() as cursor:
-                cursor.execute(query_total)
+                cursor.execute(query)
                 result = cursor.fetchone()
                 total_products = result[0] if result else 0
+                equal_products = result[1] if result else 0
 
-            # Execute the raw SQL query
-            with connection.cursor() as cursor:
-                cursor.execute(query_equal)
-                result = cursor.fetchone()
-                equal_products = result[0] if result else 0
-
-
+            # Calculate the difference and percentages
             difference = total_products - equal_products
 
             if total_products > 0:
-                equal_products_percentage = (equal_products/total_products) * 100
-                difference_percentage = ((total_products - equal_products) / total_products) * 100
+                equal_products_percentage = (equal_products / total_products) * 100
+                difference_percentage = (difference / total_products) * 100
             else:
-                equal_products_percentage = 0 
+                equal_products_percentage = 0
                 difference_percentage = 0
-            # Return the total count as a response
-            return Response(
-                {'total_products_count': total_products,
+
+            # Return the results in the response
+            return Response({
+                'total_products_count': total_products,
                 'equal_products_count': equal_products,
                 'difference_count': difference,
                 'equal_products_percentage': round(equal_products_percentage, 2),
                 'difference_percentage': round(difference_percentage, 2),
                 'name': 'Equal Price SKUs'
-                },
-                )
+            })
 
         except Exception as e:
-            # Handle errors and return appropriate response
+            # Handle errors and return an appropriate response
             return Response({'error': str(e)}, status=500)
+        
+
 
 
 class ProductCountRange(generics.GenericAPIView):
     """
-    API View to return the total count of distinct products based on SKU.
+    API View to return the total count of distinct products based on SKU, 
+    including higher-priced products.
     """
 
     def get(self, request, *args, **kwargs):
         try:
-            # SQL query to count distinct products based on SKU
-            query_total = '''
+            # SQL query to count distinct products and higher-priced products in one query
+            query = '''
                 SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
+                    COUNT(DISTINCT os."SKU") AS total_products,  -- Total distinct products
+                    COUNT(DISTINCT CASE 
+                        WHEN os."MyPrice" >= (COALESCE(p."Offer", p."RegularPrice") - 10) AND os."MyPrice" <= (COALESCE(p."Offer", p."RegularPrice") + 10) 
+                        THEN os."SKU" 
+                    END) AS range_products  -- Count distinct higher-priced products
                 FROM 
                     product_product p
                 JOIN 
@@ -1990,64 +1951,38 @@ class ProductCountRange(generics.GenericAPIView):
                 JOIN 
                     product_vendor v  -- Join Vendor table
                 ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
- 
-            '''
-
-            query_range = '''
-                SELECT 
-                    COUNT(DISTINCT os."SKU") AS total_products  -- Count distinct products based on SKU
-                FROM 
-                    product_product p
-                JOIN 
-                    product_ourstoreproduct os
-                ON 
-                    (p."ModelNumber" = os."ModelNumber"
-                    OR p."ModelNumber" LIKE TRIM(BOTH FROM os."ModelNumber"))
-                JOIN 
-                    product_vendor v  -- Join Vendor table
-                ON 
-                    p."VendorCode_id" = v."VendorCode"  -- Use VendorCode_id for the foreign key
-                WHERE 
-                    os."MyPrice" >= (COALESCE(p."Offer", p."RegularPrice") - 10) 
-                    AND os."MyPrice" <= (COALESCE(p."Offer", p."RegularPrice") + 10)
- 
+                    p."VendorCode_id" = v."VendorCode";  -- Use VendorCode_id for the foreign key
             '''
 
             # Execute the raw SQL query
             with connection.cursor() as cursor:
-                cursor.execute(query_total)
+                cursor.execute(query)
                 result = cursor.fetchone()
                 total_products = result[0] if result else 0
+                range_products = result[1] if result else 0
 
-            # Execute the raw SQL query
-            with connection.cursor() as cursor:
-                cursor.execute(query_range)
-                result = cursor.fetchone()
-                range_products = result[0] if result else 0
-
-
+            # Calculate the difference and percentages
             difference = total_products - range_products
 
             if total_products > 0:
-                range_products_percentage = (range_products/total_products) * 100
-                difference_percentage = ((total_products - range_products) / total_products) * 100
+                range_products_percentage = (range_products / total_products) * 100
+                difference_percentage = (difference / total_products) * 100
             else:
-                range_products_percentage = 0 
+                range_products_percentage = 0
                 difference_percentage = 0
-            # Return the total count as a response
-            return Response(
-                {'total_products_count': total_products,
+
+            # Return the results in the response
+            return Response({
+                'total_products_count': total_products,
                 'range_products_count': range_products,
                 'difference_count': difference,
                 'range_products_percentage': round(range_products_percentage, 2),
                 'difference_percentage': round(difference_percentage, 2),
                 'name': 'Average Price SKUs'
-                },
-                )
+            })
 
         except Exception as e:
-            # Handle errors and return appropriate response
+            # Handle errors and return an appropriate response
             return Response({'error': str(e)}, status=500)
 
 
