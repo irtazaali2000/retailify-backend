@@ -841,7 +841,7 @@ class VendorDetailsByBrandView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         # Get all brands and annotate them with the number of products from the OurStoreProduct model
         brands = (
-            OurStoreProduct.objects.values('BrandName')
+            OurStoreProduct.objects.filter(BrandName__gt='').values('BrandName')
             .annotate(product_count=Count('ProductCode'))
             .order_by('-product_count')
         )
