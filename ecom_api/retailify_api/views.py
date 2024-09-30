@@ -271,16 +271,18 @@ class CompareProductsView(generics.GenericAPIView):
                     return obj['product_regular_price']
 
                 def get_price_match(our_product, obj):
+                    # Ensure that MyPrice and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price:
+                    if our_product and retailer_price is not None and our_product['MyPrice'] is not None:
                         price_difference = our_product['MyPrice'] - retailer_price
                         price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
                         return round(price_match_percentage, 2)
                     return 0
 
                 def get_net_match(our_product, obj):
+                    # Ensure that Cost and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price and our_product['Cost']:
+                    if our_product and retailer_price is not None and our_product['Cost'] is not None:
                         net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
                         return round(net_margin, 2)
                     return 0
@@ -1144,16 +1146,18 @@ class IntelligenceProductPriceLower(generics.GenericAPIView):
                     return obj['product_regular_price']
 
                 def get_price_match(our_product, obj):
+                    # Ensure that MyPrice and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price:
+                    if our_product and retailer_price is not None and our_product['MyPrice'] is not None:
                         price_difference = our_product['MyPrice'] - retailer_price
                         price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
                         return round(price_match_percentage, 2)
                     return 0
 
                 def get_net_match(our_product, obj):
+                    # Ensure that Cost and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price and our_product['Cost']:
+                    if our_product and retailer_price is not None and our_product['Cost'] is not None:
                         net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
                         return round(net_margin, 2)
                     return 0
@@ -1322,16 +1326,18 @@ class IntelligenceProductPriceHigher(generics.GenericAPIView):
                     return obj['product_regular_price']
 
                 def get_price_match(our_product, obj):
+                    # Ensure that MyPrice and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price:
+                    if our_product and retailer_price is not None and our_product['MyPrice'] is not None:
                         price_difference = our_product['MyPrice'] - retailer_price
                         price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
                         return round(price_match_percentage, 2)
                     return 0
 
                 def get_net_match(our_product, obj):
+                    # Ensure that Cost and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price and our_product['Cost']:
+                    if our_product and retailer_price is not None and our_product['Cost'] is not None:
                         net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
                         return round(net_margin, 2)
                     return 0
@@ -1502,16 +1508,18 @@ class IntelligenceProductPriceEqual(generics.GenericAPIView):
                     return obj['product_regular_price']
 
                 def get_price_match(our_product, obj):
+                    # Ensure that MyPrice and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price:
+                    if our_product and retailer_price is not None and our_product['MyPrice'] is not None:
                         price_difference = our_product['MyPrice'] - retailer_price
                         price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
                         return round(price_match_percentage, 2)
                     return 0
 
                 def get_net_match(our_product, obj):
+                    # Ensure that Cost and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price and our_product['Cost']:
+                    if our_product and retailer_price is not None and our_product['Cost'] is not None:
                         net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
                         return round(net_margin, 2)
                     return 0
@@ -1679,16 +1687,18 @@ class IntelligenceProductPriceDifference(generics.GenericAPIView):
                     return obj['product_regular_price']
 
                 def get_price_match(our_product, obj):
+                    # Ensure that MyPrice and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price:
+                    if our_product and retailer_price is not None and our_product['MyPrice'] is not None:
                         price_difference = our_product['MyPrice'] - retailer_price
                         price_match_percentage = (price_difference / our_product['MyPrice']) * 100 if our_product['MyPrice'] != 0 else 0
                         return round(price_match_percentage, 2)
                     return 0
 
                 def get_net_match(our_product, obj):
+                    # Ensure that Cost and retailer_price are not None
                     retailer_price = obj['product_offer_price'] if obj['product_offer_price'] else obj['product_regular_price']
-                    if our_product and retailer_price and our_product['Cost']:
+                    if our_product and retailer_price is not None and our_product['Cost'] is not None:
                         net_margin = (retailer_price - our_product['Cost']) / our_product['Cost'] * 100
                         return round(net_margin, 2)
                     return 0
