@@ -29,191 +29,211 @@ class AmazonSpider(Spider):
         'Connection': 'keep-alive',
     }
 
-    cat_products_urls = {
+    # cat_products_urls = {
 
-                'Mobiles Tablets & Wearable': {
-                    'Mobile Phones': 'https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar',
-                    #'Mobile Accessories': 'https://www.amazon.ae/s?rh=n%3A12303803031&fs=true&ref=lp_12303803031_sar',
-                    #'Tablets & Ereaders': 'https://www.amazon.ae/gp/browse.html?node=12050253031&ref_=nav_em_mob_tablets_0_2_5_3',
-                    #'Wearables': 'https://www.amazon.ae/s?rh=n%3A12303756031&fs=true&ref=lp_12303756031_sar',
-                    #'Mobile Accessories': 'https://www.amazon.ae/s?rh=n%3A15415115031&fs=true&ref=lp_15415115031_sar',
-                    #'Mobile Accessories': 'https://www.amazon.ae/gp/browse.html?node=12304344031&ref_=nav_em_mob_power_banks_0_2_5_6',
-                },
+    #             # Mobiles Tablets & Wearable
+    #             'Electronics': {
+    #                 'Mobile Phones': 'https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar',
+    #                 #'Mobile Accessories': 'https://www.amazon.ae/s?rh=n%3A12303803031&fs=true&ref=lp_12303803031_sar',
+    #                 #'Tablets & Ereaders': 'https://www.amazon.ae/gp/browse.html?node=12050253031&ref_=nav_em_mob_tablets_0_2_5_3',
+    #                 #'Wearables': 'https://www.amazon.ae/s?rh=n%3A12303756031&fs=true&ref=lp_12303756031_sar',
+    #                 #'Mobile Accessories': 'https://www.amazon.ae/s?rh=n%3A15415115031&fs=true&ref=lp_15415115031_sar',
+    #                 #'Mobile Accessories': 'https://www.amazon.ae/gp/browse.html?node=12304344031&ref_=nav_em_mob_power_banks_0_2_5_6',
+    #             },
+
+    #             # Computers
+    #             'Electronics': {
+    #                 'Laptops': "https://www.amazon.ae/s?rh=n%3A12050245031&fs=true&ref=lp_12050245031_sar",
+    #                 'Desktop': "https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714144497&rnid=11497746031&ref=lp_15387140031_nr_n_4",
+    #                 #'Monitors': 'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050246031&dc&qid=1714144497&rnid=11497746031&ref=lp_15387140031_nr_n_6',
+    #                 #'Hard Drives & Storage': 'https://www.amazon.ae/s?rh=n%3A12050241031&fs=true&ref=lp_12050241031_sar',
+    #                # 'Networking & Wireless': 'https://www.amazon.ae/gp/browse.html?node=12050247031&ref_=nav_em_pc_networking_0_2_6_6',
+    #                 #'Mouse, Keyboards & Input': 'https://www.amazon.ae/gp/browse.html?node=12050260031&ref_=nav_em_pc_key_mouse_0_2_6_7',
+    #                 'Desktop': 'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714378967&rnid=11497746031&ref=lp_15387140031_nr_n_4',
+    #                 #'Computer Parts': 'https://www.amazon.ae/s?rh=n%3A26955028031&fs=true&ref=lp_26955028031_sar',
+    #                 #'Computers Accessories': 'https://www.amazon.ae/s?rh=n%3A12050239031&fs=true&ref=lp_12050239031_sar',
+    #                 #'Printers & Ink': 'https://www.amazon.ae/s?rh=n%3A12050248031&fs=true&ref=lp_12050248031_sar',  
+    #             },
+
+    #             # 'Arts & Crafts': {
+    #             #     'Art Tools And Accessories': 'https://www.amazon.ae/b?node=15172571031&ref=lp_15150351031_nr_n_0',
+    #             # },
+
+    #             # 'Furniture, Home And Garden': {
+    #             #     'Furniture': 'https://www.amazon.ae/b?node=15172574031&ref=lp_15150351031_nr_n_3',
+    #             #     'Home Decor And Accessories': 'https://www.amazon.ae/s?rh=n%3A12148101031&fs=true&ref=lp_12148101031_sar',
+    #             #     'Furniture': 'https://www.amazon.ae/s?rh=n%3A12148100031&fs=true&ref=lp_12148100031_sar',
+    #             #     'Bathroom Accessories': 'https://www.amazon.ae/s?rh=n%3A11497916031&fs=true&ref=lp_11497916031_sar',
+    #             #     'Outdoor': 'https://www.amazon.ae/s?rh=n%3A15149894031&fs=true&ref=lp_15149894031_sar',
+
+    #             # },
+
+    #             # 'Office Supplies': {
+    #             #     'Paper Products': 'https://www.amazon.ae/b?node=15172576031&ref=lp_15150351031_nr_n_5',
+    #             #     'Stationary': 'https://www.amazon.ae/b?node=15172578031&ref=lp_15150351031_nr_n_7',
+    #             #     'Stationary': 'https://www.amazon.ae/b?node=15172579031&ref=lp_15150351031_nr_n_8',
+    #             #     'Stationary': 'https://www.amazon.ae/gp/browse.html?node=11996021031&ref_=nav_em_sl_k_bags_0_2_10_8',
+    #             #     'Paper Products': 'https://www.amazon.ae/s?rh=n%3A21246379031&fs=true&ref=lp_21246379031_sar',
+    #             # },
+
+
+    #             # Video, Lcd & Oled
+    #             'Electronics': {
+    #                 'Tv': 'https://www.amazon.ae/s?rh=n%3A12303800031&fs=true&ref=lp_12303800031_sar',
+    #                 #'Home Theater': 'https://www.amazon.ae/gp/browse.html?node=12303794031&ref_=nav_em_elec_audio_video_0_2_7_6'
+    #             },
                 
-                'Computers': {
-                    'Laptops': "https://www.amazon.ae/s?rh=n%3A12050245031&fs=true&ref=lp_12050245031_sar",
-                    'Desktop': "https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714144497&rnid=11497746031&ref=lp_15387140031_nr_n_4",
-                    #'Monitors': 'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050246031&dc&qid=1714144497&rnid=11497746031&ref=lp_15387140031_nr_n_6',
-                    #'Hard Drives & Storage': 'https://www.amazon.ae/s?rh=n%3A12050241031&fs=true&ref=lp_12050241031_sar',
-                   # 'Networking & Wireless': 'https://www.amazon.ae/gp/browse.html?node=12050247031&ref_=nav_em_pc_networking_0_2_6_6',
-                    #'Mouse, Keyboards & Input': 'https://www.amazon.ae/gp/browse.html?node=12050260031&ref_=nav_em_pc_key_mouse_0_2_6_7',
-                    'Desktop': 'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714378967&rnid=11497746031&ref=lp_15387140031_nr_n_4',
-                    #'Computer Parts': 'https://www.amazon.ae/s?rh=n%3A26955028031&fs=true&ref=lp_26955028031_sar',
-                    #'Computers Accessories': 'https://www.amazon.ae/s?rh=n%3A12050239031&fs=true&ref=lp_12050239031_sar',
-                    #'Printers & Ink': 'https://www.amazon.ae/s?rh=n%3A12050248031&fs=true&ref=lp_12050248031_sar',  
-                },
+    #             # Camcorders & Cameras
+    #             'Electronics': {
+    #                 'Digital Cameras': 'https://www.amazon.ae/s?rh=n%3A12303745031&fs=true&ref=lp_12303745031_sar',
 
-                # 'Arts & Crafts': {
-                #     'Art Tools And Accessories': 'https://www.amazon.ae/b?node=15172571031&ref=lp_15150351031_nr_n_0',
-                # },
+    #             },
 
-                # 'Furniture, Home And Garden': {
-                #     'Furniture': 'https://www.amazon.ae/b?node=15172574031&ref=lp_15150351031_nr_n_3',
-                #     'Home Decor And Accessories': 'https://www.amazon.ae/s?rh=n%3A12148101031&fs=true&ref=lp_12148101031_sar',
-                #     'Furniture': 'https://www.amazon.ae/s?rh=n%3A12148100031&fs=true&ref=lp_12148100031_sar',
-                #     'Bathroom Accessories': 'https://www.amazon.ae/s?rh=n%3A11497916031&fs=true&ref=lp_11497916031_sar',
-                #     'Outdoor': 'https://www.amazon.ae/s?rh=n%3A15149894031&fs=true&ref=lp_15149894031_sar',
+    #             # 'Video Games & Consoles': {
+    #             #     'Consoles': 'https://www.amazon.ae/s?rh=n%3A11601383031&fs=true&ref=lp_11601383031_sar',
 
-                # },
+    #             # },
 
-                # 'Office Supplies': {
-                #     'Paper Products': 'https://www.amazon.ae/b?node=15172576031&ref=lp_15150351031_nr_n_5',
-                #     'Stationary': 'https://www.amazon.ae/b?node=15172578031&ref=lp_15150351031_nr_n_7',
-                #     'Stationary': 'https://www.amazon.ae/b?node=15172579031&ref=lp_15150351031_nr_n_8',
-                #     'Stationary': 'https://www.amazon.ae/gp/browse.html?node=11996021031&ref_=nav_em_sl_k_bags_0_2_10_8',
-                #     'Paper Products': 'https://www.amazon.ae/s?rh=n%3A21246379031&fs=true&ref=lp_21246379031_sar',
-                # },
 
-                'Video, Lcd & Oled': {
-                    'Tv': 'https://www.amazon.ae/s?rh=n%3A12303800031&fs=true&ref=lp_12303800031_sar',
-                    #'Home Theater': 'https://www.amazon.ae/gp/browse.html?node=12303794031&ref_=nav_em_elec_audio_video_0_2_7_6'
-                },
-                
-                'Camcorders & Cameras': {
-                    'Digital Cameras': 'https://www.amazon.ae/s?rh=n%3A12303745031&fs=true&ref=lp_12303745031_sar',
+    #             # Audio, Headphones & Music Players
+    #             'Electronics': {
+    #                 'Headphones & Speakers': 'https://www.amazon.ae/s?rh=n%3A12303875031&fs=true&ref=lp_12303875031_sar',
+    #                 'Headphones & Speakers': 'https://www.amazon.ae/s?rh=n%3A12303788031&fs=true&ref=lp_12303788031_sar',
+    #             },
 
-                },
+    #             # 'Musical Instruments': {
+    #             #     'Amplifiers & Effects Instruments': 'https://www.amazon.ae/b?node=15176028031&ref=lp_15150237031_nr_n_0',
+    #             #     'Guitar Instruments': 'https://www.amazon.ae/s?rh=n%3A15176029031&fs=true&ref=lp_15176029031_sar',
+    #             #     'Drums & Percussions Instruments': 'https://www.amazon.ae/s?rh=n%3A15176031031&fs=true&ref=lp_15176031031_sar',
+    #             #     'Guitar Instruments': 'https://www.amazon.ae/b?node=15176033031&ref=lp_15150237031_nr_n_5',
+    #             #     'Guitar Instruments': 'https://www.amazon.ae/s?rh=n%3A27009013031&fs=true&ref=lp_27009013031_sar',
+    #             #     'Keyboards & Midi Instruments': 'https://www.amazon.ae/b?node=15176037031&ref=lp_15150237031_nr_n_10',
+    #             #     'Orchestral Strings Instruments': 'https://www.amazon.ae/s?rh=n%3A15176039031&fs=true&ref=lp_15176039031_sar',
+    #             #     'Folk & Woodwind Instruments': 'https://www.amazon.ae/s?rh=n%3A15176041031&fs=true&ref=lp_15176041031_sar',
+    #             # },
 
-                # 'Video Games & Consoles': {
-                #     'Consoles': 'https://www.amazon.ae/s?rh=n%3A11601383031&fs=true&ref=lp_11601383031_sar',
+    #             # 'Home Appliances': {
+    #             #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16566535031&fs=true&ref=lp_16566535031_sar',
+    #             #     'Home Necessities': 'https://www.amazon.ae/s?rh=n%3A16450420031&fs=true&ref=lp_16450420031_sar',
+    #             #     'Kitchen Appliances': 'https://www.amazon.ae/gp/browse.html?node=15298040031&ref_=nav_em_appl_coffee_0_2_7_15',
+    #             #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16400439031&fs=true&ref=lp_16400439031_sar',
+    #             #     'Vacuum Cleaners': 'https://www.amazon.ae/gp/browse.html?node=12134247031&ref_=nav_em_appl_vacuums_0_2_7_17',
+    #             #     'Kitchen Appliances': 'https://www.amazon.ae/gp/browse.html?node=15174961031&ref_=nav_em_appl_refrigerators_0_2_7_18',
+    #             #     'Washers & Dryers': 'https://www.amazon.ae/gp/browse.html?node=15174965031&ref_=nav_em_appl_washing_machine_0_2_7_19',
+    #             #     'Washers & Dryers': 'https://www.amazon.ae/s?rh=n%3A15160105031&fs=true&ref=lp_15160105031_sar',
+    #             #     'Washers & Dryers': 'https://www.amazon.ae/s?rh=n%3A21098590031&fs=true&ref=lp_21098590031_sar',
+    #             #     'Home Appliances Accessories': 'https://www.amazon.ae/s?rh=n%3A11601269031&fs=true&ref=lp_11601269031_sar',
+    #             #     'Lighting': 'https://www.amazon.ae/s?rh=n%3A16566537031&fs=true&ref=lp_16566537031_sar',
+    #             #     'Home Appliances Accessories': 'https://www.amazon.ae/s?rh=n%3A12148103031&fs=true&ref=lp_12148103031_sar',
+    #             #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16402718031&fs=true&ref=lp_16402718031_sar',
+    #             #     #'Home Appliances Accessories': '',
 
-                # },
+    #             # },
 
-                'Audio, Headphones & Music Players': {
-                    'Headphones & Speakers': 'https://www.amazon.ae/s?rh=n%3A12303875031&fs=true&ref=lp_12303875031_sar',
-                    'Headphones & Speakers': 'https://www.amazon.ae/s?rh=n%3A12303788031&fs=true&ref=lp_12303788031_sar',
-                },
+    #             # 'Fashion': {
+    #             #     'Women Clothing': 'https://www.amazon.ae/s?k=women+clothing&rh=n%3A11995873031&ref=nb_sb_noss',
+    #             #     'Women Jewellery': 'https://www.amazon.ae/s?rh=n%3A11995892031&fs=true&ref=lp_11995892031_sar',
+    #             #     'Women Sportswear': 'https://www.amazon.ae/s?rh=n%3A11996189031&fs=true&ref=lp_11996189031_sar',
+    #             #     'Women Clothing': 'https://www.amazon.ae/s?rh=n%3A11996199031&fs=true&ref=lp_11996199031_sar',
+    #             #     'Women Clothing': 'https://www.amazon.ae/s?bbn=21648677031&rh=n%3A11497631031%2Cn%3A%2111497636031%2Cn%3A%2111497638031%2Cn%3A%2121611470031%2Cn%3A%2121611471031%2Cn%3A%2121648675031%2Cn%3A%2121648676031%2Cn%3A21648677031%2Cn%3A11995849031&dc&fst=as%3Aoff&qid=1611475788&rnid=11497632031&ref=nav_em_sl_w_outlet_0_2_8_7',
+    #             #     'Women Shoes': 'https://www.amazon.ae/s?rh=n%3A11995893031&fs=true&ref=lp_11995893031_sar',
+    #             #     'Women Bags': 'https://www.amazon.ae/gp/browse.html?node=11995843031&ref_=nav_em_sl_luggage_back_0_2_8_10',
+    #             #     'Women Bags': 'https://www.amazon.ae/gp/browse.html?node=11995891031&ref_=nav_em_sl_w_bags_wallets_0_2_8_11',
+    #             #     'Women Accessories': 'https://www.amazon.ae/s?rh=n%3A11996178031&fs=true&ref=lp_11996178031_sar',
+    #             #     'Women Shoes': 'https://www.amazon.ae/gp/browse.html?node=11996234031&ref_=nav_em_sl_w_shoes_spt_0_2_8_13',
+    #             #     'Women Perfumes': 'https://www.amazon.ae/gp/browse.html?node=12149502031&ref_=nav_em_perfume_women_0_2_11_10',
 
-                # 'Musical Instruments': {
-                #     'Amplifiers & Effects Instruments': 'https://www.amazon.ae/b?node=15176028031&ref=lp_15150237031_nr_n_0',
-                #     'Guitar Instruments': 'https://www.amazon.ae/s?rh=n%3A15176029031&fs=true&ref=lp_15176029031_sar',
-                #     'Drums & Percussions Instruments': 'https://www.amazon.ae/s?rh=n%3A15176031031&fs=true&ref=lp_15176031031_sar',
-                #     'Guitar Instruments': 'https://www.amazon.ae/b?node=15176033031&ref=lp_15150237031_nr_n_5',
-                #     'Guitar Instruments': 'https://www.amazon.ae/s?rh=n%3A27009013031&fs=true&ref=lp_27009013031_sar',
-                #     'Keyboards & Midi Instruments': 'https://www.amazon.ae/b?node=15176037031&ref=lp_15150237031_nr_n_10',
-                #     'Orchestral Strings Instruments': 'https://www.amazon.ae/s?rh=n%3A15176039031&fs=true&ref=lp_15176039031_sar',
-                #     'Folk & Woodwind Instruments': 'https://www.amazon.ae/s?rh=n%3A15176041031&fs=true&ref=lp_15176041031_sar',
-                # },
+    #             #     'Men Clothing': 'https://www.amazon.ae/s?k=men+clothing&rh=n%3A11995873031&ref=nb_sb_noss',
+    #             #     'Men Sportswear': 'https://www.amazon.ae/s?rh=n%3A11996059031&fs=true&ref=lp_11996059031_sar',
+    #             #     'Men Accessories': 'https://www.amazon.ae/gp/browse.html?node=11995872031&ref_=nav_em_sl_m_accessories_0_2_9_5',
+    #             #     'Men Clothing': 'https://www.amazon.ae/gp/browse.html?node=11996075031&ref_=nav_em_sl_m_underwear_0_2_9_6',
+    #             #     'Men Clothing': 'https://www.amazon.ae/s?bbn=21648677031&rh=n%3A11497631031%2Cn%3A%2111497636031%2Cn%3A%2111497638031%2Cn%3A%2121611470031%2Cn%3A%2121611471031%2Cn%3A%2121648675031%2Cn%3A%2121648676031%2Cn%3A21648677031%2Cn%3A11995844031&dc&fst=as%3Aoff&qid=1611475788&rnid=11497632031&ref=nav_em_sl_m_outlet_0_2_9_7',
+    #             #     'Men Shoes': 'https://www.amazon.ae/s?rh=n%3A11995876031&fs=true&ref=lp_11995876031_sar',
+    #             #     'Men Bags': 'https://www.amazon.ae/gp/browse.html?node=11995874031&ref_=nav_em_sl_m_bags_wallets_0_2_9_10',
+    #             #     'Men Accessories': 'https://www.amazon.ae/s?rh=n%3A11996046031&fs=true&ref=lp_11996046031_sar',
+    #             #     'Men Bags': 'https://www.amazon.ae/gp/browse.html?node=11995843031&ref_=nav_em_sl_luggage_back_0_2_9_12',
+    #             #     'Men Shoes': 'https://www.amazon.ae/s?rh=n%3A11996088031&fs=true&ref=lp_11996088031_sar',
+    #             #     'Men Perfumes': 'https://www.amazon.ae/gp/browse.html?node=12149499031&ref_=nav_em_perfume_men_0_2_11_9',
 
-                # 'Home Appliances': {
-                #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16566535031&fs=true&ref=lp_16566535031_sar',
-                #     'Home Necessities': 'https://www.amazon.ae/s?rh=n%3A16450420031&fs=true&ref=lp_16450420031_sar',
-                #     'Kitchen Appliances': 'https://www.amazon.ae/gp/browse.html?node=15298040031&ref_=nav_em_appl_coffee_0_2_7_15',
-                #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16400439031&fs=true&ref=lp_16400439031_sar',
-                #     'Vacuum Cleaners': 'https://www.amazon.ae/gp/browse.html?node=12134247031&ref_=nav_em_appl_vacuums_0_2_7_17',
-                #     'Kitchen Appliances': 'https://www.amazon.ae/gp/browse.html?node=15174961031&ref_=nav_em_appl_refrigerators_0_2_7_18',
-                #     'Washers & Dryers': 'https://www.amazon.ae/gp/browse.html?node=15174965031&ref_=nav_em_appl_washing_machine_0_2_7_19',
-                #     'Washers & Dryers': 'https://www.amazon.ae/s?rh=n%3A15160105031&fs=true&ref=lp_15160105031_sar',
-                #     'Washers & Dryers': 'https://www.amazon.ae/s?rh=n%3A21098590031&fs=true&ref=lp_21098590031_sar',
-                #     'Home Appliances Accessories': 'https://www.amazon.ae/s?rh=n%3A11601269031&fs=true&ref=lp_11601269031_sar',
-                #     'Lighting': 'https://www.amazon.ae/s?rh=n%3A16566537031&fs=true&ref=lp_16566537031_sar',
-                #     'Home Appliances Accessories': 'https://www.amazon.ae/s?rh=n%3A12148103031&fs=true&ref=lp_12148103031_sar',
-                #     'Kitchen Appliances': 'https://www.amazon.ae/s?rh=n%3A16402718031&fs=true&ref=lp_16402718031_sar',
-                #     #'Home Appliances Accessories': '',
+    #             # },
 
-                # },
+    #             # 'Men & Women Watches': {
+    #             #     'Women Watches': 'https://www.amazon.ae/s?rh=n%3A11995894031&fs=true&ref=lp_11995894031_sar',
+    #             #     'Men Watches': 'https://www.amazon.ae/s?rh=n%3A11995877031&fs=true&ref=lp_11995877031_sar',
+    #             # },
 
-                # 'Fashion': {
-                #     'Women Clothing': 'https://www.amazon.ae/s?k=women+clothing&rh=n%3A11995873031&ref=nb_sb_noss',
-                #     'Women Jewellery': 'https://www.amazon.ae/s?rh=n%3A11995892031&fs=true&ref=lp_11995892031_sar',
-                #     'Women Sportswear': 'https://www.amazon.ae/s?rh=n%3A11996189031&fs=true&ref=lp_11996189031_sar',
-                #     'Women Clothing': 'https://www.amazon.ae/s?rh=n%3A11996199031&fs=true&ref=lp_11996199031_sar',
-                #     'Women Clothing': 'https://www.amazon.ae/s?bbn=21648677031&rh=n%3A11497631031%2Cn%3A%2111497636031%2Cn%3A%2111497638031%2Cn%3A%2121611470031%2Cn%3A%2121611471031%2Cn%3A%2121648675031%2Cn%3A%2121648676031%2Cn%3A21648677031%2Cn%3A11995849031&dc&fst=as%3Aoff&qid=1611475788&rnid=11497632031&ref=nav_em_sl_w_outlet_0_2_8_7',
-                #     'Women Shoes': 'https://www.amazon.ae/s?rh=n%3A11995893031&fs=true&ref=lp_11995893031_sar',
-                #     'Women Bags': 'https://www.amazon.ae/gp/browse.html?node=11995843031&ref_=nav_em_sl_luggage_back_0_2_8_10',
-                #     'Women Bags': 'https://www.amazon.ae/gp/browse.html?node=11995891031&ref_=nav_em_sl_w_bags_wallets_0_2_8_11',
-                #     'Women Accessories': 'https://www.amazon.ae/s?rh=n%3A11996178031&fs=true&ref=lp_11996178031_sar',
-                #     'Women Shoes': 'https://www.amazon.ae/gp/browse.html?node=11996234031&ref_=nav_em_sl_w_shoes_spt_0_2_8_13',
-                #     'Women Perfumes': 'https://www.amazon.ae/gp/browse.html?node=12149502031&ref_=nav_em_perfume_women_0_2_11_10',
+    #             # 'Personal Care & Beauty': {
+    #             #     'Makeup & Accessories': 'https://www.amazon.ae/s?rh=n%3A11497859031&fs=true&ref=lp_11497859031_sar',
+    #             #     'Dental Care': 'https://www.amazon.ae/gp/browse.html?node=12373018031&ref_=nav_em_hpc_dental_care_0_2_11_17',
+    #             #     'Makeup & Accessories': 'https://www.amazon.ae/s?i=specialty-aps&srs=16630973031&rh=n%3A16630973031&fs=true&ref=lp_16630973031_sar',
+    #             # },
 
-                #     'Men Clothing': 'https://www.amazon.ae/s?k=men+clothing&rh=n%3A11995873031&ref=nb_sb_noss',
-                #     'Men Sportswear': 'https://www.amazon.ae/s?rh=n%3A11996059031&fs=true&ref=lp_11996059031_sar',
-                #     'Men Accessories': 'https://www.amazon.ae/gp/browse.html?node=11995872031&ref_=nav_em_sl_m_accessories_0_2_9_5',
-                #     'Men Clothing': 'https://www.amazon.ae/gp/browse.html?node=11996075031&ref_=nav_em_sl_m_underwear_0_2_9_6',
-                #     'Men Clothing': 'https://www.amazon.ae/s?bbn=21648677031&rh=n%3A11497631031%2Cn%3A%2111497636031%2Cn%3A%2111497638031%2Cn%3A%2121611470031%2Cn%3A%2121611471031%2Cn%3A%2121648675031%2Cn%3A%2121648676031%2Cn%3A21648677031%2Cn%3A11995844031&dc&fst=as%3Aoff&qid=1611475788&rnid=11497632031&ref=nav_em_sl_m_outlet_0_2_9_7',
-                #     'Men Shoes': 'https://www.amazon.ae/s?rh=n%3A11995876031&fs=true&ref=lp_11995876031_sar',
-                #     'Men Bags': 'https://www.amazon.ae/gp/browse.html?node=11995874031&ref_=nav_em_sl_m_bags_wallets_0_2_9_10',
-                #     'Men Accessories': 'https://www.amazon.ae/s?rh=n%3A11996046031&fs=true&ref=lp_11996046031_sar',
-                #     'Men Bags': 'https://www.amazon.ae/gp/browse.html?node=11995843031&ref_=nav_em_sl_luggage_back_0_2_9_12',
-                #     'Men Shoes': 'https://www.amazon.ae/s?rh=n%3A11996088031&fs=true&ref=lp_11996088031_sar',
-                #     'Men Perfumes': 'https://www.amazon.ae/gp/browse.html?node=12149499031&ref_=nav_em_perfume_men_0_2_11_9',
+    #             # 'Groceries': {
+    #             #     'Nutrition': 'https://www.amazon.ae/s?rh=n%3A12373019031&fs=true&ref=lp_12373019031_sar',
+    #             #     'Food Cupboard': 'https://www.amazon.ae/s?rh=n%3A15387142031&fs=true&ref=lp_15387142031_sar',
+    #             #     'Drinks': 'https://www.amazon.ae/s?rh=n%3A15159985031&fs=true&ref=lp_15159985031_sar',
+    #             #     'Crisps, Snacks & Nuts': 'https://www.amazon.ae/s?rh=n%3A15160005031&fs=true&ref=lp_15160005031_sar',
+    #             #     'Cooking Ingredients': 'https://www.amazon.ae/s?rh=n%3A15387143031&fs=true&ref=lp_15387143031_sar',
+    #             #     'Pet Foods': 'https://www.amazon.ae/s?rh=n%3A15150407031&fs=true&ref=lp_15150407031_sar',
 
-                # },
+    #             # },
 
-                # 'Men & Women Watches': {
-                #     'Women Watches': 'https://www.amazon.ae/s?rh=n%3A11995894031&fs=true&ref=lp_11995894031_sar',
-                #     'Men Watches': 'https://www.amazon.ae/s?rh=n%3A11995877031&fs=true&ref=lp_11995877031_sar',
-                # },
+    #             # 'Baby & Kids': {
+    #             #     'Boys Clothing': 'https://www.amazon.ae/gp/browse.html?node=11995853031&ref_=nav_em_sl_b_clothing_0_2_10_2',
+    #             #     'Girls Clothing': 'https://www.amazon.ae/gp/browse.html?node=11995859031&ref_=nav_em_sl_g_clothing_0_2_10_3',
+    #             #     'Boys Accessories': 'https://www.amazon.ae/s?bbn=21720575031&rh=n%3A11497631031%2Cn%3A21720575031%2Cn%3A11995841031&dc&qid=1714380211&rnid=11497632031&ref=lp_21720575031_nr_n_2',
+    #             #     'Girls Accessories': 'https://www.amazon.ae/s?bbn=21720575031&rh=n%3A11497631031%2Cn%3A21720575031%2Cn%3A11995842031&dc&qid=1714380211&rnid=11497632031&ref=lp_21720575031_nr_n_1',
+    #             #     'Boys Shoes': 'https://www.amazon.ae/gp/browse.html?node=11995856031&ref_=nav_em_sl_b_shoes_0_2_10_6',
+    #             #     'Girls Shoes': 'https://www.amazon.ae/gp/browse.html?node=11995862031&ref_=nav_em_sl_g_shoes_0_2_10_7',
+    #             #     'Diapers, Bath & Skincare': 'https://www.amazon.ae/s?rh=n%3A12198694031&fs=true&ref=lp_12198694031_sar',
+    #             #     'Strollers, Gear & Accessories': 'https://www.amazon.ae/gp/browse.html?node=12198769031&ref_=nav_em_baby_strollers_0_2_15_5',
+    #             #     'Feeding & Nursing': 'https://www.amazon.ae/gp/browse.html?node=12198697031&ref_=nav_em_baby_nursing_feeding_0_2_15_6',
+    #             #     'Toys': 'https://www.amazon.ae/s?rh=n%3A17930529031&fs=true&ref=lp_17930529031_sar',
+    #             # },
 
-                # 'Personal Care & Beauty': {
-                #     'Makeup & Accessories': 'https://www.amazon.ae/s?rh=n%3A11497859031&fs=true&ref=lp_11497859031_sar',
-                #     'Dental Care': 'https://www.amazon.ae/gp/browse.html?node=12373018031&ref_=nav_em_hpc_dental_care_0_2_11_17',
-                #     'Makeup & Accessories': 'https://www.amazon.ae/s?i=specialty-aps&srs=16630973031&rh=n%3A16630973031&fs=true&ref=lp_16630973031_sar',
-                # },
+    #             # 'Health & Medical': {
+    #             #     'Health And Fitness': 'https://www.amazon.ae/s?rh=n%3A11601212031&fs=true&ref=lp_11601212031_sar',
+    #             # },
 
-                # 'Groceries': {
-                #     'Nutrition': 'https://www.amazon.ae/s?rh=n%3A12373019031&fs=true&ref=lp_12373019031_sar',
-                #     'Food Cupboard': 'https://www.amazon.ae/s?rh=n%3A15387142031&fs=true&ref=lp_15387142031_sar',
-                #     'Drinks': 'https://www.amazon.ae/s?rh=n%3A15159985031&fs=true&ref=lp_15159985031_sar',
-                #     'Crisps, Snacks & Nuts': 'https://www.amazon.ae/s?rh=n%3A15160005031&fs=true&ref=lp_15160005031_sar',
-                #     'Cooking Ingredients': 'https://www.amazon.ae/s?rh=n%3A15387143031&fs=true&ref=lp_15387143031_sar',
-                #     'Pet Foods': 'https://www.amazon.ae/s?rh=n%3A15150407031&fs=true&ref=lp_15150407031_sar',
+    #             # 'Books': {
+    #             #     'Arabic Books': 'https://www.amazon.ae/s?bbn=11497688031&rh=n%3A11497688031%2Cp_n_feature_nine_browse-bin%3A15412915031&ref=nav_em_bks_arabic_0_2_17_3',
+    #             #     'Children Books': 'https://www.amazon.ae/s?rh=n%3A12379684031&fs=true&ref=lp_12379684031_sar',
+    #             #     'Business & Investment Books': 'https://www.amazon.ae/s?rh=n%3A12379682031&fs=true&ref=lp_12379682031_sar',
+    #             #     'Self Help Books': 'https://www.amazon.ae/s?rh=n%3A12379874031&fs=true&ref=lp_12379874031_sar',
+    #             #     'Cooking & Food Books': 'https://www.amazon.ae/s?rh=n%3A12379687031&fs=true&ref=lp_12379687031_sar',
+    #             #     'Fiction Books': 'https://www.amazon.ae/s?rh=n%3A12379699031&fs=true&ref=lp_12379699031_sar',
+    #             #     'Biography Books': 'https://www.amazon.ae/s?rh=n%3A12379681031&fs=true&ref=lp_12379681031_sar',
+    #             # },
 
-                # },
+    #             # 'Video Games & Consoles': {
+    #             #     'Playstation 5 Games': 'https://www.amazon.ae/s?rh=n%3A20904689031&language=en_AE&brr=1&rd=1&ref=nav_em_vg_playstation5_0_2_18_3',
+    #             #     'Xbox 360 Games': 'https://www.amazon.ae/s?rh=n%3A20904706031&language=en_AE&brr=1&rd=1&ref=nav_em_vg_xbox_x_0_2_18_4',
+    #             #     'Playstation 4 Games': 'https://www.amazon.ae/s?rh=n%3A12359187031&fs=true&ref=lp_12359187031_sar',
+    #             #     'Xbox One Games': 'https://www.amazon.ae/gp/browse.html?node=12359193031&ref_=nav_em_vg_xbox_one_0_2_18_6',
+    #             #     'Nintendo Switch Games': 'https://www.amazon.ae/s?rh=n%3A12359183031&fs=true&ref=lp_12359183031_sar',
+    #             #     'Video Games & Keys': 'https://www.amazon.ae/s?rh=n%3A89266298031&fs=true&ref=lp_89266298031_sar',
+    #             #     'Video Games & Keys': 'https://www.amazon.ae/s?rh=n%3A12359184031&fs=true&ref=lp_12359184031_sar',
+    #             #     'Games Accessories': 'https://www.amazon.ae/s?rh=n%3A15387145031&fs=true&ref=lp_15387145031_sar',
+    #             # },
 
-                # 'Baby & Kids': {
-                #     'Boys Clothing': 'https://www.amazon.ae/gp/browse.html?node=11995853031&ref_=nav_em_sl_b_clothing_0_2_10_2',
-                #     'Girls Clothing': 'https://www.amazon.ae/gp/browse.html?node=11995859031&ref_=nav_em_sl_g_clothing_0_2_10_3',
-                #     'Boys Accessories': 'https://www.amazon.ae/s?bbn=21720575031&rh=n%3A11497631031%2Cn%3A21720575031%2Cn%3A11995841031&dc&qid=1714380211&rnid=11497632031&ref=lp_21720575031_nr_n_2',
-                #     'Girls Accessories': 'https://www.amazon.ae/s?bbn=21720575031&rh=n%3A11497631031%2Cn%3A21720575031%2Cn%3A11995842031&dc&qid=1714380211&rnid=11497632031&ref=lp_21720575031_nr_n_1',
-                #     'Boys Shoes': 'https://www.amazon.ae/gp/browse.html?node=11995856031&ref_=nav_em_sl_b_shoes_0_2_10_6',
-                #     'Girls Shoes': 'https://www.amazon.ae/gp/browse.html?node=11995862031&ref_=nav_em_sl_g_shoes_0_2_10_7',
-                #     'Diapers, Bath & Skincare': 'https://www.amazon.ae/s?rh=n%3A12198694031&fs=true&ref=lp_12198694031_sar',
-                #     'Strollers, Gear & Accessories': 'https://www.amazon.ae/gp/browse.html?node=12198769031&ref_=nav_em_baby_strollers_0_2_15_5',
-                #     'Feeding & Nursing': 'https://www.amazon.ae/gp/browse.html?node=12198697031&ref_=nav_em_baby_nursing_feeding_0_2_15_6',
-                #     'Toys': 'https://www.amazon.ae/s?rh=n%3A17930529031&fs=true&ref=lp_17930529031_sar',
-                # },
-
-                # 'Health & Medical': {
-                #     'Health And Fitness': 'https://www.amazon.ae/s?rh=n%3A11601212031&fs=true&ref=lp_11601212031_sar',
-                # },
-
-                # 'Books': {
-                #     'Arabic Books': 'https://www.amazon.ae/s?bbn=11497688031&rh=n%3A11497688031%2Cp_n_feature_nine_browse-bin%3A15412915031&ref=nav_em_bks_arabic_0_2_17_3',
-                #     'Children Books': 'https://www.amazon.ae/s?rh=n%3A12379684031&fs=true&ref=lp_12379684031_sar',
-                #     'Business & Investment Books': 'https://www.amazon.ae/s?rh=n%3A12379682031&fs=true&ref=lp_12379682031_sar',
-                #     'Self Help Books': 'https://www.amazon.ae/s?rh=n%3A12379874031&fs=true&ref=lp_12379874031_sar',
-                #     'Cooking & Food Books': 'https://www.amazon.ae/s?rh=n%3A12379687031&fs=true&ref=lp_12379687031_sar',
-                #     'Fiction Books': 'https://www.amazon.ae/s?rh=n%3A12379699031&fs=true&ref=lp_12379699031_sar',
-                #     'Biography Books': 'https://www.amazon.ae/s?rh=n%3A12379681031&fs=true&ref=lp_12379681031_sar',
-                # },
-
-                # 'Video Games & Consoles': {
-                #     'Playstation 5 Games': 'https://www.amazon.ae/s?rh=n%3A20904689031&language=en_AE&brr=1&rd=1&ref=nav_em_vg_playstation5_0_2_18_3',
-                #     'Xbox 360 Games': 'https://www.amazon.ae/s?rh=n%3A20904706031&language=en_AE&brr=1&rd=1&ref=nav_em_vg_xbox_x_0_2_18_4',
-                #     'Playstation 4 Games': 'https://www.amazon.ae/s?rh=n%3A12359187031&fs=true&ref=lp_12359187031_sar',
-                #     'Xbox One Games': 'https://www.amazon.ae/gp/browse.html?node=12359193031&ref_=nav_em_vg_xbox_one_0_2_18_6',
-                #     'Nintendo Switch Games': 'https://www.amazon.ae/s?rh=n%3A12359183031&fs=true&ref=lp_12359183031_sar',
-                #     'Video Games & Keys': 'https://www.amazon.ae/s?rh=n%3A89266298031&fs=true&ref=lp_89266298031_sar',
-                #     'Video Games & Keys': 'https://www.amazon.ae/s?rh=n%3A12359184031&fs=true&ref=lp_12359184031_sar',
-                #     'Games Accessories': 'https://www.amazon.ae/s?rh=n%3A15387145031&fs=true&ref=lp_15387145031_sar',
-                # },
-
-                # 'Car Parts & Accessories': {
-                #     'Car Accessories': 'https://www.amazon.ae/s?rh=n%3A11498030031&fs=true&ref=lp_11498030031_sar',
-                # },
+    #             # 'Car Parts & Accessories': {
+    #             #     'Car Accessories': 'https://www.amazon.ae/s?rh=n%3A11498030031&fs=true&ref=lp_11498030031_sar',
+    #             # },
  
+    #     }
+
+    cat_products_urls = {
+        'Electronics': {
+            'Mobile Phones': ['https://www.amazon.ae/s?rh=n%3A12303750031&fs=true&ref=lp_12303750031_sar'],
+            'Laptops': ['https://www.amazon.ae/s?rh=n%3A12050245031&fs=true&ref=lp_12050245031_sar'],
+            'Desktop': [
+                'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714144497&rnid=11497746031&ref=lp_15387140031_nr_n_4',
+                'https://www.amazon.ae/s?bbn=15387140031&rh=n%3A11497745031%2Cn%3A15387140031%2Cn%3A12050242031&dc&qid=1714378967&rnid=11497746031&ref=lp_15387140031_nr_n_4'
+            ],
+            'Tv': ['https://www.amazon.ae/s?rh=n%3A12303800031&fs=true&ref=lp_12303800031_sar'],
         }
+    }
+
 
     # custom_settings = {
     #     'DOWNLOAD_DELAY': 0.5,
@@ -234,6 +254,7 @@ class AmazonSpider(Spider):
         'AUTOTHROTTLE_START_DELAY': 5,  # Initial delay for automatic throttling
         'AUTOTHROTTLE_MAX_DELAY': 60,  # Maximum delay for automatic throttling
         'AUTOTHROTTLE_DEBUG': True,  # Enables autothrottle debug mode
+        'DUPEFILTER_CLASS': 'scrapy.dupefilters.RFPDupeFilter',
         #'LOG_LEVEL': 'INFO',  # Adjusted log level for more detailed logging
         #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',  # Updated log file name
         }
@@ -242,7 +263,7 @@ class AmazonSpider(Spider):
     count = 0
     
     conn = psycopg2.connect(
-        dbname="retailifydb",
+        dbname="retailifydb3",
         user="postgres",
         password="admin",
         host="localhost",
@@ -329,10 +350,22 @@ class AmazonSpider(Spider):
 
     def start_requests(self):
         for main_category, sub_categories in self.cat_products_urls.items():
-            for sub_category, product_url in sub_categories.items():
+            for sub_category, product_urls in sub_categories.items():
                 catalogue_code = self.get_catalogue_code(main_category)
                 if catalogue_code:
-                    yield scrapy.Request(url=product_url, headers=self.headers, meta={'category': main_category, 'sub_category': sub_category, 'cat_url': product_url, 'page': self.page, 'catalogue_code': catalogue_code})
+                    for product_url in product_urls:  # Iterate over each URL in the list
+                        yield scrapy.Request(
+                            url=product_url,
+                            headers=self.headers,
+                            meta={
+                                'category': main_category,
+                                'sub_category': sub_category,
+                                'cat_url': product_url,
+                                'page': self.page,
+                                'catalogue_code': catalogue_code
+                            }
+                        )
+
 
     def parse(self, response):
         #print("INSIDE PARSE")
@@ -399,13 +432,16 @@ class AmazonSpider(Spider):
             item['Offer'] = 0
 
         item['RegularPrice'] = response.xpath('//span[@class="a-size-small aok-offscreen"]/text()').get()
-        if not item['RegularPrice']:
-            item['RegularPrice'] = 0
 
         if item['RegularPrice']:
             item['RegularPrice'] = item['RegularPrice'].split('AED')[1].strip()
             item['RegularPrice'] = item['RegularPrice'].replace(',', '')
             item['RegularPrice'] = round(float(item['RegularPrice']), 2)
+        
+        else:
+            item['RegularPrice'] = response.xpath('(//span[contains(@class, "a-price-whole")])[1]/text()').get()
+            if not item['RegularPrice']:
+                item['RegularPrice'] = 0
             
 
         stock_avilability = response.xpath('//div[@id="availability"]/span[@class="a-size-medium a-color-success"]/text()').get()
@@ -418,11 +454,76 @@ class AmazonSpider(Spider):
         item['BrandName'] = ''
         item['BrandCode'] = ''
         item['Currency'] = 'AED'
-        item['About'] = response.xpath('//div[@id="renewedProgramDescriptionAtf"]/p/text()').get()
+        item['Market'] = 'UAE'
+            
+        
+        about_list = response.xpath('//div[@id="feature-bullets"]//ul/li//span[@class="a-list-item"]/text()').getall()
+        about = "\n".join(about_list)
+        item['About'] = about
+
+
+        os_version = response.xpath('//tr[contains(@class, "po-operating_system")]//td[@class="a-span9"]/span/text()').get()
+        if not os_version:
+            os_version = response.xpath('//th[contains(text(), "OS")]/following-sibling::td/text()').get()
+ 
+        if not os_version:
+            os_version = response.xpath('//table[@id="productDetails_techSpec_section_1"]//tr[th[normalize-space()="OS"]]/td/text()').get()
+        
+        internal_memory = response.xpath('//tr[contains(@class, "po-memory_storage_capacity")]//td[@class="a-span9"]/span/text()').get()
+        if not internal_memory:
+            internal_memory = response.xpath('//tr[td/span[normalize-space(text())="Memory storage capacity"]]/td[2]/span/text()').get()
+
+        model_name = response.xpath('//tr[contains(@class, "po-model_name")]//td[@class="a-span9"]/span/text()').get()
+        ram = response.xpath('//tr[contains(@class, "po-ram_memory.installed_size")]//td[@class="a-span9"]/span/text()').get()
+        
+        if not ram:
+            ram = response.xpath('//th[contains(text(), "RAM")]/following-sibling::td/text()').get()
+
+        processor_number = response.xpath('//tr[contains(@class, "po-cpu_model.family")]//td[@class="a-span9"]/span/text()').get()
+        if not processor_number:
+            processor_number = response.xpath('//td[text()="Processor Number"]/following-sibling::td[1]/text()').get()
+        
+        if not processor_number:
+            processor_number = response.xpath('//td[contains(@class, "ucc-attribute-title") and span[contains(text(), "Chip")]]/following-sibling::td[1]/span/text()').get()
+
+        model_number = response.xpath('//span[contains(text(), "Item model number")]/following-sibling::span/text()').get()
+        if not model_number:
+            model_number = response.xpath('//tr[th[normalize-space(text())="Item model number"]]/td/text()').get()
+        
+        if not model_number:
+            model_number = response.xpath('//span[@class="a-text-bold" and contains(normalize-space(.), "Item model number")]/following-sibling::span[1]/text()').get()
+
+        color = response.xpath('//table[@id="productDetails_techSpec_section_1"]//tr[th[normalize-space()="Color"]]/td/text()').get()
+        
+        
         catalogue_code = response.meta['catalogue_code']
         category_code = self.get_category_code(item['CategoryName'], catalogue_code)
         item['CatalogueCode'] = catalogue_code
         item['CategoryCode'] = category_code
+
+                # Store attributes dynamically
+        dynamic_attributes = []
+        
+        if color:
+            dynamic_attributes.append({'name': 'Color', 'value': color.strip()})
+
+        if internal_memory:
+            dynamic_attributes.append({'name': 'Internal Memory', 'value': internal_memory.strip()})
+
+        if os_version:
+            dynamic_attributes.append({'name': 'OS Version', 'value': os_version.strip()})
+
+        if processor_number:
+            dynamic_attributes.append({'name': 'Processor Number', 'value': processor_number.strip()})
+
+        if ram:
+            dynamic_attributes.append({'name': 'RAM', 'value': ram.strip()})
+
+        # Add the dynamic attributes to the item
+        item['attributes'] = dynamic_attributes
+        item['ModelName'] = model_name
+        item['ModelNumber'] = model_number
+
         
 
         #savings_perc = response.xpath('//span[@class="a-size-large a-color-price savingPriceOverride aok-align-center reinventPriceSavingsPercentageMargin savingsPercentage"]/text()').get()

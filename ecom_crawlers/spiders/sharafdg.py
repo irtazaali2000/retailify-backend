@@ -71,6 +71,7 @@ class SharafDGSpider(Spider):
         'DOWNLOAD_DELAY': 0.1,
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
+        'DUPEFILTER_CLASS': 'scrapy.dupefilters.RFPDupeFilter',
         #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
     }
@@ -79,7 +80,7 @@ class SharafDGSpider(Spider):
     count = 0
     item_reviews = []
     conn = psycopg2.connect(
-        dbname="retailifydb",
+        dbname="retailifydb3",
         user="postgres",
         password="admin",
         host="localhost",
@@ -88,60 +89,77 @@ class SharafDGSpider(Spider):
     cursor = conn.cursor()
 
 
+    # categories = {
+    #     # 'Mobiles Tablets & Wearables
+    #     'Electronics': {
+    #             #'Mobile Accessories': body_mobile_accessories,
+    #             'Mobile Phones': body_mobiles,
+    #             #'Tablets Accessories': body_tablets_accessories,
+    #             #'Tablets': body_tablets
+    #     },
+
+    #     # 'Personal Care & Beauty': {
+    #     #     #'Makeup & Accessories': body_health_fitness_beauty
+    #     # },
+
+    #     # Computers
+    #     'Electronics': {
+    #         #'Computers & Accessories': body_computing_accessories,
+    #         'Laptops': body_computing_laptops,
+    #         #'Networking & Wireless': body_computing_networking_wireless,
+    #         #'Printers & Ink': body_computing_printers_ink,
+    #         #'Hard Drives & Storage': body_computing_storage,
+    #         #'Monitors': body_computing_monitors,
+    #         #'Desktop': body_computing_desktop_pc,
+    #         #'Software': body_computing_software,
+    #         #'Scanners' :body_computing_scanners            
+    #     },
+
+    #     # Video, Lcd & Oled
+    #     'Electronics': {
+    #         'Tv': body_tv,
+    #         #'Home Theater': body_home_cinema_soundbars,
+    #         #'Video & Tv Accessories': body_tv_accessories,
+    #         #'Projectors & Screens': body_projectors
+    #     },
+
+    #     # Audio, Headphones & Music Players
+    #     'Electronics': {
+    #         'Audio Accessories': body_audio
+    #     },
+
+    #     # 'Men & Women Watches': {
+    #     #     #'Unisex Watches': body_wearables_smartwatches
+    #     # },
+
+    #     # 'Home Appliances': {
+    #     #     #'Home Appliances Accessories': body_home_appliance,
+    #     #     #'Home Appliances Accessories': body_home_improvements
+    #     # },
+
+    #     # 'Video Games & Consoles': {
+    #     #     #'Games Accessories': body_gaming
+    #     # },
+
+    #     # Camcorders & Cameras
+    #     'Electronics': {
+    #        #'Camera Accessories': body_camera_accessories,
+    #        'Digital Cameras': body_digital_cameras,
+    #        #'Camcorders': body_camcorders,
+    #        #'Binoculars, Telescopes & Optics': body_binoculars
+    #     },
+    #         }
+
     categories = {
-        'Mobiles Tablets & Wearables': {
-                #'Mobile Accessories': body_mobile_accessories,
+        # 'Mobiles Tablets & Wearables
+        'Electronics': {
                 'Mobile Phones': body_mobiles,
-                #'Tablets Accessories': body_tablets_accessories,
-                #'Tablets': body_tablets
+                'Laptops': body_computing_laptops,
+                'Tv': body_tv,
+                'Audio Accessories': body_audio,
+                'Digital Cameras': body_digital_cameras,
         },
 
-        'Personal Care & Beauty': {
-            #'Makeup & Accessories': body_health_fitness_beauty
-        },
-
-        'Computers': {
-            #'Computers & Accessories': body_computing_accessories,
-            'Laptops': body_computing_laptops,
-            #'Networking & Wireless': body_computing_networking_wireless,
-            #'Printers & Ink': body_computing_printers_ink,
-            #'Hard Drives & Storage': body_computing_storage,
-            #'Monitors': body_computing_monitors,
-            #'Desktop': body_computing_desktop_pc,
-            #'Software': body_computing_software,
-            #'Scanners' :body_computing_scanners            
-        },
-
-        'Video, Lcd & Oled': {
-            'Tv': body_tv,
-            #'Home Theater': body_home_cinema_soundbars,
-            #'Video & Tv Accessories': body_tv_accessories,
-            #'Projectors & Screens': body_projectors
-        },
-
-        'Audio, Headphones & Music Players': {
-           # 'Audio Accessories': body_audio
-        },
-
-        'Men & Women Watches': {
-            #'Unisex Watches': body_wearables_smartwatches
-        },
-
-        'Home Appliances': {
-            #'Home Appliances Accessories': body_home_appliance,
-            #'Home Appliances Accessories': body_home_improvements
-        },
-
-        'Video Games & Consoles': {
-            #'Games Accessories': body_gaming
-        },
-
-        'Camcorders & Cameras': {
-           #'Camera Accessories': body_camera_accessories,
-           'Digital Cameras': body_digital_cameras,
-           #'Camcorders': body_camcorders,
-           #'Binoculars, Telescopes & Optics': body_binoculars
-        },
             }
     
     def __init__(self, reviews='False', short_scraper="False", *args, **kwargs):
@@ -293,9 +311,8 @@ class SharafDGSpider(Spider):
                 category_code = self.get_category_code(sub_category, catalogue_code)
                 vendor_code = self.vendor_code
                 
-                
-                yield scrapy.Request(url=self.review_api_1.format(sku), callback=self.parse_pid, 
-                    meta={
+                yield scrapy.Request(url=url, headers=self.headers, callback=self.parse_description,
+                meta={
                     'title': title, 
                     'sku': sku,
                     'img': img,
@@ -313,16 +330,110 @@ class SharafDGSpider(Spider):
                     'ReviewCount': ReviewCount,
                     'CatalogueCode': catalogue_code,
                     'CategoryCode': category_code,
-                    'VendorCode': vendor_code,
+                    'VendorCode': vendor_code
                     })
+
+
+                # yield scrapy.Request(url=self.review_api_1.format(sku), callback=self.parse_pid, 
+                #     meta={
+                #     'title': title, 
+                #     'sku': sku,
+                #     'img': img,
+                #     'url': url,
+                #     'price_in_aed': price_in_aed,
+                #     'sale_price_in_aed': sale_price_in_aed,
+                #     'brand': brand,
+                #     'sub_category': sub_category,
+                #     'in_stock': in_stock,
+                #     'discount_percentage': discount_percentage,
+                #     'discount_value': discount_value,
+                #     'rating': rating,
+                #     'category': category,
+                #     'page': page,
+                #     'ReviewCount': ReviewCount,
+                #     'CatalogueCode': catalogue_code,
+                #     'CategoryCode': category_code,
+                #     'VendorCode': vendor_code,
+                #     })
+                
           
             #Next Page
             page = page + 1
+            print(f"Moving to next page: {page}")
             modified_body = json.loads(body)
             for request in modified_body['requests']:
-                request['params'] = request['params'].format(page)
+                #request['params'] = request['params'].format(page)
+                request['params'] = request['params'].replace(f"page={page-1}", f"page={page}")
             body = json.dumps(modified_body)
+
+            print(f"Requesting next page {page} with body: {body}")
             yield scrapy.Request(url=self.products_api, headers=self.headers, method='POST', body=body,  meta={'category': category, 'sub_category': sub_category, 'catalogue_code': catalogue_code, 'body': body, 'page': page})
+        else:
+            print(f"No hits found on page {page}. Stopping pagination.")
+
+
+    def parse_description(self, response):
+        item = ProductItemSharafDG()
+        item['ProductName'] = response.meta['title']
+        item['SKU'] = response.meta['sku']
+        item['MainImage'] = response.meta['img']
+        item['URL'] = response.meta['url']
+        # item['RegularPrice'] = response.meta['price_in_aed']
+        # item['Offer'] = response.meta['sale_price_in_aed']
+        item['MyPrice'] = response.meta['price_in_aed']
+        item['Cost'] = response.meta['price_in_aed']
+        item['BrandName'] = response.meta['brand']
+        item['CategoryName'] = response.meta['sub_category']
+        item['StockAvailability'] = response.meta['in_stock']
+        item['RatingValue'] = response.meta['rating']
+        item['CatalogueName'] = response.meta['category']
+        item['CatalogueCode'] = response.meta['CatalogueCode']
+        item['CategoryCode'] = response.meta['CategoryCode']
+        # item['VendorCode'] = response.meta['VendorCode']
+        # item['ModelNumber'] = ''
+        item['BrandCode'] = ''
+        item['Currency'] = 'AED'
+        item['Market'] = 'UAE'
+        item['ModelName'] = ''
+        
+        #about = " ".join(response.xpath('//h5[contains(text(), "Key Information")]/following-sibling::ul[@class="clearfix nav features"]').getall())
+        about_list = response.xpath('//h5[contains(text(), "Key Information")]/following-sibling::ul[@class="clearfix nav features"]').getall()
+        about = "\n".join(about_list)
+        model_number = response.xpath('//div[@class="fw-800 w-30"][normalize-space(text())="Model Number"]/following-sibling::div[@class="w-60"]/text()').get()
+        item['ModelNumber'] = model_number if model_number else ''
+        item['About'] = about
+
+        color = response.xpath('//div[@class="fw-800 w-30"][normalize-space(text())="Color"]/following-sibling::div[@class="w-60"]/text()').get()
+        internal_memory = response.xpath('//div[@class="fw-800 w-30"][normalize-space(text())="Internal Memory"]/following-sibling::div[@class="w-60"]/text()').get()
+        os_version = response.xpath('//div[text()=" OS Version"]/following-sibling::div/text()').get()
+        processor_number = response.xpath('//div[text()=" Chipset"]/following-sibling::div/text()').get()
+        ram = response.xpath('//div[text()=" RAM"]/following-sibling::div/text()').get()
+          # Store attributes dynamically
+        dynamic_attributes = []
+        
+        if color:
+            dynamic_attributes.append({'name': 'Color', 'value': color.strip()})
+
+        if internal_memory:
+            dynamic_attributes.append({'name': 'Internal Memory', 'value': internal_memory.strip()})
+
+        if os_version:
+            dynamic_attributes.append({'name': 'OS Version', 'value': os_version.strip()})
+
+        if processor_number:
+            dynamic_attributes.append({'name': 'Processor Number', 'value': processor_number.strip()})
+
+        if ram:
+            dynamic_attributes.append({'name': 'RAM', 'value': ram.strip()})
+
+        # Add the dynamic attributes to the item
+        item['attributes'] = dynamic_attributes
+
+        # item['Color'] = color if color else ''
+       
+        # item['InternalMemory'] = internal_memory if internal_memory else ''
+        
+        yield item
 
 
     def parse_pid(self, response):

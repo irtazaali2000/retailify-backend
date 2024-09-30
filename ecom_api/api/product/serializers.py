@@ -32,7 +32,7 @@ class CategoryNameMappingSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Product
+        model = OurStoreProduct
         fields = '__all__'
 
 

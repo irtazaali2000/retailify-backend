@@ -61,11 +61,14 @@ class ProductItemAmazon(scrapy.Item):
     Offer = scrapy.Field()
     RegularPrice = scrapy.Field()
     ModelNumber = scrapy.Field()
+    ModelName = scrapy.Field()
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
     Currency = scrapy.Field()
     About = scrapy.Field()
+    Market = scrapy.Field()
+    attributes = scrapy.Field()
 
 
 class ProductItemJumbo(scrapy.Item):
@@ -88,6 +91,9 @@ class ProductItemJumbo(scrapy.Item):
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
+    Market = scrapy.Field()
+    Color = scrapy.Field()
+    InternalMemory = scrapy.Field()
     #page = scrapy.Field()
 
     
@@ -206,16 +212,19 @@ class ProductItemEmax(scrapy.Item):
     BrandCode = scrapy.Field()
     BrandName = scrapy.Field()
     StockAvailability = scrapy.Field()
-    Offer = scrapy.Field()
-    RegularPrice = scrapy.Field()
-    # Cost = scrapy.Field()
-    # MyPrice = scrapy.Field()
+    # Offer = scrapy.Field()
+    # RegularPrice = scrapy.Field()
+    Cost = scrapy.Field()
+    MyPrice = scrapy.Field()
     ModelNumber = scrapy.Field()
     RatingValue = scrapy.Field()
-    VendorCode = scrapy.Field()
+    # VendorCode = scrapy.Field()
     reviews = scrapy.Field()
     Currency = scrapy.Field()
     About = scrapy.Field()
+    Market = scrapy.Field()
+    Color = scrapy.Field()
+    InternalMemory = scrapy.Field()
 
 
 
@@ -305,17 +314,23 @@ class ProductItemSharafDG(scrapy.Item):
     BrandName = scrapy.Field()
     #SubBrandName = scrapy.Field()
     StockAvailability = scrapy.Field()
-    Offer = scrapy.Field()
-    RegularPrice = scrapy.Field()
+    # Offer = scrapy.Field()
+    # RegularPrice = scrapy.Field()
+
+    MyPrice = scrapy.Field()
+    Cost = scrapy.Field()
     #ModelName = scrapy.Field()
     ModelNumber = scrapy.Field()
+    ModelName = scrapy.Field()
     RatingValue = scrapy.Field()
     #BestRating = scrapy.Field()
     #ReviewCount = scrapy.Field()
-    VendorCode = scrapy.Field()
+    # VendorCode = scrapy.Field()
     reviews = scrapy.Field()
     About = scrapy.Field()
     Currency = scrapy.Field()
+    Market = scrapy.Field()
+    attributes = scrapy.Field()
     
 
 
@@ -420,11 +435,17 @@ class ProductItemNoon(scrapy.Item):
     Offer = scrapy.Field()
     RegularPrice = scrapy.Field()
     ModelNumber = scrapy.Field()
+    ModelName = scrapy.Field()
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
     Currency = scrapy.Field()
     About = scrapy.Field()
+    Market = scrapy.Field()
+    attributes = scrapy.Field()
+    # Color = scrapy.Field()
+    # InternalMemory = scrapy.Field()
+
 
 
 class ProductItemCarrefour(scrapy.Item):
@@ -442,10 +463,13 @@ class ProductItemCarrefour(scrapy.Item):
     Offer = scrapy.Field()
     RegularPrice = scrapy.Field()
     ModelNumber = scrapy.Field()
+    ModelName = scrapy.Field()
     RatingValue = scrapy.Field()
     VendorCode = scrapy.Field()
     reviews = scrapy.Field()
     Currency = scrapy.Field()
     About = scrapy.Field()
+    Market = scrapy.Field()
+    attributes = scrapy.Field()
 
                                                         

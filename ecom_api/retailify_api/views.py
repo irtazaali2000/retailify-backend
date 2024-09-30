@@ -659,6 +659,11 @@ class AllCatalogueNames(generics.GenericAPIView):
         categories = Catalogue.objects.values_list('CatalogueName', flat=True)
         return Response(list(categories))
 
+class AllOurStoreMarketNames(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        ourstore_markets = OurStoreProduct.objects.values_list('Market', flat=True).distinct()
+        return Response(list(ourstore_markets))
+
 
 class ProductDetailsByCategoryView(generics.GenericAPIView):
     serializer_class = ProductDetailsByCategorySerializer
@@ -777,7 +782,11 @@ class VendorDetailsByCategoryView(generics.GenericAPIView):
             # Get all products within the current category
             products = Product.objects.filter(CategoryCode=category)
             # Get the count of products in OurStoreProduct for the same category
-            store_products_count = OurStoreProduct.objects.filter(CategoryCode=category).count()
+            store_products = OurStoreProduct.objects.filter(CategoryCode=category)
+            store_products_count = store_products.count()
+
+            # Get distinct markets from the OurStoreProduct model for the current category
+            markets = store_products.values_list('Market', flat=True).distinct()
 
             # Aggregate stock level, stock availability, and stock value (price) per vendor for the current category
             vendors_data = products.values('VendorCode__VendorName').annotate(
@@ -808,8 +817,9 @@ class VendorDetailsByCategoryView(generics.GenericAPIView):
 
             # Add category details to the results list
             results.append({
-                'qty': store_products_count,
                 'name': category.CategoryName,
+                'qty': store_products_count,
+                'markets': list(markets),
                 'vendors': vendor_details
             })
 
@@ -852,6 +862,12 @@ class VendorDetailsByBrandView(generics.GenericAPIView):
             # Get all products within the current brand from the Product model
             products = Product.objects.filter(BrandName=brand['BrandName'])
 
+            # Get all products within the current brand from the OurStoreProduct model
+            store_products = OurStoreProduct.objects.filter(BrandName=brand['BrandName'])
+            
+            # Get distinct markets from the OurStoreProduct model for the current brand
+            markets = store_products.values_list('Market', flat=True).distinct()
+
             # Aggregate stock level, stock availability, and stock value (price) per vendor for the current brand
             vendors_data = products.values('VendorCode__VendorName').annotate(
                 stock_level=Count('ProductCode'),  # Count of products
@@ -883,6 +899,7 @@ class VendorDetailsByBrandView(generics.GenericAPIView):
             results.append({
                 'name': brand['BrandName'],  # Brand name from OurStoreProduct
                 'qty': brand['product_count'],  # Product count from OurStoreProduct
+                'markets': list(markets),
                 'vendors': vendor_details
             })
 

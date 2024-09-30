@@ -14,6 +14,7 @@ from fake_useragent import UserAgent
 import scrapy
 import psycopg2
 import os
+from copy import deepcopy
 
 
 class JumboSpider(Spider):
@@ -25,50 +26,66 @@ class JumboSpider(Spider):
     #body = {"query":"","ruleContexts":["magento-category-{}"],"page":1,"facets":["*"],"hitsPerPage":24,"filters":"","facetFilters":["visibility_search:1","in_stock:1","categoryIds:{}"]}
     
 
+    # categories = {
+    #     # Mobiles Tables & Wearables
+    #     "Electronics": {
+    #         'Mobile Phones': 401,
+    #         # "Mobile Accessories": 353,
+    #         # "Wearables": 416,
+    #     },
+
+    #     #Computers
+    #     'Electronics': {
+    #         "Desktop": 395
+    #     },
+        
+    #     # Video, Lcd & Oled
+    #     'Electronics': {
+    #         'Tv': 404
+    #     },
+        
+    #     #Camcorders & Cameras
+    #     'Electronics': {
+    #         'Camera Accessories': 359
+    #     },
+
+    #     # 'Home Appliances': {
+    #     #     "Home Appliances Accessories": 371
+    #     # },
+
+    #     # Audio, Headphones & Music Players
+    #     'Electronics': {
+    #         "Headphones & Speakers": 374
+    #     },
+
+    #     # 'Computers': {
+    #     #     "Networking & Wireless": 389,
+    #     # },
+        
+    #     # 'Video Games & Consoles': {
+    #     #     "Games Accessories": 365
+    #     # },
+        
+    #     # 'Office Supplies': {
+    #     #     "Warehouse Equipment": 392,
+    #     # },
+
+    #     # 'Personal Care & Beauty': {
+    #     #     "Makeup & Accessories": 377,
+    #     # }
+        
+    #     }
+
     categories = {
-        "Mobiles Tables & Wearables": {
-            'Mobile Phones': 401,
-            # "Mobile Accessories": 353,
-            # "Wearables": 416,
-        },
+    "Electronics": {
+        'Mobile Phones': 401,
+        'Desktop': 395,
+        'Tv': 404,
+        'Camera Accessories': 359,
+        'Headphones & Speakers': 374,
+    }
+    }
 
-        'Computers': {
-            "Desktop": 395
-        },
-        
-        'Video, Lcd & Oled': {
-            'Tv': 404
-        },
-
-        'Camcorders & Cameras': {
-            'Camera Accessories': 359
-        },
-
-        # 'Home Appliances': {
-        #     "Home Appliances Accessories": 371
-        # },
-
-        'Audio, Headphones & Music Players': {
-            "Headphones & Speakers": 374
-        },
-
-        # 'Computers': {
-        #     "Networking & Wireless": 389,
-        # },
-        
-        # 'Video Games & Consoles': {
-        #     "Games Accessories": 365
-        # },
-        
-        # 'Office Supplies': {
-        #     "Warehouse Equipment": 392,
-        # },
-
-        # 'Personal Care & Beauty': {
-        #     "Makeup & Accessories": 377,
-        # }
-        
-        }
 
     
     custom_settings = {
@@ -77,14 +94,15 @@ class JumboSpider(Spider):
         'DOWNLOAD_TIMEOUT': 100, 
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
         # 'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',
-        'LOG_FILE': None
+        # 'LOG_FILE': None,
+        'DUPEFILTER_CLASS': 'scrapy.dupefilters.RFPDupeFilter',
     }
 
     count = 0
     item_reviews = []
 
     conn = psycopg2.connect(
-        dbname="retailifydb",
+        dbname="retailifydb2",
         user="postgres",
         password="admin",
         host="localhost",
@@ -216,11 +234,12 @@ class JumboSpider(Spider):
                 if item['RegularPrice'] == item['Offer']:
                     item['Offer'] = 0
                 item['BrandName'] = hit.get("Brand", '')
-                item['ModelNumber'] = hit.get('ItemNumber')
+                # item['ModelNumber'] = hit.get('ItemNumber')
                 item['VendorCode'] = vendor_code
                 # item['RatingValue'] = 0
                 item['BrandCode'] = ''
                 item['Currency'] = 'AED'
+                item['Market'] = 'UAE'
                 item['About'] = hit.get('KeyProductFeatures', '')
                 catalogue_code = response.meta['catalogue_code']
                 category_code = self.get_category_code(item['CategoryName'], catalogue_code)
@@ -230,35 +249,50 @@ class JumboSpider(Spider):
                 #item['page'] = page
                 self.count+=1
 
-                yield scrapy.Request(
-                    url=self.get_pid_api.format(item['SKU']),
-                    callback=self.parse_pid,
-                    meta={'item': item, 'category_name': category_name, 'page': page, 'sku': item['SKU']}
-                )
+                # yield scrapy.Request(
+                #     url=self.get_pid_api.format(item['SKU']),
+                #     callback=self.parse_pid,
+                #     meta={'item': deepcopy(item), 'category_name': category_name, 'page': page, 'sku': item['SKU']}
+                # )
+        
+                yield scrapy.Request(url=item['URL'], callback=self.parse_description, meta={'item': deepcopy(item)}, dont_filter=True)
 
             print("Total Items on Page {}: {}".format(page, self.count))
             page = page + 1
             next_body = response.request.body.replace(f'"page": {page-1}'.encode('utf-8'), f'"page": {page}'.encode('utf-8'))
             yield scrapy.Request(url=self.products_api, method='POST', body=next_body, meta={'category_name': category_name, 'sub_category': sub_category, 'page': page, 'vendor_code': self.vendor_code, 'catalogue_code': catalogue_code})
 
-    def parse_pid(self, response):
-        data = json.loads(response.text)
-        item = response.meta['item']
-        sku = response.meta['sku']
 
-        # print(sku)
-        user_review_url = data.get('user_review_url')
-        score = data.get('score', 0)
-        if score:
-            item['RatingValue'] = round(float(score) / 2, 2)
-        else:
-            item['RatingValue'] = 0
-        # print(user_review_url)
-        if user_review_url:
-            url = user_review_url + '&offset=1&limit=1'
-            yield scrapy.Request(url=url, callback=self.parse_review, meta={'item': item, 'sku': sku})
-        else:
-            yield item
+    def parse_description(self, response):
+        item = response.meta['item']
+        about = response.xpath('//h4[contains(text(), "Product Highlights")]/following-sibling::ul').get()
+        internal_storage = response.xpath('//li[div[1][normalize-space(text())="Internal Storage"]]/div[2]/text()').get()
+        color = response.xpath('normalize-space(//h4[span[@class="font-bold"][normalize-space(text())="Color"]]/text()[normalize-space() != ""])').get()
+    
+        item['ModelNumber'] = ''
+        item['InternalStorage'] = internal_storage
+        item['Color'] = color
+        item['About'] = about
+        yield item
+
+    # def parse_pid(self, response):
+    #     data = json.loads(response.text)
+    #     item = response.meta['item']
+    #     sku = response.meta['sku']
+
+    #     # print(sku)
+    #     user_review_url = data.get('user_review_url')
+    #     score = data.get('score', 0)
+    #     if score:
+    #         item['RatingValue'] = round(float(score) / 2, 2)
+    #     else:
+    #         item['RatingValue'] = 0
+    #     # print(user_review_url)
+    #     if user_review_url:
+    #         url = user_review_url + '&offset=1&limit=1'
+    #         yield scrapy.Request(url=url, callback=self.parse_review, meta={'item': deepcopy(item), 'sku': sku})
+    #     else:
+    #         yield item
 
 
     # def parse_review(self, response):

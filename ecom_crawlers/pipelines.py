@@ -15,6 +15,9 @@ from scrapy.utils.project import get_project_settings
 from .utils import sendemail, from_addr
 from scrapy.exceptions import DropItem
 from itemadapter import ItemAdapter
+import re
+from bs4 import BeautifulSoup
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -43,6 +46,13 @@ class FilterItemPipelineJumbo(object):
         if 'Offer' in item and item['Offer']:
             price = str(item['Offer']).replace('AED','').replace(',','')            
             item['Offer'] = float(price)
+        
+        # Clean 'About' field by removing HTML tags and special characters
+        if 'About' in item and item['About']:
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator=" ")  # Get clean text
+            clean_about = re.sub(r'\s+', ' ', clean_about)  # Remove extra whitespace
+            item['About'] = clean_about.strip()
 
         # if 'categories' in item and item['categories']:
         #     categories_str = ','.join(item['categories'])
@@ -56,32 +66,30 @@ class UploadPipelineJumbo(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
 
     def open_spider(self, spider):
@@ -576,8 +584,12 @@ class FilterItemPipelineEmax(object):
         # if 'MyPrice' in item and item['MyPrice']:  
         #     item['MyPrice'] = round(float(item['MyPrice']), 2)
 
+        # Clean 'About' field by removing HTML tags and special characters
         if 'About' in item and item['About']:
-            item['About'] = item['About'].replace('<br>', '').replace('<p>', '').replace('</p>', '')
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator=" ")  # Get clean text
+            clean_about = re.sub(r'\s+', ' ', clean_about)  # Remove extra whitespace
+            item['About'] = clean_about.strip()
 
         # if 'percentage_discount' in item and item['percentage_discount']:  
         #     item['percentage_discount'] = round(float(item['percentage_discount']), 2)
@@ -592,32 +604,30 @@ class UploadPipelineEmax(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
 
     def open_spider(self, spider):
@@ -651,7 +661,6 @@ class UploadPipelineEmax(object):
                       subject=subject,
                       message=message)
             LOGGER.info(f"Spider Closed: Email Sent to {self.to_email}")
-
 
 
 
@@ -865,6 +874,17 @@ class FilterItemPipelineSharafDG(object):
         if 'RegularPrice' in item and item['RegularPrice']:  
             item['RegularPrice'] = round(float(item['RegularPrice']), 2)
 
+        # Clean 'About' field by removing HTML tags and special characters
+        if 'About' in item and item['About']:
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator="\n")  # Get text with line breaks
+            # Replace multiple spaces or tabs with a single space
+            clean_about = re.sub(r'[ \t]+', ' ', clean_about)
+            # Replace multiple newlines with a single newline
+            clean_about = re.sub(r'\n+', '\n', clean_about)
+            item['About'] = clean_about.strip()
+        
+
         if 'RatingValue' in item and item['RatingValue']:  
             item['RatingValue'] = round(float(item['RatingValue']), 2)
 
@@ -884,33 +904,63 @@ class UploadPipelineSharafDG(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
+
+    def open_spider(self, spider):
+        if self.email:
+            # subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            message = f"{spider.name} initiated at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Opened: Email Sent to {self.to_email}")
+
+    def close_spider(self, spider):
+        stats = spider.crawler.stats.get_stats()
+        if self.email:
+            subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            # subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            message = f"{spider.name} Closed at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}\n\n" \
+                      f"Total Item Scraped from spider={stats.get('item_scraped_count', 0)}\n"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Closed: Email Sent to {self.to_email}")
     
 
 
@@ -1159,6 +1209,17 @@ class FilterItemPipelineAmazon(object):
             if isinstance(item['CategoryName'], str):  # Check if it's a string first
                 item['CategoryName'] = item['CategoryName'].strip()
 
+        
+        # Clean 'About' field by removing HTML tags and special characters
+        if 'About' in item and item['About']:
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator="\n")  # Get text with line breaks
+            # Replace multiple spaces or tabs with a single space
+            clean_about = re.sub(r'[ \t]+', ' ', clean_about)
+            # Replace multiple newlines with a single newline
+            clean_about = re.sub(r'\n+', '\n', clean_about)
+            item['About'] = clean_about.strip()
+
         return item
     
 
@@ -1168,33 +1229,63 @@ class UploadPipelineAmazon(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
+
+    def open_spider(self, spider):
+        if self.email:
+            # subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            message = f"{spider.name} initiated at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Opened: Email Sent to {self.to_email}")
+
+    def close_spider(self, spider):
+        stats = spider.crawler.stats.get_stats()
+        if self.email:
+            subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            # subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            message = f"{spider.name} Closed at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}\n\n" \
+                      f"Total Item Scraped from spider={stats.get('item_scraped_count', 0)}\n"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Closed: Email Sent to {self.to_email}")
 
 
 
@@ -1215,6 +1306,19 @@ class FilterItemPipelineNoon(object):
         if 'ProductName' in item and item['ProductName']:
             item['ProductName'] = item['ProductName'].strip()
 
+        # Clean 'About' field by removing HTML tags and special characters
+        if 'About' in item and item['About']:
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator="\n")  # Get text with line breaks
+            # Replace multiple spaces or tabs with a single space
+            clean_about = re.sub(r'[ \t]+', ' ', clean_about)
+            # Replace multiple newlines with a single newline
+            clean_about = re.sub(r'\n+', '\n', clean_about)
+            item['About'] = clean_about.strip()
+
+
+            
+
         return item
     
 
@@ -1224,34 +1328,32 @@ class UploadPipelineNoon(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
-    
+
 
 
     ######################  Carrefour  #######################################
@@ -1263,6 +1365,19 @@ class FilterItemPipelineCarrefour(object):
         if 'RegularPrice' in item and item['RegularPrice']:  
             item['RegularPrice'] = round(float(item['RegularPrice']), 2)
 
+        if 'ModelName' in item and item['ModelName']:  
+            item['ModelName'] = item['ModelName'].split(':')[-1].strip()
+
+        # Clean 'About' field by removing HTML tags and special characters
+        if 'About' in item and item['About']:
+            soup = BeautifulSoup(item['About'], 'html.parser')
+            clean_about = soup.get_text(separator="\n")  # Get text with line breaks
+            # Replace multiple spaces or tabs with a single space
+            clean_about = re.sub(r'[ \t]+', ' ', clean_about)
+            # Replace multiple newlines with a single newline
+            clean_about = re.sub(r'\n+', '\n', clean_about)
+            item['About'] = clean_about.strip()
+
 
         return item
     
@@ -1273,31 +1388,61 @@ class UploadPipelineCarrefour(object):
         self.api = '{}/api/v1/private/product/upload/'.format(HOST)
         self.email = get_project_settings().attributes['EMAIL'].value
         self.to_email = get_project_settings().attributes['TO_EMAIL'].value
+        self.seen_items = set()
 
     def process_item(self, item, spider):
-        # Send the data directly as a dictionary
-        res = requests.post(
-            self.api,
-            json=dict(item)
-        )
+        item_key = item.get('SKU')
+        if item_key in self.seen_items:
+            LOGGER.info(f"Item already processed: {item_key}")
+            return item
 
-        if res.status_code != 200:
-            LOGGER.error(f"Product Not Uploaded: {res.text}")
+        self.seen_items.add(item_key)
+        try:
+            #LOGGER.info(f"Sending item to API: {json.dumps(dict(item))}")
+            res = requests.post(self.api, json=dict(item))
+            #LOGGER.info(f"API response: {res.status_code} {res.text}")
+            if res.status_code != 200:
+                LOGGER.error(f"Product Not Uploaded: {res.text}")
+                if self.email:
+                    sendemail(self.email, self.to_email, f"Product Not Uploaded: {res.text}")
+                return item
+            self.seen_items.remove(item_key)
+        except requests.RequestException as e:
+            LOGGER.error(f"Request exception: {e}")
             if self.email:
-                subject = f"{spider.name} : Product insertion has been failed due to {res.text}"
-                message = f"Api Failed:" \
-                          f"{res.text}\n\n\n" \
-                          f"ITEM DETAILS BELOW:" \
-                          f"{json.dumps(dict(item))}"
-
-                sendemail(from_addr=from_addr,
-                          to_addr_list=self.to_email,
-                          cc_addr_list=["baig052@gmail.com"],
-                          subject=subject,
-                          message=message)
-                LOGGER.error(f"Error Raised: Email Sent to {self.to_email}")
-
-        res.raise_for_status()
-
+                sendemail(self.email, self.to_email, f"Request exception: {e}")
+            return item
         return item
+
+    def open_spider(self, spider):
+        if self.email:
+            # subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            subject = f"{spider.name} : Scrapper is now running from {datetime.now()}"
+            message = f"{spider.name} initiated at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Opened: Email Sent to {self.to_email}")
+
+    def close_spider(self, spider):
+        stats = spider.crawler.stats.get_stats()
+        if self.email:
+            subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            # subject = f"{spider.name} :  Scrapper has been completed successfully at {datetime.now()}"
+            message = f"{spider.name} Closed at {datetime.now()}\n" \
+                      f"Check Logfile for stats for this run in \n" \
+                      f"path LOGFILE={spider.custom_settings['LOG_FILE']}\n\n" \
+                      f"Total Item Scraped from spider={stats.get('item_scraped_count', 0)}\n"
+
+            sendemail(from_addr=from_addr,
+                      to_addr_list=self.to_email,
+                      cc_addr_list=["baig052@gmail.com"],
+                      subject=subject,
+                      message=message)
+            LOGGER.info(f"Spider Closed: Email Sent to {self.to_email}")
 

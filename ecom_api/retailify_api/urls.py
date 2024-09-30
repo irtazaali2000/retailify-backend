@@ -1,24 +1,5 @@
 from django.urls import path
-from .views import (VendorList, VendorDetail, CatalogueList, CatalogueDetail, CategoryList, 
-                    CategoryDetail, ProductList, ProductDetail, ReviewList, ReviewDetail, 
-                    ImageList, ImageDetail, CustomProductList,
-                   ProductsWithMultipleVendorsByCategoryView,
-                   AllVendorNames, 
-                   CompareProductsView, 
-                #    CompareProductsByNameView,
-                #    CompareProductsByCategoryView, CompareProductsByBrandView, 
-                   ProductDetailsByCategoryView,
-                   CountBrandProductCategoryView, CountStockAvailabilityView,
-                   AllBrandNames, AllCategoryNames, AllCatalogueNames,
-                   VendorDetailsByCategoryView, VendorDetailsByBrandView,
-                   VendorDetailsByCatalogueView, InStockProductsByMonthView, CategoryPriceByYearView,
-                #    IntelligenceProductPriceView, 
-                   IntelligenceProductPriceHigher,
-                   IntelligenceProductPriceLower,
-                   IntelligenceProductPriceEqual, IntelligenceProductPriceDifference, ProductCountHigher, ProductCountLower, ProductCountEqual,
-                   ProductCountRange
-                   )
-                #    IntelligenceProductPriceAve
+from .views import *
 
 urlpatterns = [
     # Vendor URLs
@@ -57,6 +38,9 @@ urlpatterns = [
     path('all_brand_names/', AllBrandNames.as_view(), name='all-brand-names'),
     path('all_category_names/', AllCategoryNames.as_view(), name='all-category-names'),
     path('all_catalogue_names/', AllCatalogueNames.as_view(), name='all-catalogue-names'),
+    path('all_ourstore_market_names/', AllOurStoreMarketNames.as_view(), name='all-market-names'),
+
+    
     path('product_details_by_category/', ProductDetailsByCategoryView.as_view(), name='product-details-by-category'),
     path('brand-product-category-counts/', CountBrandProductCategoryView.as_view(), name='brand-product-category-counts'),
     path('count-stockavailability/', CountStockAvailabilityView.as_view(), name='count_stockavailability'),

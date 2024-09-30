@@ -13,7 +13,7 @@ from fake_useragent import UserAgent
 import scrapy
 import psycopg2
 import os
-
+from copy import deepcopy
 
 class CarreFourSpider(Spider):
     name = 'carrefour'
@@ -30,6 +30,7 @@ class CarreFourSpider(Spider):
         'DOWNLOAD_DELAY': 0.1,
         'RETRY_TIMES': 3,
         'DOWNLOAD_TIMEOUT': 100,
+        'DUPEFILTER_CLASS': 'scrapy.dupefilters.RFPDupeFilter',
         #'DUPEFILTER_CLASS': 'scrapy.dupefilters.BaseDupeFilter',
         #'LOG_FILE': f'scrapy-logs/{name}-{datetime.now().strftime("%d-%m-%y-%H-%M-%S")}.log',  #
     }
@@ -37,131 +38,145 @@ class CarreFourSpider(Spider):
     page = 0
 
 
-    categories = {
-        # "Groceries": {
-        #     "Fresh Food": "F1600000",
-        #     "Fruits and Vegetables": "F11600000",
-        #     "Food Cupboard": "F1700000",
-        #     "Drinks": "F1500000",
-        #     "Frozen Foods": "F6000000",
-        #     "Milk, Butter & Eggs": "F1610000",
-        #     "Fresh Food": "F1200000",
-        #     "Pet Foods": "F1100000",
-        # },
+    # categories = {
+    #     # "Groceries": {
+    #     #     "Fresh Food": "F1600000",
+    #     #     "Fruits and Vegetables": "F11600000",
+    #     #     "Food Cupboard": "F1700000",
+    #     #     "Drinks": "F1500000",
+    #     #     "Frozen Foods": "F6000000",
+    #     #     "Milk, Butter & Eggs": "F1610000",
+    #     #     "Fresh Food": "F1200000",
+    #     #     "Pet Foods": "F1100000",
+    #     # },
 
-        # 'Home Appliances': {
-        #     "Home Necessities": "NF3000000",
-        #     "Home Necessities": "NF4040300",
-        #     'Vacuum Cleaners': 'NF4040800',
-        #     'Climate Control': 'NF4040100',
-        #     'Kitchen Appliances': 'NF4040600',
-        #     'Kitchen Appliances': 'NF4040400',
-        #     'Kitchen Appliances': 'NF4040700',
-        #     'Sewing Machines': 'NF4040110'
+    #     # 'Home Appliances': {
+    #     #     "Home Necessities": "NF3000000",
+    #     #     "Home Necessities": "NF4040300",
+    #     #     'Vacuum Cleaners': 'NF4040800',
+    #     #     'Climate Control': 'NF4040100',
+    #     #     'Kitchen Appliances': 'NF4040600',
+    #     #     'Kitchen Appliances': 'NF4040400',
+    #     #     'Kitchen Appliances': 'NF4040700',
+    #     #     'Sewing Machines': 'NF4040110'
 
-        # },
+    #     # },
 
-        # 'Personal Care & Beauty': {
-        #     "Makeup & Accessories": "NF2000000",
-        # },
+    #     # 'Personal Care & Beauty': {
+    #     #     "Makeup & Accessories": "NF2000000",
+    #     # },
 
-        # 'Baby & Kids': {
-        #     "Diapers, Bath & Skincare": "F1000000",
-        #     'Toys': 'NF1400000'
-        # },        
+    #     # 'Baby & Kids': {
+    #     #     "Diapers, Bath & Skincare": "F1000000",
+    #     #     'Toys': 'NF1400000'
+    #     # },        
        
-        # 'Video Games & Consoles': {
-        #     "Consoles": "NF4090100",
-        # },
+    #     # 'Video Games & Consoles': {
+    #     #     "Consoles": "NF4090100",
+    #     # },
+        
+    #     # Computers
+    #     'Electronics': {
+    #         'Laptops': 'NF4070500',
+    #         'Desktop': 'NF4070800',
+    #         #'Hard Drives & Storage': 'NF4070300',
+    #         #'Networking & Wireless': 'NF4070700',
+    #         #'Computer Accessories': 'NF4070200',
+    #         #'Software': 'NF4071000',
+    #         #'Ink, Toners & Cartridges': 'NF4071100'
+    #     },
 
-        'Computers': {
-            'Laptops': 'NF4070500',
-            'Desktop': 'NF4070800',
-            #'Hard Drives & Storage': 'NF4070300',
-            #'Networking & Wireless': 'NF4070700',
-            #'Computer Accessories': 'NF4070200',
-            #'Software': 'NF4071000',
-            #'Ink, Toners & Cartridges': 'NF4071100'
-        },
 
-
-        # 'Video, Lcd & Oled': {
-        #     'Projectors & Screens': 'NF4080100',
-        #     'Video & Tv Accessories': 'NF4080300',
-        #     'Dvd, Blurays & Digital Media Players': 'NF4080700',
-        #     'Home Theater': 'NF4050500',
+    #     # 'Video, Lcd & Oled': {
+    #     #     'Projectors & Screens': 'NF4080100',
+    #     #     'Video & Tv Accessories': 'NF4080300',
+    #     #     'Dvd, Blurays & Digital Media Players': 'NF4080700',
+    #     #     'Home Theater': 'NF4050500',
             
-        # },
+    #     # },
 
-        # 'Office Supplies': {
-        #     'ID Card Printer & Supplies': 'NF4070900'
-        # },
+    #     # 'Office Supplies': {
+    #     #     'ID Card Printer & Supplies': 'NF4070900'
+    #     # },
 
+    #     # Mobiles Tablets & Wearables
+    #     'Electronics': {
+    #         "Mobile Phones": "NF1200000",
+    #         "Mobile Phones": "NF4060200",
+    #         "Mobile Phones": 'NF4060100',
+    #         'Mobile Phones': 'NF1220200',
+    #         'Mobile Phones': 'NF1220100',
+    #         # 'Wearables': 'NF1220300',
+    #         # 'Mobile Accessories': 'NF1210000',
+    #         # 'Tablets & Ereaders': 'NF1230000'
 
-        'Mobiles Tablets & Wearables': {
-            "Mobile Phones": "NF1200000",
-            "Mobile Phones": "NF4060200",
-            "Mobile Phones": 'NF4060100',
-            'Mobile Phones': 'NF1220200',
-            'Mobile Phones': 'NF1220100',
-            # 'Wearables': 'NF1220300',
-            # 'Mobile Accessories': 'NF1210000',
-            # 'Tablets & Ereaders': 'NF1230000'
+    #     },
 
-        },
-
-        # 'Furniture, Home And Garden': {
-        #     "Home Decor And Accessories": "NF8000000",
-        #     "Home Decor And Accessories": "NF8013000",
-        #     "Bathroom Accessories": "NF8010000",
-        #     "Home Decor And Accessories": "NF8020000",
-        #     "Home Decor And Accessories": 'NF8030100',
-        #     "Home Decor And Accessories": 'NF8030200',
-        #     "Home Decor And Accessories": 'NF8030300',
-        #     "Home Decor And Accessories": 'NF8030500',
-        #     "Home Decor And Accessories": 'NF8050000',
-        #     "Home Decor And Accessories": 'NF8060000',
-        #     "Home Decor And Accessories": 'NF8070000',
-        #     "Home Decor And Accessories": 'NF8080000',
-        #     "Home Decor And Accessories": 'NF8100000',
-        #     "Home Decor And Accessories": 'NF8120000',
-        #     'Kitchen Accessories': 'NF8090000',
-        #     'Kitchen Accessories': 'NF8030400',
-        #     "Outdoor": "NF8030600",
-        #     'Pet Accessories': 'F1100000',
-        #     'Flowers & Plants': 'NF9010000'
-        # },
+    #     # 'Furniture, Home And Garden': {
+    #     #     "Home Decor And Accessories": "NF8000000",
+    #     #     "Home Decor And Accessories": "NF8013000",
+    #     #     "Bathroom Accessories": "NF8010000",
+    #     #     "Home Decor And Accessories": "NF8020000",
+    #     #     "Home Decor And Accessories": 'NF8030100',
+    #     #     "Home Decor And Accessories": 'NF8030200',
+    #     #     "Home Decor And Accessories": 'NF8030300',
+    #     #     "Home Decor And Accessories": 'NF8030500',
+    #     #     "Home Decor And Accessories": 'NF8050000',
+    #     #     "Home Decor And Accessories": 'NF8060000',
+    #     #     "Home Decor And Accessories": 'NF8070000',
+    #     #     "Home Decor And Accessories": 'NF8080000',
+    #     #     "Home Decor And Accessories": 'NF8100000',
+    #     #     "Home Decor And Accessories": 'NF8120000',
+    #     #     'Kitchen Accessories': 'NF8090000',
+    #     #     'Kitchen Accessories': 'NF8030400',
+    #     #     "Outdoor": "NF8030600",
+    #     #     'Pet Accessories': 'F1100000',
+    #     #     'Flowers & Plants': 'NF9010000'
+    #     # },
          
-        #  'Health & Medical': {
-        #     "Health And Fitness": "NF7000000",
-        #  },
+    #     #  'Health & Medical': {
+    #     #     "Health And Fitness": "NF7000000",
+    #     #  },
        
-        # 'Office Supplies': {
-        #     "Stationary": "NF1300000",
+    #     # 'Office Supplies': {
+    #     #     "Stationary": "NF1300000",
             
-        # },
+    #     # },
         
-        'Audio, Headphones & Music Players': {
-           'Headphones & Speakers': 'NF4051000',
-           #'Recording Equipment': 'NF4050900',
-           #'Music Players': 'NF4050600',
-           },
+    #     # Audio, Headphones & Music Players
+    #     'Electronics': {
+    #        'Headphones & Speakers': 'NF4051000',
+    #        #'Recording Equipment': 'NF4050900',
+    #        #'Music Players': 'NF4050600',
+    #        },
 
         
-        # 'Car Parts & Accessories': {
-        #     'Car Accessories': 'NF2302000',
-        #     'Car Audio': 'NF2301000'
-        # },
+    #     # 'Car Parts & Accessories': {
+    #     #     'Car Accessories': 'NF2302000',
+    #     #     'Car Audio': 'NF2301000'
+    #     # },
 
-        # 'Books': {
-        #     'Fiction Books': 'NF9030300',
-        #     'Non-Fiction Books': 'NF9030100'
-        # }
-    }
+    #     # 'Books': {
+    #     #     'Fiction Books': 'NF9030300',
+    #     #     'Non-Fiction Books': 'NF9030100'
+    #     # }
+    # }
+    categories = {
+            'Electronics': [
+                # ('Headphones & Speakers', 'NF4051000'),
+                # ('Mobile Phones', 'NF1200000'),
+                # ('Mobile Phones', 'NF4060200'),
+                # ('Mobile Phones', 'NF4060100'),
+                ('Mobile Phones', 'NF1220200'),
+                # ('Mobile Phones', 'NF1220100'),
+                # ('Laptops', 'NF4070500'),
+                # ('Desktop', 'NF4070800'),
+            ],
+        }
 
 
     conn = psycopg2.connect(
-        dbname="retailifydb",
+        dbname="retailifydb3",
         user="postgres",
         password="admin",
         host="localhost",
@@ -250,11 +265,15 @@ class CarreFourSpider(Spider):
         
     def start_requests(self):
         for main_category, subcategories in self.categories.items():
-            for subcategory, category_code in subcategories.items():
+            for subcategory, category_code in subcategories:
                 catalogue_code = self.get_catalogue_code(main_category)
                 if catalogue_code:
-                    yield scrapy.Request(url=self.products_api.format(category_code, self.page), headers=self.headers,
-                                        meta={'category': main_category, 'sub_category': subcategory, 'category_code': category_code, 'page': self.page, 'catalogue_code': catalogue_code})
+                    yield scrapy.Request(
+                        url=self.products_api.format(category_code, self.page),
+                        headers=self.headers,
+                        meta={'category': main_category, 'sub_category': subcategory, 'category_code': category_code, 'page': self.page, 'catalogue_code': catalogue_code}
+                    )
+
 
             
 
@@ -294,21 +313,67 @@ class CarreFourSpider(Spider):
                     item['MainImage'] = item['MainImage'][0].get('href')
 
                 item['URL'] = product.get('links', {}).get('productUrl', {}).get('href')
+                item['URL'] = self.main_url + item['URL']
                 item['VendorCode'] = vendor_code
                 item['RatingValue'] = 0
                 item['ModelNumber'] = ''
+             
                 item['Currency'] = 'AED'
                 item['About'] = ''
+                item['Market'] = 'UAE'
                 catalogue_code = response.meta['catalogue_code']
                 category_code = self.get_category_code(item['CategoryName'], catalogue_code)
                 item['CatalogueCode'] = catalogue_code
                 item['CategoryCode'] = category_code
+                
+  
+                yield scrapy.Request(url=item['URL'], headers=self.headers, callback=self.parse_description, meta={'item': deepcopy(item)})
 
-                yield item
+                #yield item
 
             
             #NEXT PAGE
             page = page + 1
             yield scrapy.Request(url=self.products_api.format(category_code, page), headers=self.headers,
                                  meta={'category': item['CatalogueName'], 'sub_category': item['CategoryName'], 'category_code': category_code, 'page': page, 'catalogue_code': catalogue_code})
+            
+
+    def parse_description(self, response):
+        item = response.meta['item']
+        about_list = response.xpath('//div[@class="css-1npift7"]//li/text()').getall()
+        about = "\n".join(about_list)
+        internal_memory = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Internal storage capacity")]/following-sibling::h3/text()').get()
+        model_name = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Model Name")]/following-sibling::h3/text()').get()
+        if not model_name:
+            model_name = response.xpath('//li[contains(text(), "Model name")]/text()').get()
+        processor_number = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Processor model")]/following-sibling::h3/text()').get()
+        os_version = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Operating system version")]/following-sibling::h3/text()').get()
+        color = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Color")]/following-sibling::h3/text()').get()
+        ram = response.xpath('//div[@data-testid="nonFoodItems" and not(ancestor::div[contains(@class, "css-oh2l30")])]//div[contains(text(),"Internal RAM")]/following-sibling::h3/text()').get()
+        
+        
+        item['ModelName'] = model_name        
+        item['About'] = about
+
+
+        dynamic_attributes = []
+        
+        if color:
+            dynamic_attributes.append({'name': 'Color', 'value': color.strip()})
+
+        if internal_memory:
+            dynamic_attributes.append({'name': 'Internal Memory', 'value': internal_memory.strip()})
+
+        if os_version:
+            dynamic_attributes.append({'name': 'OS Version', 'value': os_version.strip()})
+
+        if processor_number:
+            dynamic_attributes.append({'name': 'Processor Number', 'value': processor_number.strip()})
+
+        if ram:
+            dynamic_attributes.append({'name': 'RAM', 'value': ram.strip()})
+
+        # Add the dynamic attributes to the item
+        item['attributes'] = dynamic_attributes
+        yield item
             
