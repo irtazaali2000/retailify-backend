@@ -791,7 +791,7 @@ class VendorDetailsByCategoryView(generics.GenericAPIView):
 
         # Pagination using django.core.paginator
         page_number = request.GET.get('page', 1)
-        paginator = Paginator(categories, 5)  # Show 5 categories per page
+        paginator = Paginator(categories, 10)  # Show 5 categories per page
 
         try:
             paginated_categories = paginator.page(page_number)
