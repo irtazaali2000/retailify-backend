@@ -39,6 +39,7 @@ urlpatterns = [
     path('all_category_names/', AllCategoryNames.as_view(), name='all-category-names'),
     path('all_catalogue_names/', AllCatalogueNames.as_view(), name='all-catalogue-names'),
     path('all_ourstore_market_names/', AllOurStoreMarketNames.as_view(), name='all-market-names'),
+    path('all_currencies/', AllCurrencies.as_view(), name='all-currencies'),
 
     
     path('product_details_by_category/', ProductDetailsByCategoryView.as_view(), name='product-details-by-category'),

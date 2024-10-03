@@ -665,25 +665,48 @@ class AllOurStoreMarketNames(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         ourstore_markets = OurStoreProduct.objects.values_list('Market', flat=True).distinct()
         return Response(list(ourstore_markets))
+    
+class AllCurrencies(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        currencies = OurStoreProduct.objects.values_list('Currency', flat=True).distinct()
+        return Response(list(currencies))
 
 
 class ProductDetailsByCategoryView(generics.GenericAPIView):
     serializer_class = ProductDetailsByCategorySerializer
 
     def get(self, request, *args, **kwargs):
+        # Get the currency from user input (query parameter)
+        currency = request.query_params.get('currency', None)
+
+        # Check if currency is provided
+        if not currency:
+            return Response({'error': 'Currency parameter is missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the currency is valid
+        valid_currencies = OurStoreProduct.objects.values_list('Currency', flat=True).distinct()
+        if currency not in valid_currencies:
+            return Response({'error': f"Invalid currency: {currency}. Please provide a valid currency."}, status=status.HTTP_400_BAD_REQUEST)
+
         # Perform aggregation: total price and total products per category
         categories = Category.objects.annotate(
-            total_price=Coalesce(Sum('ourstoreproduct__MyPrice'), Value(0), output_field=DecimalField()),  # Sum of RegularPrice in Product
-            total_products=Count('ourstoreproduct')  # Count of products in each category
+            total_price=Coalesce(Sum('ourstoreproduct__MyPrice', filter=F('ourstoreproduct__Currency') == currency), Value(0), output_field=DecimalField()),  # Sum MyPrice filtered by currency
+            total_products=Count('ourstoreproduct', filter=F('ourstoreproduct__Currency') == currency)  # Count products with the specified currency
         ).values(
-            'total_price', 
+            'total_price',
             'total_products',
-             category_name=F('CategoryName'),  # Use alias to rename the key
+            category_name=F('CategoryName'),  # Use alias to rename the key
         )
 
         # Serialize the data
         serializer = self.get_serializer(categories, many=True)
-        return Response(serializer.data)
+
+        # Add currency to total_price for display purposes
+        serialized_data = serializer.data
+        for category in serialized_data:
+            category['total_price'] = f"{category['total_price']} {currency}"
+
+        return Response(serialized_data, status=status.HTTP_200_OK)
 
 
 class CountBrandProductCategoryView(generics.GenericAPIView):
@@ -841,7 +864,8 @@ class VendorDetailsByBrandView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         # Get all brands and annotate them with the number of products from the OurStoreProduct model
         brands = (
-            OurStoreProduct.objects.filter(BrandName__gt='').values('BrandName')
+            OurStoreProduct.objects.filter(BrandName__gt='')
+            .values('BrandName')
             .annotate(product_count=Count('ProductCode'))
             .order_by('-product_count')
         )
@@ -958,15 +982,26 @@ class VendorDetailsByCatalogueView(generics.GenericAPIView):
 
 
 class InStockProductsByMonthView(generics.GenericAPIView):
-    
+
     def get(self, request, *args, **kwargs):
         # Get the current date and the date from 2 months ago
         now = timezone.now()
         two_months_ago = now - timezone.timedelta(days=60)
 
+        currency = request.GET.get('currency', None)
+        if not currency:
+            return Response({'message': 'Currency parameter is required.'}, status=400)
+        
+        currency_exists = (
+            Product.objects.filter(Currency=currency).exists() or
+            OurStoreProduct.objects.filter(Currency=currency).exists()
+        )
+
+        if not currency_exists:
+            return Response({'message': f'The currency "{currency}" does not exist in the database.'}, status=404)
         # Fetch Product data for vendors, grouping by month and VendorCode
         product_data = (
-            Product.objects.filter(DateInserted__gte=two_months_ago, StockAvailability=True)
+            Product.objects.filter(DateInserted__gte=two_months_ago, StockAvailability=True, Currency=currency)
             .annotate(month=TruncMonth('DateInserted'))
             .values('month', 'VendorCode__VendorName')
             .annotate(instock_count=Count('ProductCode'))
@@ -974,28 +1009,39 @@ class InStockProductsByMonthView(generics.GenericAPIView):
 
         # Fetch OurStoreProduct data for in-stock products, grouping by month
         our_store_data = (
-            OurStoreProduct.objects.filter(DateInserted__gte=two_months_ago, StockAvailability=True)
+            OurStoreProduct.objects.filter(DateInserted__gte=two_months_ago, StockAvailability=True, Currency=currency)
             .annotate(month=TruncMonth('DateInserted'))
             .values('month')
             .annotate(instock_count=Count('ProductCode'))
         )
 
-        # Create a dictionary to store the results grouped by month
+        # Predefine the months for the last two months
+        months = [
+            (now - timezone.timedelta(days=i * 30)).replace(day=1) for i in range(0, 2)
+        ]  # Generates the first day of the last two months plus the current one
+
+        # Predefine vendor names you want to include in the results
+        vendor_names = Product.objects.values_list('VendorCode__VendorName', flat=True).distinct()
+
+        # Create a dictionary to store the results grouped by month, initializing with 0
         results = {}
+        for month in months:
+            month_str = month_name[month.month] + " " + str(month.year)
+            results[month_str] = {"month": month_str}
+            # Initialize each vendor and our stock with 0
+            for vendor in vendor_names:
+                results[month_str][vendor] = 0
+            results[month_str]['Our Stock'] = 0
 
         # Process the Product data (vendor products)
         for entry in product_data:
             month = month_name[entry['month'].month] + " " + str(entry['month'].year)
             vendor_name = entry['VendorCode__VendorName']
-            if month not in results:
-                results[month] = {"month": month}
             results[month][vendor_name] = entry['instock_count']
 
         # Process the OurStoreProduct data (our store's products)
         for entry in our_store_data:
             month = month_name[entry['month'].month] + " " + str(entry['month'].year)
-            if month not in results:
-                results[month] = {"month": month}
             results[month]['Our Stock'] = entry['instock_count']
 
         # Convert the results dictionary to a list
@@ -1011,24 +1057,50 @@ class CategoryPriceByYearView(generics.GenericAPIView):
         now = timezone.now()
         twelve_months_ago = now - timezone.timedelta(days=365)
 
+
+        currency = request.GET.get('currency', None)
+        if not currency:
+            return Response({'message': 'Currency parameter is required.'}, status=400)
+        
+        # Check if the currency exists in the database
+        currency_exists = OurStoreProduct.objects.filter(Currency=currency).exists()
+        if not currency_exists:
+            return Response({'message': f'The currency "{currency}" does not exist in the database.'}, status=404)
+
+
+        # Fetch the distinct categories
+        category_names = OurStoreProduct.objects.values_list('CategoryCode__CategoryName', flat=True).distinct()
+
+        # Predefine the months for the last 12 months
+        months = [
+            (now - timezone.timedelta(days=i * 30)).replace(day=1) for i in range(0, 12)
+        ]  # Generates the first day of the last 12 months
+
+
+        # Initialize a dictionary to store the data grouped by month
+        results = {}
+        for month in months:
+            month_str = month_name[month.month] + " " + str(month.year)
+            results[month_str] = {"month": month_str}
+            # Initialize each category with 0
+            for category in category_names:
+                results[month_str][category] = "0 " + currency
+
         # Fetch the data from OurStoreProduct, grouping by month and category
         products_data = (
-            OurStoreProduct.objects.filter(DateInserted__gte=twelve_months_ago)
+            OurStoreProduct.objects.filter(DateInserted__gte=twelve_months_ago, Currency=currency)
             .annotate(month=TruncMonth('DateInserted'))  # Group by month
             .values('month', 'CategoryCode__CategoryName')  # Group by category
             .annotate(total_price=Sum('MyPrice'))  # Sum of MyPrice for each category
         )
 
-        # Initialize a dictionary to store the data grouped by month
-        results = {}
 
-        # Process the data
+        # Process the data and update the dictionary
         for entry in products_data:
             month = month_name[entry['month'].month] + " " + str(entry['month'].year)  # Get month name and year
             category_name = entry['CategoryCode__CategoryName']
-            if month not in results:
-                results[month] = {"month": month}
-            results[month][category_name] = entry['total_price'] or 0  # Add the total price for each category
+            total_price_with_currency = f"{entry['total_price'] or 0} {currency}"  # Concatenate price with currency
+            results[month][category_name] = total_price_with_currency
 
         # Convert the dictionary to a list
         final_results = list(results.values())
@@ -1048,7 +1120,7 @@ class IntelligenceProductPriceLower(generics.GenericAPIView):
             product_name = request.GET.get('product_name', None)
 
             # Get pagination parameters
-            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page_size = int(request.GET.get('page_size', 20))  # Default to 5 products per page
             page = int(request.GET.get('page', 1))  # Default to page 1
 
             # Base SQL query for ModelNumber matching
@@ -1226,7 +1298,7 @@ class IntelligenceProductPriceHigher(generics.GenericAPIView):
             product_name = request.GET.get('product_name', None)
 
             # Get pagination parameters
-            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page_size = int(request.GET.get('page_size', 20))  # Default to 5 products per page
             page = int(request.GET.get('page', 1))  # Default to page 1
 
             # Base SQL query for ModelNumber matching
@@ -1410,7 +1482,7 @@ class IntelligenceProductPriceEqual(generics.GenericAPIView):
             product_name = request.GET.get('product_name', None)
 
             # Get pagination parameters
-            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page_size = int(request.GET.get('page_size', 20))  # Default to 5 products per page
             page = int(request.GET.get('page', 1))  # Default to page 1
 
             # Base SQL query for ModelNumber matching
@@ -1589,7 +1661,7 @@ class IntelligenceProductPriceDifference(generics.GenericAPIView):
             product_name = request.GET.get('product_name', None)
 
             # Get pagination parameters
-            page_size = int(request.GET.get('page_size', 5))  # Default to 5 products per page
+            page_size = int(request.GET.get('page_size', 20))  # Default to 5 products per page
             page = int(request.GET.get('page', 1))  # Default to page 1
 
             # Base SQL query for ModelNumber matching
